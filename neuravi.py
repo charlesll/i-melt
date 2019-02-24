@@ -25,7 +25,10 @@ class Data():
     """
 
     def __init__(self, path="./data/"):
-        self.X_train= joblib.load(path+"X_train.pkl")
+        
+        self.X_columns = joblib.load(path+"X_columns.pkl")
+        
+        self.X_train = joblib.load(path+"X_train.pkl")
         self.X_valid =joblib.load(path+"X_valid.pkl")
         self.X_test = joblib.load(path+"X_test.pkl")
 
@@ -170,6 +173,7 @@ class Model_AG(object):
         self.optimizer = tf.train.RMSPropOptimizer(self._learning_rate).minimize(self.loss)
         self.merged = tf.summary.merge_all()
         self.init_op = tf.global_variables_initializer()
+        
 
 class Model_AG_CpIndT(object):
     """
@@ -381,7 +385,7 @@ class Model_TVF(object):
         #
         # Adam and Gibbs with network outputs
         #
-        self.a_ = tf.placeholder(dtype=tf.float32, shape=[None,1], name="A")
+        self.a_ = tf.placeholder(dtype=tf.float32, shape=[None,1], name="a_ph")
         self.b_ = tf.placeholder(dtype=tf.float32, shape=[None,1], name="b_ph")
         self.t1_ = tf.placeholder(dtype=tf.float32, shape=[None,1], name="t1_ph")
         
