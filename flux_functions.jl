@@ -20,17 +20,18 @@ function init_both(dims)
     return ones(dims).*[log.(100000.);log.(10.)]
 end
 
-Be(x) = reshape(exp.(m1(x[1:4,:])[1,:]),1,size(x,2))
+tg(x) = reshape(exp.(m1(x[1:4,:])[1,:]),1,size(x,2))
 ScTg(x) = reshape(exp.(m1(x[1:4,:])[2,:]),1,size(x,2))
 
 
-tg(x) = Be(x)./((12.0.-Ae).*ScTg(x))
+Be(x) = (12.0.-Ae).*(tg(x) .* ScTg(x))
 
 dCp(x,T, ap, b) = ap.*(log.(T).-log.(tg(x))) .+ b.*(T.-tg(x))
 
 model(x,T, ap, b) = Ae .+ Be(x) ./ (T.* (ScTg(x) .+ dCp(x,T, ap, b)))
 
 mse(yp, y) = sqrt(sum((yp .- y).^2)./size(y, 2))
+
 mse_weighted(yp, y, w) = sqrt(sum((yp .- y).^2.0./(w.^2))./size(y, 2))
 
 predict(x,T, ap, b) = model(x,T, ap, b)
