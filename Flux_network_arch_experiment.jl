@@ -14,9 +14,9 @@ include("flux_functions.jl")
 include("flux_train.jl")
 
 dataset="./data/DataSet_0p10val.hdf5"
-mod_path_out= "./model/architecture_exp/"
+mod_path_out= "/home/charles/architecture_exp/"
 
-for i = 1:10
+for i = 1:2
     nb_layers = rand(1:6)
     nb_neurons = rand(2:400)
     nameout = "_"*string(nb_neurons)*"_neurons_"*string(nb_layers)*"_layers"
