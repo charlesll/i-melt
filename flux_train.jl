@@ -1,5 +1,13 @@
-# General function to train the network and save it
-function train_nn(path_data,mod_path_out,mod_suffix)
+# Copyright Charles Le Losq
+"""
+    train_nn(path_data,mod_path_out,mod_suffix)
+
+General function to train the network and save it
+"""
+function train_nn(path_data,mod_path_out,mod_suffix;
+                    max_epoch = 5000, nb_neurons = 100, p_drop = 0.3, nb_layers = 3,
+                    pretraining=true, verbose = true, figures=true, savefigures=false)
+
     X_columns = h5read(path_data, "X_columns")
 
     X_entropy_train = h5read(path_data, "X_entropy_train")
@@ -38,19 +46,6 @@ function train_nn(path_data,mod_path_out,mod_suffix)
     X_raman_valid = Float32.(h5read("./data/NKAS_DataSet.hdf5","X_raman_test"))
     y_raman_valid = Float32.((h5read("./data/NKAS_DataSet.hdf5","y_raman_test")))
 
-    println("loaded")
-    println("\nFeatures in X_ arrays are")
-    println(X_columns)
-    println("\nShape of X train and valid is")
-    println(size(X_train))
-    println(size(X_valid))
-
-    print("Size of Raman datasets")
-    print(size(X_raman_train))
-    print(size(y_raman_train))
-    print(size(X_raman_valid))
-    print(size(y_raman_valid))
-
     #
     # NETWORK DEFINITION
     #
@@ -58,41 +53,164 @@ function train_nn(path_data,mod_path_out,mod_suffix)
     Ae = param([-2.11]) # Pre-exp Param
 
     # Network architecture
-    nb_neurons = 100
-    p_drop = 0.3
-
     nb_channels_raman = size(y_raman_train,1) # number of channels on Raman spectra
 
     # Hidden Layers
     c1 = Dense(4, nb_neurons, relu)
     c2 = Dense(nb_neurons, nb_neurons, relu)
     c3 = Dense(nb_neurons, nb_neurons, relu)
+    c4 = Dense(nb_neurons, nb_neurons, relu)
+    c5 = Dense(nb_neurons, nb_neurons, relu)
+    c6 = Dense(nb_neurons, nb_neurons, relu)
 
     # Output Layers
     cout_thermo = Dense(nb_neurons, 3,initb=init_both) #initW = glorot_uniform
     cout_raman =  Dense(nb_neurons,nb_channels_raman)
 
     # Core : common network
-    core = Chain(c1, Dropout(p_drop),
-        c2, Dropout(p_drop),
-        c3, Dropout(p_drop))
+    # Number of layers can be adjust3ed between 1 and 6
+    if nb_layers == 1
+        core = Chain(c1, Dropout(p_drop))
+    elseif nb_layers == 2
+        core = Chain(c1, Dropout(p_drop),
+            c2, Dropout(p_drop))
+    elseif nb_layers == 3
+        core = Chain(c1, Dropout(p_drop),
+            c2, Dropout(p_drop),
+            c3, Dropout(p_drop))
+    elseif nb_layers == 4
+        core = Chain(c1, Dropout(p_drop),
+            c2, Dropout(p_drop),
+            c3, Dropout(p_drop),
+            c4, Dropout(p_drop))
+    elseif nb_layers == 5
+        core = Chain(c1, Dropout(p_drop),
+            c2, Dropout(p_drop),
+            c3, Dropout(p_drop),
+            c4, Dropout(p_drop),
+            c5, Dropout(p_drop))
+    elseif nb_layers == 6
+        core = Chain(c1, Dropout(p_drop),
+            c2, Dropout(p_drop),
+            c3, Dropout(p_drop),
+            c4, Dropout(p_drop),
+            c5, Dropout(p_drop),
+            c6, Dropout(p_drop))
+    end
 
     # Core + outputs
     nnr = Chain(core, cout_raman) |> gpu
     nns = Chain(core, cout_thermo) |> gpu
 
     # PREPARING DATA / FINAL
-    x_train_, y_train_, T_train_, ap_train_, b_train_, sc_train_, tg_train_ = prepare_datas(X_train,y_train)
-    x_valid_, y_valid_, T_valid_, ap_valid_, b_valid_, sc_valid_, tg_valid_ = prepare_datas(X_valid,y_valid)
+    x_train_, y_train_, T_train_, ap_train_, b_train_, sc_train_, tg_train_ = prepare_data(X_train,y_train)
+    x_valid_, y_valid_, T_valid_, ap_valid_, b_valid_, sc_valid_, tg_valid_ = prepare_data(X_valid,y_valid)
 
-    x_entro_train_, y_entro_train_, T_entro_train_, ap_entro_train_, b_entro_train_, sc_entro_train_, tg_entro_train_ = prepare_datas(X_entropy_train,X_entropy_train[11,:])
-    x_entro_valid_, y_entro_valid_, T_entro_valid_, ap_entro_valid_, b_entro_valid_, sc_entro_valid_, tg_entro_valid_ = prepare_datas(X_entropy_valid,X_entropy_valid[11,:])
+    x_entro_train_, y_entro_train_, T_entro_train_, ap_entro_train_, b_entro_train_, sc_entro_train_, tg_entro_train_ = prepare_data(X_entropy_train,X_entropy_train[11,:])
+    x_entro_valid_, y_entro_valid_, T_entro_valid_, ap_entro_valid_, b_entro_valid_, sc_entro_valid_, tg_entro_valid_ = prepare_data(X_entropy_valid,X_entropy_valid[11,:])
 
-    print("\nloss Raman: $(loss_raman(X_raman_train, y_raman_train, nnr))")
-    print("\nloss tg: $(loss_tg(x_entro_train_, tg_entro_train_, nns))")
-    print("\nloss sc: $(loss_sc(x_entro_train_, sc_entro_train_, nns))")
-    print("\nloss n train: $(loss_n(x_train_, T_train_ ,ap_train_, b_train_, y_train_, nns, Ae))")
-    print("\nloss myega train: $(loss_n_myega(x_train_, T_train_ , y_train, nns, Ae))")
+    if verbose == true
+        print("\nloss Raman: $(loss_raman(X_raman_train, y_raman_train, nnr))")
+        print("\nloss tg: $(loss_tg(x_entro_train_, tg_entro_train_, nns))")
+        print("\nloss sc: $(loss_sc(x_entro_train_, sc_entro_train_, nns))")
+        print("\nloss ag train: $(loss_n(x_train_, T_train_ ,ap_train_, b_train_, y_train_, nns, Ae))")
+        print("\nloss myega train: $(loss_n_myega(x_train_, T_train_ , y_train, nns, Ae))")
+    end
+
+
+    #
+    # PRETRAINING
+    #
+    if pretraining == true
+        println("Pretraining activated. Pretraining...")
+        #### Raman pre-training followed by entropy/Tg pre-training
+        record_loss_raman_train = Float64[]
+        record_loss_raman_valid = Float64[]
+
+        testmode!(nns,false)
+        testmode!(nnr,false)
+
+        # loop details
+        epoch_idx = 1; nb_epoch = 2000
+        optimal_epochs_s = 1; early_stop = 1; patience = 100
+        min_loss_val = 30000000.0
+
+        p = ProgressMeter.Progress(patience, 1)   # minimum update interval: 1 second
+        while early_stop < patience # with realy stopping
+
+            evalcb = () -> (push!(record_loss_raman_train, loss_raman(X_raman_train, y_raman_train,nnr).data),
+                            push!(record_loss_raman_valid, loss_raman(X_raman_valid, y_raman_valid,nnr).data))
+            Flux.train!(loss_raman, params(nnr), [(X_raman_train,y_raman_train,nnr)], ADAM(0.001), cb = throttle(evalcb, 1))
+
+            # Early stopping criterion
+            if record_loss_raman_valid[epoch_idx] < min_loss_val
+                early_stop = 1
+                optimal_epochs = epoch_idx
+                min_loss_val = record_loss_raman_valid[epoch_idx]
+            else
+                early_stop += 1
+            end
+
+            ProgressMeter.update!(p, early_stop)
+            epoch_idx += 1
+        end
+
+        println(mean(record_loss_raman_train[end-20:end]))
+        println(mean(record_loss_raman_valid[end-20:end]))
+        if figures == true # just for myself, for quick visualization
+            plot(record_loss_raman_train)
+            plot!(record_loss_raman_valid)
+            savefig("./figures/raman_loss")
+        end
+
+        #### Now entropy pre-training
+
+        # record loss
+        record_loss_sc_train = Float64[]
+        record_loss_sc_valid = Float64[]
+
+        # loop details
+        epoch_idx = 1; optimal_epochs_s = 0;
+        early_stop = 1; patience = 100
+        min_loss_val = 30000000.0
+
+        # loop
+        p = ProgressMeter.Progress(patience, 1)   # minimum update interval: 1 second
+        while early_stop < patience
+
+            evalcb = () -> (push!(record_loss_sc_train, loss_tg_sc(x_entro_train_, tg_entro_train_, sc_entro_train_,nns).data),
+                push!(record_loss_sc_valid, loss_tg_sc(x_entro_valid_, tg_entro_valid_, sc_entro_valid_,nns).data))
+
+            Flux.train!(loss_tg_sc, params(nns), [(x_entro_train_, tg_entro_train_, sc_entro_train_,nns)], ADAM(0.001), cb = throttle(evalcb, 1))
+
+            ProgressMeter.update!(p, early_stop)
+
+            # Early stopping criterion
+            if record_loss_sc_valid[epoch_idx] < min_loss_val
+                early_stop = 0
+                optimal_epochs = epoch_idx
+                min_loss_val = record_loss_sc_valid[epoch_idx]
+            else
+                early_stop += 1
+            end
+            epoch_idx += 1
+        end
+
+        println("Entropy-Tg loss")
+        println(mean(record_loss_sc_train[end-20:end]))
+        println(mean(record_loss_sc_valid[end-20:end]))
+        if figures == true # Plot the entropy and Tg comparisons
+            # Plot
+            plot(record_loss_sc_train,label="train",xlabel="iterations")
+            plot!(record_loss_sc_valid,label="valid")
+            savefig("./figures/entropy_loss")
+        end
+
+    end
+
+    #
+    # GLOBAL TRAINING
+    #
 
     # Global loss function, weigth were manually adjusted
     L2_norm = 0.1
@@ -103,7 +221,6 @@ function train_nn(path_data,mod_path_out,mod_suffix)
         loss_sc(x2,sc2_target, nns) .+
         0.01.*loss_raman(x_raman, y_raman, nnr) .+
         L2_norm*sum(norm, params(nnr,nns))
-
     # Loss record
     record_loss_train = Float64[]
     record_loss_valid = Float64[]
@@ -114,9 +231,9 @@ function train_nn(path_data,mod_path_out,mod_suffix)
 
     epoch_idx = 1; optimal_epochs_s = 0;
     early_stop = 1; patience = 20
-    min_loss_val = 30000000.0; max_epoch = 5000
+    min_loss_val = 30000000.0;
 
-    print("\nStarting the training...")
+    println("Starting the training...")
     p = ProgressMeter.Progress(max_epoch, 1)   # minimum update interval: 1 second
 
     # Training dataset
@@ -150,9 +267,22 @@ function train_nn(path_data,mod_path_out,mod_suffix)
     end
 
     println("Training done, file saved at",mod_path_out,"with suffix",mod_suffix)
-    println("loss Raman: $(loss_raman(X_raman_train, y_raman_train, nnr))")
-    println("loss tg: $(loss_tg(x_entro_train_, tg_entro_train_, nns))")
-    println("loss sc: $(loss_sc(x_entro_train_, sc_entro_train_, nns))")
-    println("loss n train: $(loss_n(x_train_, T_train_ ,ap_train_, b_train_, y_train_, nns, Ae))")
-    println("loss myega train: $(loss_n_myega(x_train_, T_train_ , y_train, nns, Ae))")
+    if  verbose == true
+        println("loss Raman: $(loss_raman(X_raman_train, y_raman_train, nnr))")
+        println("loss tg: $(loss_tg(x_entro_train_, tg_entro_train_, nns))")
+        println("loss sc: $(loss_sc(x_entro_train_, sc_entro_train_, nns))")
+        println("loss n train: $(loss_n(x_train_, T_train_ ,ap_train_, b_train_, y_train_, nns, Ae))")
+        println("loss myega train: $(loss_n_myega(x_train_, T_train_ , y_train, nns, Ae))")
+    end
+    println("Global loss:")
+    println(mean(record_loss_train[end-5:end]))
+    println(mean(record_loss_valid[end-5:end]))
+
+    if figures == true # Plot the entropy and Tg comparisons
+        # Plot
+        plot(record_loss_train,label="train",xlabel="iterations")
+        plot!(record_loss_valid,label="valid")
+        savefig("./figures/global_loss")
+    end
+
 end

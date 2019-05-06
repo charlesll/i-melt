@@ -1,7 +1,76 @@
 #
-# Data preparation
+# DATA MANIPULATIONS
 #
-function prepare_datas(X_,y_)
+
+"""
+    load_data(path_dataset::String, path_raman::String)
+
+load the viscosity and Raman datasets at path_dataset and path_raman, respectively
+"""
+function load_data(path_data::String, path_raman::String;verbose=true)
+
+    datas = Dict()
+    datas["X_columns"] = h5read(path_data, "X_columns")
+
+    datas["X_entropy_train"] = h5read(path_data, "X_entropy_train")
+    datas["X_entropy_train_sc"] = h5read(path_data, "X_entropy_train_sc")
+
+    datas["X_entropy_valid"] = h5read(path_data, "X_entropy_valid")
+    datas["X_entropy_valid_sc"] = h5read(path_data, "X_entropy_valid_sc")
+
+    datas["X_entropy_test"] = h5read(path_data, "X_entropy_test")
+    datas["X_entropy_test_sc"] = h5read(path_data, "X_entropy_test_sc")
+
+    datas["X_entropy_tv"] = [datas["X_entropy_train"] datas["X_entropy_valid"]]
+    datas["X_entropy_sc_tv"] = [datas["X_entropy_train_sc"] datas["X_entropy_valid_sc"]]
+
+    datas["X_tv"] = h5read(path_data, "X_tv")
+    datas["X_tv_sc"] = h5read(path_data, "X_tv_sc")
+    datas["y_tv"] = h5read(path_data, "y_tv")
+
+    datas["X_train"] = h5read(path_data, "X_train")
+    datas["X_train_sc"] = h5read(path_data, "X_train_sc")
+    datas["y_train"] = h5read(path_data, "y_train")
+
+    datas["X_valid"] = h5read(path_data, "X_valid")
+    datas["X_valid_sc"] = h5read(path_data, "X_valid_sc")
+    datas["y_valid"] = h5read(path_data, "y_valid")
+
+    datas["X_test"] = h5read(path_data, "X_test")
+    datas["X_test_sc"] = h5read(path_data, "X_test_sc")
+    datas["y_test"] = h5read(path_data, "y_test")
+
+    datas["X_scaler_mean"] = h5read(path_data, "X_scaler_mean")
+    datas["X_scaler_var"] = h5read(path_data, "X_scaler_var")
+
+    datas["X_raman_train"] = Float32.(h5read(path_raman,"X_raman_train"))
+    datas["y_raman_train"] = Float32.((h5read(path_raman,"y_raman_train")))
+    datas["X_raman_valid"] = Float32.(h5read(path_raman,"X_raman_test"))
+    datas["y_raman_valid"] = Float32.((h5read(path_raman,"y_raman_test")))
+
+    if verbose == true
+        println("loaded")
+        println("\nFeatures in X_ arrays are")
+        println(datas["X_columns"])
+        println("\nShape of X train and valid is")
+        println(size(datas["X_tv"]))
+
+        println("Size of Raman datasets")
+        println(size(datas["X_raman_train"]))
+        println(size(datas["y_raman_train"]))
+        println(size(datas["X_raman_valid"]))
+        println(size(datas["y_raman_valid"]))
+    end
+
+    return datas
+end
+
+"""
+    prepare_datas(X_,y_)
+
+Prepare datas
+"""
+function prepare_data(X_,y_)
 
     y = reshape(y_[:],1,length(y_))
 
@@ -14,6 +83,11 @@ function prepare_datas(X_,y_)
     return Float32.(x), Float32.(y), Float32.(T), Float32.(ap), Float32.(b), Float32.(sc), Float32.(tg)
 end
 
+"""
+    gkfolds(X_, y_, idx_label; k = 5)
+
+K-fold data preparation
+"""
 function gkfolds(X_, y_, idx_label; k = 5)
 
     dd = kfolds(shuffleobs(unique(X_[idx_label,:])), k = k);
@@ -49,7 +123,7 @@ aCpl(x) = 81.37.*x[1,:] .+ 27.21.*x[2,:] .+ 100.6.*x[3,:]  .+ 50.13.*x[4,:] .+ x
 ap(x) = reshape(aCpl(x) - 3.0.*8.314.*at_gfu(x),1,size(x,2))
 b(x) = reshape(0.0943.*x[2,:] + 0.01578.*x[4,:],1,size(x,2)) #bCpl
 
-#
+#ST
 # Function for initial bias values
 #
 
@@ -66,8 +140,10 @@ function init_both(dims)
 end
 
 init_random(dims...) = randn(Float32, dims...) .* [5.;10.]
-# Function for extracting parameters from the network
 
+#
+# Function for extracting parameters from the network
+#
 function tg(x,network)
     return reshape(exp.(network(x[1:4,:])[1,:]),1,size(x,2))
 end
@@ -126,10 +202,16 @@ function loss_sc(x,sc,network)
     return mse(ScTg(x,network),sc) # Configurational entropy
 end
 
-function loss_tg(x,target,network)
-    return mse(tg(x,network),target) # glass transition T
+function loss_tg(x,tg_target,network)
+    return mse(tg(x,network),tg_target) # glass transition T
 end
 
 function loss_raman(x,raman_target,network)
     return mse(network(x),raman_target) # Raman spectra
+end
+
+function loss_tg_sc(x,tg_target,sc_target,nns; L2_norm = 0.001, tg_scale = 0.001)
+        return tg_scale.*loss_tg(x,tg_target,nns)
+        .+ loss_sc(x,sc_target,nns)
+        .+ L2_norm*sum(norm, params(nns))# Add this to your loss
 end

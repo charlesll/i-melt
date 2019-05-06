@@ -1,0 +1,4 @@
+__pycache__
+.ipynb_checkpoints
+./model/architecture_exp
+./model/error_size
