@@ -6,7 +6,7 @@ General function to train the network and save it
 """
 function train_nn(path_data,mod_path_out,mod_suffix;
                     max_epoch = 5000, nb_neurons = 100, p_drop = 0.3, nb_layers = 3,
-                    pretraining=true, verbose = true, figures=true, savefigures=false)
+                    pretraining=true, verbose = true, figures=false)
 
     X_columns = h5read(path_data, "X_columns")
 

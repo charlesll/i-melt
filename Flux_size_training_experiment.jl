@@ -29,6 +29,6 @@ liste_suffix = ["_1","_2","_3","_4","_5","_6","_7","_8","_9","_10"]
 
 for i = 1:length(liste_dataset)
     for j = 1:length(liste_suffix)
-        train_nn(liste_dataset[i], mod_path_out, liste_prefix[i]*liste_suffix[j])
+        train_nn(liste_dataset[i], mod_path_out, liste_prefix[i]*liste_suffix[j],max_epoch=4000, pretraining=true, figures=false)
     end
 end
