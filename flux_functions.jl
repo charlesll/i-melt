@@ -157,9 +157,8 @@ function tg(x,network)
     return reshape(exp.(network(x[1:4,:])[1,:]),1,size(x,2))
 end
 
-function ScTg(x,Ae,ap,network)
-    return ap./(fragility(x,network)./(12.0.-Ae).-1)
-    #return reshape(exp.(network(x[1:4,:])[2,:]),1,size(x,2))
+function ScTg(x,network)
+    return reshape(exp.(network(x[1:4,:])[2,:]),1,size(x,2))
 end
 
 function fragility(x,network)
@@ -174,8 +173,8 @@ end
 # Thermodynamic equations : Adam and Gibbs model
 #
 
-function Be(x,Ae,ap,network)
-    return (12.0.-Ae).*(tg(x,network) .* ScTg(x,Ae,ap,network))
+function Be(x,network, Ae)
+    return (12.0.-Ae).*(tg(x,network) .* ScTg(x,network))
 end
 
 function dCp(x, T, ap, b, network)
@@ -184,12 +183,17 @@ end
 
 # AG EQUATION
 function ag(x, T, ap, b, network, Ae)
-    return Ae .+ Be(x,Ae,ap,network) ./ (T.* (ScTg(x,Ae,ap,network) .+ dCp(x, T, ap, b,network)))
+    return Ae .+ Be(x,network, Ae) ./ (T.* (ScTg(x,network) .+ dCp(x, T, ap, b,network)))
 end
 
 # MYEGA EQUATION
 function myega(x, T, network, Ae)
     return Ae .+ (12.0 .- Ae).*(tg(x,network)./T).*exp.((fragility(x,network)./(12.0.-Ae).-1.0).*(tg(x,network)./T.-1.0))
+end
+
+# Avramov-Mitchell EQUATION
+function am(x, T, network, Ae)
+    return Ae .+ 2.3.*(12.0 .- Ae).*(tg(x,network)./T).^fragility(x,network)
 end
 
 #
@@ -200,7 +204,7 @@ function mse(yp, y)
     return sqrt(sum((yp .- y).^2)./size(y, 2))
 end
 
-function loss_n(x, T, ap, b, y_target,network, Ae)
+function loss_n_ag(x, T, ap, b, y_target,network, Ae)
     return mse(ag(x, T, ap, b,network, Ae), y_target) # viscosity AG
 end
 
@@ -208,12 +212,16 @@ function loss_n_myega(x, T, y_target,network, Ae)
     return mse(myega(x, T,network, Ae), y_target) # viscosity MYEGA
 end
 
+function loss_n_am(x, T, y_target,network, Ae)
+    return mse(myega(x, T,network, Ae), y_target) # viscosity MYEGA
+end
+
 function loss_n_tvf(x, T, y_target,network)
     return mse(tvf(x,T,network),y_target) # viscosity TVF
 end
 
-function loss_sc(x,sc,Ae,ap,network)
-    return mse(ScTg(x,Ae,ap,network),sc) # Configurational entropy
+function loss_sc(x,sc,network)
+    return mse(ScTg(x,network),sc) # Configurational entropy
 end
 
 function loss_tg(x,tg_target,network)

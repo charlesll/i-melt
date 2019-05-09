@@ -124,8 +124,8 @@ function train_nn(path_data,mod_path_out,mod_suffix;
         print("\nloss tg: $(loss_tg(x_entro_train_, tg_entro_train_, nns))")
         print("\nloss sc: $(loss_sc(x_entro_train_, sc_entro_train_, nns))")
         print("\nloss density: $(loss_density(X_density_train, y_density_train, nns))")
-        print("\nloss ag train: $(loss_n(x_train_, T_train_ ,ap_train_, b_train_, y_train_, nns, Ae))")
-        print("\nloss myega train: $(loss_n_myega(x_train_, T_train_ , y_train, nns, Ae))")
+        print("\nloss ag train: $(loss_n_ag(x_train_, T_train_ ,ap_train_, b_train_, y_train_, nns, Ae))")
+        print("\nloss myega train: $(loss_n_am(x_train_, T_train_ , y_train, nns, Ae))")
     end
 
 
@@ -243,10 +243,10 @@ function train_nn(path_data,mod_path_out,mod_suffix;
     # Global loss function, weigth were manually adjusted
     L2_norm = 0.1
     loss_global(x, T, ap, b, y_target, x2, tg2_target, sc2_target, x_raman, y_raman, x_density, y_density, nnr, nns, Ae) =
-        100.0.*loss_n(x, T, ap, b, y_target, nns, Ae) .+
-        100.0.*loss_n_myega(x,T,y_target, nns, Ae) .+
+        100.0.*loss_n_ag(x, T, ap, b, y_target, nns, Ae) .+
+        100.0.*loss_n_am(x, T, y_target, nns, Ae) .+
         loss_tg(x2,tg2_target, nns) .+
-        #100.0.*loss_sc(x2,sc2_target, nns) .+
+        100.0.*loss_sc(x2,sc2_target, nns) .+
         1000.0.*loss_density(x_density,y_density, nns) .+
         10.0.*loss_raman(x_raman, y_raman, nnr) .+
         L2_norm*sum(norm, params(nnr,nns))
@@ -301,8 +301,8 @@ function train_nn(path_data,mod_path_out,mod_suffix;
         println("loss tg: $(loss_tg(x_entro_train_, tg_entro_train_, nns))")
         println("loss sc: $(loss_sc(x_entro_train_, sc_entro_train_, nns))")
         println("loss density: $(loss_density(X_density_train, y_density_train, nns))")
-        println("loss n train: $(loss_n(x_train_, T_train_ ,ap_train_, b_train_, y_train_, nns, Ae))")
-        println("loss myega train: $(loss_n_myega(x_train_, T_train_ , y_train, nns, Ae))")
+        println("loss n train: $(loss_n_ag(x_train_, T_train_ ,ap_train_, b_train_, y_train_, nns, Ae))")
+        println("loss myega train: $(loss_n_am(x_train_, T_train_ , y_train, nns, Ae))")
     end
     println("Global loss:")
     println(mean(record_loss_train[end-5:end]))
