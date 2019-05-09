@@ -13,7 +13,7 @@ using BSON: @save, @load
 include("flux_functions.jl")
 include("flux_train.jl")
 
-mod_path_out= "./model/"
+mod_path_out= "/home/charles/Desktop/exp_size/"
 
 liste_dataset = ["./data/DataSet_0p10val.hdf5",
                  "./data/DataSet_0p20val.hdf5",

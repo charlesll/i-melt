@@ -3,11 +3,11 @@
 #
 
 """
-    load_data(path_dataset::String, path_raman::String)
+    load_data(path_dataset::String, path_raman::String, path_density::String)
 
 load the viscosity and Raman datasets at path_dataset and path_raman, respectively
 """
-function load_data(path_data::String, path_raman::String;verbose=true)
+function load_data(path_data::String, path_raman::String, path_density::String;verbose=true)
 
     datas = Dict()
     datas["X_columns"] = h5read(path_data, "X_columns")
@@ -47,6 +47,15 @@ function load_data(path_data::String, path_raman::String;verbose=true)
     datas["y_raman_train"] = Float32.((h5read(path_raman,"y_raman_train")))
     datas["X_raman_valid"] = Float32.(h5read(path_raman,"X_raman_test"))
     datas["y_raman_valid"] = Float32.((h5read(path_raman,"y_raman_test")))
+
+    # Loading density dataset
+    datas["X_density_train"] = Float32.(h5read("./data/NKAS_density.hdf5","X_density_train"))
+    datas["X_density_valid"] = Float32.(h5read("./data/NKAS_density.hdf5","X_density_valid"))
+    datas["X_density_test"] = Float32.(h5read("./data/NKAS_density.hdf5","X_density_test"))
+
+    datas["y_density_train"] = Float32.(h5read("./data/NKAS_density.hdf5","y_density_train"))
+    datas["y_density_valid"] = Float32.(h5read("./data/NKAS_density.hdf5","y_density_valid"))
+    datas["y_density_test"] = Float32.(h5read("./data/NKAS_density.hdf5","y_density_test"))
 
     if verbose == true
         println("loaded")
@@ -136,7 +145,7 @@ function tens(size)
 end
 
 function init_both(dims)
-    return ones(dims).*[log.(1000.);log.(10.);log.(10.)]
+    return ones(dims).*[log.(1000.);log.(10.);log.(10.); log.(2.3)]
 end
 
 init_random(dims...) = randn(Float32, dims...) .* [5.;10.]
@@ -154,6 +163,10 @@ end
 
 function fragility(x,network)
     return reshape(exp.(network(x[1:4,:])[3,:]),1,size(x,2))
+end
+
+function density(x,network)
+    return reshape(exp.(network(x[1:4,:])[4,:]),1,size(x,2))
 end
 
 #
@@ -210,8 +223,10 @@ function loss_raman(x,raman_target,network)
     return mse(network(x),raman_target) # Raman spectra
 end
 
-function loss_tg_sc(x,tg_target,sc_target,nns; L2_norm = 0.001, tg_scale = 0.001)
-        return tg_scale.*loss_tg(x,tg_target,nns)
-        .+ loss_sc(x,sc_target,nns)
-        .+ L2_norm*sum(norm, params(nns))# Add this to your loss
+function loss_density(x,density_target,network)
+    return mse(density(x,network),density_target)
+end
+
+function loss_tg_sc_d(x,tg_target,sc_target,x_d, d_target,nns; L2_norm = 0.001, s_scale = 100.0, tg_scale = 1.0, d_scale = 1000.)
+        return tg_scale.*loss_tg(x,tg_target,nns) .+ s_scale.*loss_sc(x,sc_target,nns) .+ d_scale.*loss_density(x_d,d_target,nns) .+ L2_norm*sum(norm, params(nns))# Add this to your loss
 end

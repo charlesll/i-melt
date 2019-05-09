@@ -5,7 +5,7 @@ using Flux: gpu, Dense, BatchNorm, relu, Chain, ADAM, RMSProp, Descent, params, 
 
 using Base.Iterators: repeated
 
-using DataFrames, DataFramesMeta, ExcelFiles, MLDataUtils, HDF5, ProgressMeter, Plots, LinearAlgebra, NNlib
+using MLDataUtils, HDF5, ProgressMeter, Plots, LinearAlgebra, NNlib
 pyplot() # pyplot backend
 
 using BSON: @save, @load
@@ -21,5 +21,5 @@ for i = 1:200
     nb_neurons = rand(2:400)
     nameout = "_"*string(nb_neurons)*"_neurons_"*string(nb_layers)*"_layers"
     train_nn(dataset, mod_path_out, nameout, nb_layers=nb_layers,
-    nb_neurons=nb_neurons,max_epoch=3000, pretraining=true, figures=false)
+    nb_neurons=nb_neurons,max_epoch=5000, pretraining=true, figures=false)
 end

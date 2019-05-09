@@ -5,7 +5,7 @@ using Flux: gpu, Dense, BatchNorm, relu, Chain, ADAM, RMSProp, Descent, params, 
 
 using Base.Iterators: repeated
 
-using DataFrames, DataFramesMeta, ExcelFiles, MLDataUtils, HDF5, ProgressMeter, Plots, LinearAlgebra, NNlib
+using MLDataUtils, HDF5, ProgressMeter, Plots, LinearAlgebra, NNlib
 pyplot() # pyplot backend
 
 using BSON: @save, @load
