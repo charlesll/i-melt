@@ -247,7 +247,7 @@ function train_nn(path_data,mod_path_out,mod_suffix;
         100.0.*loss_n_myega(x,T,y_target, nns, Ae) .+
         loss_tg(x2,tg2_target, nns) .+
         100.0.*loss_sc(x2,sc2_target, nns) .+
-        100.0.*loss_density(x_density,y_density, nns) .+
+        1000.0.*loss_density(x_density,y_density, nns) .+
         10.0.*loss_raman(x_raman, y_raman, nnr) .+
         L2_norm*sum(norm, params(nnr,nns))
     # Loss record
