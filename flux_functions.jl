@@ -193,7 +193,7 @@ end
 
 # Avramov-Mitchell EQUATION
 function am(x, T, network, Ae)
-    return Ae .+ 2.3.*(12.0 .- Ae).*(tg(x,network)./T).^fragility(x,network)
+    return Ae .+ (12.0 .- Ae).*(tg(x,network)./T).^fragility(x,network)
 end
 
 #
@@ -213,7 +213,7 @@ function loss_n_myega(x, T, y_target,network, Ae)
 end
 
 function loss_n_am(x, T, y_target,network, Ae)
-    return mse(myega(x, T,network, Ae), y_target) # viscosity MYEGA
+    return mse(am(x, T,network, Ae), y_target) # viscosity MYEGA
 end
 
 function loss_n_tvf(x, T, y_target,network)
