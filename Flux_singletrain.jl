@@ -15,6 +15,8 @@ include("flux_train.jl")
 
 mod_path_out= "./model/"
 
-dataset="./data/DataSet_0p10val.hdf5"
+dataset="./data/DataSet_0p20val.hdf5"
 
-train_nn(dataset, mod_path_out, "_test",max_epoch=2,pretraining=true,figures=true)
+train_nn(dataset, mod_path_out, "_test",
+nb_neurons = 150, p_drop = 0.3, nb_layers = 4,
+max_epoch=2000,pretraining=true,figures=true)

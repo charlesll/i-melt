@@ -13,16 +13,13 @@ function load_data(path_data::String, path_raman::String, path_density::String;v
     datas["X_columns"] = h5read(path_data, "X_columns")
 
     datas["X_entropy_train"] = h5read(path_data, "X_entropy_train")
-    datas["X_entropy_train_sc"] = h5read(path_data, "X_entropy_train_sc")
+    datas["y_entropy_train"] = h5read(path_data, "y_entropy_train")
 
     datas["X_entropy_valid"] = h5read(path_data, "X_entropy_valid")
-    datas["X_entropy_valid_sc"] = h5read(path_data, "X_entropy_valid_sc")
+    datas["y_entropy_valid"] = h5read(path_data, "y_entropy_valid")
 
     datas["X_entropy_test"] = h5read(path_data, "X_entropy_test")
-    datas["X_entropy_test_sc"] = h5read(path_data, "X_entropy_test_sc")
-
-    datas["X_entropy_tv"] = [datas["X_entropy_train"] datas["X_entropy_valid"]]
-    datas["X_entropy_sc_tv"] = [datas["X_entropy_train_sc"] datas["X_entropy_valid_sc"]]
+    datas["y_entropy_test"] = h5read(path_data, "y_entropy_test")
 
     datas["X_tv"] = h5read(path_data, "X_tv")
     datas["X_tv_sc"] = h5read(path_data, "X_tv_sc")
@@ -155,7 +152,7 @@ function tens(size)
 end
 
 function init_both(dims)
-    return ones(dims).*[log.(1000.);log.(10.); log.(2.3)]
+    return ones(dims).*[log.(1000.);log.(30.); log.(2.3)]
 end
 
 #
@@ -193,7 +190,7 @@ end
 
 # AG EQUATION
 function ag(x, T, ap, b, network, Ae)
-    return Ae .+ Be(x,network, Ae) ./ (T.* (ScTg(x,ap,b,network,Ae) .+ dCp(x, T, ap, b,network)))
+    return Ae .+ Be(x,ap,b,network, Ae) ./ (T.* (ScTg(x,ap,b,network,Ae) .+ dCp(x, T, ap, b,network)))
 end
 
 # MYEGA EQUATION
@@ -230,9 +227,9 @@ function loss_n_tvf(x, T, y_target,network)
     return mse(tvf(x,T,network),y_target) # viscosity TVF
 end
 
-#function loss_sc(x,sc,network)
-#    return mse(ScTg(x,network),sc) # Configurational entropy
-#end
+function loss_sc(X_, ap_, b_, Sc_, nns, Ae)
+    return mse(ScTg(X_, ap_, b_, nns, Ae),Sc_)
+end
 
 function loss_tg(x,tg_target,network)
     return mse(tg(x,network),tg_target) # glass transition T
@@ -250,6 +247,12 @@ function loss_tg_d(x,tg_target,x_d, d_target,nns; L2_norm = 0.001, s_scale = 100
         return tg_scale.*loss_tg(x,tg_target,nns) .+ d_scale.*loss_density(x_d,d_target,nns) .+ L2_norm*sum(norm, params(nns))# Add this to your loss
 end
 
+function loss_tg_d_sc(x_tg, y_tg, x_d, y_d, x_s, ap_s, b_s, y_s, nns, Ae; L2_norm = 0.001, K_s = 100.0, K_t = 1.0, K_d = 1000.)
+        return K_t.*loss_tg(x_tg,y_tg,nns)
+        .+ K_d.*loss_density(x_d,y_d,nns)
+        .+ K_s.*loss_sc(x_s, ap_s, b_s, y_s, nns, Ae)
+        .+ L2_norm*sum(norm, params(nns))# Add this to your loss
+end
 
 # s_scale.*loss_sc(x,sc_target,nns) .+
     #return mse((12.-Ae).*(1+(ap.+tg(x,network).*b)./ScTg(x,network)) - fragility(x,network))
