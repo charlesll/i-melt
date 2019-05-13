@@ -17,4 +17,4 @@ mod_path_out= "./model/"
 
 dataset="./data/DataSet_0p10val.hdf5"
 
-train_nn(dataset, mod_path_out, "_test",max_epoch=5000,pretraining=true,figures=true)
+train_nn(dataset, mod_path_out, "_test",max_epoch=2,pretraining=true,figures=true)

@@ -43,6 +43,16 @@ function load_data(path_data::String, path_raman::String, path_density::String;v
     datas["X_scaler_mean"] = h5read(path_data, "X_scaler_mean")
     datas["X_scaler_var"] = h5read(path_data, "X_scaler_var")
 
+    # Loading viscous Tg
+    datas["X_tg_train"] = h5read(path_data,"X_tg_train")
+    datas["X_tg_valid"] = h5read(path_data,"X_tg_valid")
+    datas["X_tg_test"]  = h5read(path_data,"X_tg_test")
+
+    datas["y_tg_train"] = h5read(path_data,"y_tg_train")
+    datas["y_tg_valid"] = h5read(path_data,"y_tg_valid")
+    datas["y_tg_test"]  = h5read(path_data,"y_tg_test")
+
+    # Lading Raman dataset
     datas["X_raman_train"] = Float32.(h5read(path_raman,"X_raman_train"))
     datas["y_raman_train"] = Float32.((h5read(path_raman,"y_raman_train")))
     datas["X_raman_valid"] = Float32.(h5read(path_raman,"X_raman_test"))
@@ -148,8 +158,6 @@ function init_both(dims)
     return ones(dims).*[log.(1000.);log.(10.); log.(2.3)]
 end
 
-init_random(dims...) = randn(Float32, dims...) .* [5.;10.]
-
 #
 # Function for extracting parameters from the network
 #
@@ -157,13 +165,14 @@ function tg(x,network)
     return reshape(exp.(network(x[1:4,:])[1,:]),1,size(x,2))
 end
 
-function ScTg(x,network)
-    return reshape(exp.(network(x[1:4,:])[2,:]),1,size(x,2))
+function ScTg(x,ap, b, network,Ae)
+    return (ap .+ b.*tg(x,network))./(fragility(x,network)./(12.0 .- Ae) .- 1.0)
+    #return reshape(exp.(network(x[1:4,:])[2,:]),1,size(x,2))
 end
 
-function fragility(x,ap,b,network,Ae) # Now calculated
-    return (12.0.-Ae).*(1.0 .+ (ap .+ b .* tg(x,network))./ScTg(x,network)
-    #return reshape(exp.(network(x[1:4,:])[3,:]),1,size(x,2))
+function fragility(x,network) # Now calculated
+    #return (12.0.-Ae).*(1.0 .+ (ap .+ b .* tg(x,network))./ScTg(x,network))
+    return reshape(exp.(network(x[1:4,:])[2,:]),1,size(x,2))
 end
 
 function density(x,network)
@@ -174,8 +183,8 @@ end
 # Thermodynamic equations : Adam and Gibbs model
 #
 
-function Be(x,network, Ae)
-    return (12.0.-Ae).*(tg(x,network) .* ScTg(x,network))
+function Be(x,ap, b, network, Ae)
+    return (12.0.-Ae).*(tg(x,network) .* ScTg(x,ap,b,network,Ae))
 end
 
 function dCp(x, T, ap, b, network)
@@ -184,17 +193,17 @@ end
 
 # AG EQUATION
 function ag(x, T, ap, b, network, Ae)
-    return Ae .+ Be(x,network, Ae) ./ (T.* (ScTg(x,network) .+ dCp(x, T, ap, b,network)))
+    return Ae .+ Be(x,network, Ae) ./ (T.* (ScTg(x,ap,b,network,Ae) .+ dCp(x, T, ap, b,network)))
 end
 
 # MYEGA EQUATION
-function myega(x, T, ap, b, network, Ae)
-    return Ae .+ (12.0 .- Ae).*(tg(x,network)./T).*exp.((fragility(x,ap, b, network)./(12.0.-Ae).-1.0).*(tg(x,network)./T.-1.0))
+function myega(x, T, network, Ae)
+    return Ae .+ (12.0 .- Ae).*(tg(x,network)./T).*exp.((fragility(x, network)./(12.0.-Ae).-1.0).*(tg(x,network)./T.-1.0))
 end
 
 # Avramov-Mitchell EQUATION
-function am(x, T, ap, b, network, Ae)
-    return Ae .+ (12.0 .- Ae).*(tg(x,network)./T).^fragility(x, ap, b, network)
+function am(x, T, network, Ae)
+    return Ae .+ (12.0 .- Ae).*(tg(x,network)./T).^(fragility(x, network)./12.0)
 end
 
 #
@@ -209,21 +218,21 @@ function loss_n_ag(x, T, ap, b, y_target,network, Ae)
     return mse(ag(x, T, ap, b,network, Ae), y_target) # viscosity AG
 end
 
-function loss_n_myega(x, T, y_target,network, Ae)
-    return mse(myega(x, T,network, Ae), y_target) # viscosity MYEGA
+function loss_n_myega(x, T, y_target, network, Ae)
+    return mse(myega(x, T, network, Ae), y_target) # viscosity MYEGA
 end
 
-function loss_n_am(x, T, y_target,network, Ae)
-    return mse(am(x, T,network, Ae), y_target) # viscosity MYEGA
+function loss_n_am(x, T, y_target, network, Ae)
+    return mse(am(x, T, network, Ae), y_target) # viscosity MYEGA
 end
 
 function loss_n_tvf(x, T, y_target,network)
     return mse(tvf(x,T,network),y_target) # viscosity TVF
 end
 
-function loss_sc(x,sc,network)
-    return mse(ScTg(x,network),sc) # Configurational entropy
-end
+#function loss_sc(x,sc,network)
+#    return mse(ScTg(x,network),sc) # Configurational entropy
+#end
 
 function loss_tg(x,tg_target,network)
     return mse(tg(x,network),tg_target) # glass transition T
@@ -237,9 +246,11 @@ function loss_density(x,density_target,network)
     return mse(density(x,network),density_target)
 end
 
-function loss_tg_sc_d(x,tg_target,sc_target,x_d, d_target,nns; L2_norm = 0.001, s_scale = 100.0, tg_scale = 1.0, d_scale = 1000.)
-        return tg_scale.*loss_tg(x,tg_target,nns) .+ s_scale.*loss_sc(x,sc_target,nns) .+ d_scale.*loss_density(x_d,d_target,nns) .+ L2_norm*sum(norm, params(nns))# Add this to your loss
+function loss_tg_d(x,tg_target,x_d, d_target,nns; L2_norm = 0.001, s_scale = 100.0, tg_scale = 1.0, d_scale = 1000.)
+        return tg_scale.*loss_tg(x,tg_target,nns) .+ d_scale.*loss_density(x_d,d_target,nns) .+ L2_norm*sum(norm, params(nns))# Add this to your loss
 end
 
+
+# s_scale.*loss_sc(x,sc_target,nns) .+
     #return mse((12.-Ae).*(1+(ap.+tg(x,network).*b)./ScTg(x,network)) - fragility(x,network))
     #function loss_constrain_m_cpsc(x,ap,b,tg_target,sc_target,network,Ae)
