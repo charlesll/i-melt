@@ -74,7 +74,7 @@ function train_nn(path_data,mod_path_out,mod_suffix;
     c6 = Dense(nb_neurons, nb_neurons, relu)
 
     # Output Layers
-    cout_thermo = Dense(nb_neurons, 4,initb=init_both) #initW = glorot_uniform
+    cout_thermo = Dense(nb_neurons, 3,initb=init_both) #initW = glorot_uniform
     cout_raman =  Dense(nb_neurons,nb_channels_raman)
 
     # Core : common network
@@ -125,7 +125,7 @@ function train_nn(path_data,mod_path_out,mod_suffix;
         print("\nloss sc: $(loss_sc(x_entro_train_, sc_entro_train_, nns))")
         print("\nloss density: $(loss_density(X_density_train, y_density_train, nns))")
         print("\nloss ag train: $(loss_n_ag(x_train_, T_train_ ,ap_train_, b_train_, y_train_, nns, Ae))")
-        print("\nloss myega train: $(loss_n_am(x_train_, T_train_ , y_train, nns, Ae))")
+        print("\nloss am train: $(loss_n_am(x_train_, T_train_ , y_train, nns, Ae))")
     end
 
 
@@ -302,7 +302,7 @@ function train_nn(path_data,mod_path_out,mod_suffix;
         println("loss sc: $(loss_sc(x_entro_train_, sc_entro_train_, nns))")
         println("loss density: $(loss_density(X_density_train, y_density_train, nns))")
         println("loss n train: $(loss_n_ag(x_train_, T_train_ ,ap_train_, b_train_, y_train_, nns, Ae))")
-        println("loss myega train: $(loss_n_am(x_train_, T_train_ , y_train, nns, Ae))")
+        println("loss am train: $(loss_n_am(x_train_, T_train_ , y_train, nns, Ae))")
     end
     println("Global loss:")
     println(mean(record_loss_train[end-5:end]))

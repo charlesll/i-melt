@@ -145,7 +145,7 @@ function tens(size)
 end
 
 function init_both(dims)
-    return ones(dims).*[log.(1000.);log.(10.);log.(10.); log.(2.3)]
+    return ones(dims).*[log.(1000.);log.(10.); log.(2.3)]
 end
 
 init_random(dims...) = randn(Float32, dims...) .* [5.;10.]
@@ -161,12 +161,13 @@ function ScTg(x,network)
     return reshape(exp.(network(x[1:4,:])[2,:]),1,size(x,2))
 end
 
-function fragility(x,network)
-    return reshape(exp.(network(x[1:4,:])[3,:]),1,size(x,2))
+function fragility(x,ap,b,network,Ae) # Now calculated
+    return (12.0.-Ae).*(1.0 .+ (ap .+ b .* tg(x,network))./ScTg(x,network)
+    #return reshape(exp.(network(x[1:4,:])[3,:]),1,size(x,2))
 end
 
 function density(x,network)
-    return reshape(exp.(network(x[1:4,:])[4,:]),1,size(x,2))
+    return reshape(exp.(network(x[1:4,:])[3,:]),1,size(x,2))
 end
 
 #
@@ -187,13 +188,13 @@ function ag(x, T, ap, b, network, Ae)
 end
 
 # MYEGA EQUATION
-function myega(x, T, network, Ae)
-    return Ae .+ (12.0 .- Ae).*(tg(x,network)./T).*exp.((fragility(x,network)./(12.0.-Ae).-1.0).*(tg(x,network)./T.-1.0))
+function myega(x, T, ap, b, network, Ae)
+    return Ae .+ (12.0 .- Ae).*(tg(x,network)./T).*exp.((fragility(x,ap, b, network)./(12.0.-Ae).-1.0).*(tg(x,network)./T.-1.0))
 end
 
 # Avramov-Mitchell EQUATION
-function am(x, T, network, Ae)
-    return Ae .+ (12.0 .- Ae).*(tg(x,network)./T).^fragility(x,network)
+function am(x, T, ap, b, network, Ae)
+    return Ae .+ (12.0 .- Ae).*(tg(x,network)./T).^fragility(x, ap, b, network)
 end
 
 #
@@ -239,3 +240,6 @@ end
 function loss_tg_sc_d(x,tg_target,sc_target,x_d, d_target,nns; L2_norm = 0.001, s_scale = 100.0, tg_scale = 1.0, d_scale = 1000.)
         return tg_scale.*loss_tg(x,tg_target,nns) .+ s_scale.*loss_sc(x,sc_target,nns) .+ d_scale.*loss_density(x_d,d_target,nns) .+ L2_norm*sum(norm, params(nns))# Add this to your loss
 end
+
+    #return mse((12.-Ae).*(1+(ap.+tg(x,network).*b)./ScTg(x,network)) - fragility(x,network))
+    #function loss_constrain_m_cpsc(x,ap,b,tg_target,sc_target,network,Ae)
