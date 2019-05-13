@@ -104,11 +104,8 @@ function train_nn(path_data,mod_path_out,mod_suffix;
     nns = Chain(core, cout_thermo) |> gpu
 
     # PREPARING DATA / FINAL
-    x_train_, y_train_, T_train_, ap_train_, b_train_, sc_train_, tg_train_ = prepare_data(X_train,y_train)
-    x_valid_, y_valid_, T_valid_, ap_valid_, b_valid_, sc_valid_, tg_valid_ = prepare_data(X_valid,y_valid)
-
-    #x_entro_train_, y_entro_train_, T_entro_train_, ap_entro_train_, b_entro_train_, sc_entro_train_, tg_entro_train_ = prepare_data(X_entropy_train,X_entropy_train[11,:])
-    #x_entro_valid_, y_entro_valid_, T_entro_valid_, ap_entro_valid_, b_entro_valid_, sc_entro_valid_, tg_entro_valid_ = prepare_data(X_entropy_valid,X_entropy_valid[11,:])
+    x_train_, y_train_, T_train_, ap_train_, b_train_, ~, ~ = prepare_data(X_train,y_train)
+    x_valid_, y_valid_, T_valid_, ap_valid_, b_valid_, ~, ~ = prepare_data(X_valid,y_valid)
 
     if verbose == true
         print("\nloss Raman: $(loss_raman(X_raman_train, y_raman_train, nnr))")
