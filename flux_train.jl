@@ -57,6 +57,7 @@ function train_nn(path_data,mod_path_out,mod_suffix;
     #
 
     Ae = param([-2.11]) # Pre-exp Param
+    Mo = param([15.0]) # min fragi
 
     # Network architecture
     nb_channels_raman = size(y_raman_train,1) # number of channels on Raman spectra
@@ -70,7 +71,7 @@ function train_nn(path_data,mod_path_out,mod_suffix;
     c6 = Dense(nb_neurons, nb_neurons, relu)
 
     # Output Layers
-    cout_thermo = Dense(nb_neurons, 3,initb=init_both) #initW = glorot_uniform
+    cout_thermo = Dense(nb_neurons, 4,initb=init_both) #initW = glorot_uniform
     cout_raman =  Dense(nb_neurons,nb_channels_raman)
 
     # Core : common network
@@ -116,12 +117,13 @@ function train_nn(path_data,mod_path_out,mod_suffix;
     x_sc_valid, sc_valid, ~, sc_ap_valid_, sc_b_valid_, sc_valid, ~ = prepare_data(X_entropy_valid,y_entropy_valid)
 
     if verbose == true
-        print("\nloss Raman: $(loss_raman(X_raman_train, y_raman_train, nnr))")
-        print("\nloss tg: $(loss_tg(X_tg_train, y_tg_train, nns))")
-        #print("\nloss sc: $(loss_sc(x_entro_train_, sc_entro_train_, nns))")
-        print("\nloss density: $(loss_density(X_density_train, y_density_train, nns))")
-        #print("\nloss ag train: $(loss_n_ag(x_train_, T_train_ , ap_train_, b_train_, y_train_, nns, Ae))")
-        print("\nloss am train: $(loss_n_myega(x_train_, T_train_ ,y_train, nns, Ae))")
+        println("loss Raman: $(loss_raman(X_raman_train, y_raman_train, nnr))")
+        println("loss tg: $(loss_tg(X_tg_train, y_tg_train, nns))")
+        println("loss sc: $(loss_sc(x_sc_train, sc_train, nns))")
+        println("loss density: $(loss_density(X_density_train, y_density_train, nns))")
+        println("loss AG train: $(loss_n_ag(x_train_, T_train_ , ap_train_, b_train_, y_train_, nns, Ae))")
+        println("loss MYEGA train: $(loss_n_myega(x_train_, T_train_ ,y_train, nns, Ae))")
+        println("loss Frag train: $(loss_frag(x_train_, ap_train_, b_train_, nns, Mo))")
     end
 
 
@@ -188,14 +190,14 @@ function train_nn(path_data,mod_path_out,mod_suffix;
 
             evalcb = () -> (push!(record_loss_sc_train, loss_tg_d_sc(X_tg_train, y_tg_train,
                                                                     X_density_train, y_density_train,
-                                                                    x_sc_train, sc_train, sc_ap_train_, sc_b_train_,
-                                                                    nns,Ae).data),
+                                                                    x_sc_train, sc_train,
+                                                                    nns).data),
                 push!(record_loss_sc_valid, loss_tg_d_sc(X_tg_valid, y_tg_valid,
                                                         X_density_valid,y_density_valid,
-                                                        x_sc_valid, sc_train, sc_ap_train_, sc_b_train_,
-                                                        nns,Ae).data))
-            dataset = [(X_tg_train, y_tg_train,X_density_train, y_density_train,x_sc_train, sc_train, sc_ap_train_, sc_b_train_,nns,Ae)]
-            Flux.train!(loss_tg_d_sc, params(nns,Ae), dataset, ADAM(0.001), cb = throttle(evalcb, 1))
+                                                        x_sc_valid, sc_train,
+                                                        nns).data))
+            dataset = [(X_tg_train, y_tg_train,X_density_train, y_density_train,x_sc_train, sc_train,nns)]
+            Flux.train!(loss_tg_d_sc, params(nns), dataset, ADAM(0.001), cb = throttle(evalcb, 1))
 
             ProgressMeter.update!(p, early_stop)
 
@@ -224,13 +226,13 @@ function train_nn(path_data,mod_path_out,mod_suffix;
             testmode!(nnr)
             testmode!(nns)
 
-            scatter([y_tg_train',y_density_train',sc_train'], # x values
-            [tg(X_tg_train,nns).data[:],density(X_density_train,nns).data[:],ScTg(x_sc_train,sc_ap_train_,sc_b_train_,nns,Ae).data], # y values
+            scatter([y_tg_train'[:],y_density_train'[:],sc_train'[:]], # x values
+            [tg(X_tg_train,nns).data'[:],density(X_density_train,nns).data'[:],ScTg(x_sc_train,nns).data'[:]], # y values
             layout=3, # layout
             label=["Train" "Train" "Train"])
 
-            scatter!([y_tg_valid',y_density_valid',sc_valid'], # x values
-            [tg(X_tg_valid,nns).data[:],density(X_density_valid,nns).data[:],ScTg(x_sc_valid,sc_ap_valid_,sc_b_valid_,nns,Ae).data], # y values
+            scatter!([y_tg_valid'[:],y_density_valid'[:],sc_valid'[:]], # x values
+            [tg(X_tg_valid,nns).data'[:],density(X_density_valid,nns).data'[:],ScTg(x_sc_valid,nns).data'[:]], # y values
             label=["Valid" "Valid" "Valid"])
 
             savefig("./figures/pretrain_tg_s_d")
@@ -246,22 +248,24 @@ function train_nn(path_data,mod_path_out,mod_suffix;
     if  verbose == true
         println("loss Raman: $(loss_raman(X_raman_train, y_raman_train, nnr))")
         println("loss tg: $(loss_tg(X_tg_train, y_tg_train, nns))")
-        #println("loss sc: $(loss_sc(x_entro_train_, sc_entro_train_, nns))")
+        println("loss sc: $(loss_sc(x_sc_train, sc_train, nns))")
         println("loss density: $(loss_density(X_density_train, y_density_train, nns))")
-        #println("loss n train: $(loss_n_ag(x_train_, T_train_ , ap_train_, b_train_, y_train_, nns, Ae))")
-        println("loss am train: $(loss_n_myega(x_train_, T_train_ , y_train, nns, Ae))")
+        println("loss AG train: $(loss_n_ag(x_train_, T_train_ , ap_train_, b_train_, y_train_, nns, Ae))")
+        println("loss MYEGA train: $(loss_n_myega(x_train_, T_train_ , y_train, nns, Ae))")
+        println("loss Frag train: $(loss_frag(x_train_, ap_train_, b_train_, nns, Mo))")
     end
 
     # Global loss function, weigth were manually adjusted
     L2_norm = 0.1
-    loss_global(x, T, ap, b, y_target, x_tg, y_tg, x_raman, y_raman, x_density, y_density, x_sc,ap_sc,b_sc, y_sc, nnr, nns, Ae) =
-        100.0.*loss_n_ag(x, T, ap, b, y_target, nns, Ae) .+
-        100.0.*loss_n_myega(x, T, y_target, nns, Ae) .+
-        loss_tg(x_tg,y_tg, nns) .+
-        100.0.*loss_sc(x_sc, ap_sc, b_sc, y_sc, nns,Ae) .+
-        1000.0.*loss_density(x_density,y_density, nns) .+
-        10.0.*loss_raman(x_raman, y_raman, nnr) .+
-        L2_norm*sum(norm, params(nnr,nns))
+    loss_global(x, T, ap, b, y_target, x_tg, y_tg, x_raman, y_raman, x_density, y_density, x_sc, y_sc, nnr, nns, Ae, Mo) =
+        200.0.*loss_n_ag(x, T, ap, b, y_target, nns, Ae) .+ # more important
+        100.0.*loss_n_myega(x, T, y_target, nns, Ae) .+ # less important
+        loss_tg(x_tg,y_tg, nns) .+ # Tg loss, always important
+        100.0.*loss_sc(x_sc, y_sc, nns) .+ # entropy, not very, just as a loose constraint
+        1000.0.*loss_density(x_density,y_density, nns) .+ # density, important
+        10.0.*loss_raman(x_raman, y_raman, nnr) .+ # Raman is a loose constraint too
+        50.0 .*loss_frag(x, ap, b, nns, Mo) .+ # Minimizing the different between viscous fragility and its thermodynamic calculation
+        L2_norm*sum(norm, params(nnr,nns)) # avoiding overfitting by adding a L2_norm; forces weights toward 0
     # Loss record
     record_loss_train = Float64[]
     record_loss_valid = Float64[]
@@ -282,19 +286,20 @@ function train_nn(path_data,mod_path_out,mod_suffix;
                 X_tg_train, y_tg_train,
                 X_raman_train, y_raman_train,
                 X_density_train, y_density_train,
-                x_sc_train, sc_ap_train_,sc_b_train_,sc_train,
-                nnr, nns, Ae)]
+                x_sc_train, sc_train,
+                nnr, nns, Ae, Mo)]
 
     while epoch_idx < max_epoch
 
         evalcb = () -> (push!(record_loss_train, loss_global(x_train_, T_train_ ,ap_train_, b_train_, y_train_,
-                    X_tg_train, y_tg_train,X_raman_train, y_raman_train, X_density_train, y_density_train, x_sc_train, sc_ap_train_,sc_b_train_,sc_train,
-                     nnr, nns, Ae).data),
+                    X_tg_train, y_tg_train,X_raman_train, y_raman_train, X_density_train, y_density_train,
+                    x_sc_train, sc_train,
+                     nnr, nns, Ae, Mo).data),
                     push!(record_loss_valid, loss_global(x_valid_, T_valid_ ,ap_valid_, b_valid_, y_valid_,
                     X_tg_valid, y_tg_valid,X_raman_valid, y_raman_valid, X_density_valid, y_density_valid,
-                    x_sc_valid, sc_ap_valid_,sc_b_valid_,sc_valid,
-                    nnr, nns, Ae).data))
-        Flux.train!(loss_global, params(Ae,nnr,nns), dataset, ADAM(0.001), cb = throttle(evalcb, 1))
+                    x_sc_valid, sc_valid,
+                    nnr, nns, Ae, Mo).data))
+        Flux.train!(loss_global, params(Ae,Mo,nnr,nns), dataset, ADAM(0.001), cb = throttle(evalcb, 1))
 
         ProgressMeter.update!(p, epoch_idx)
 
@@ -306,6 +311,7 @@ function train_nn(path_data,mod_path_out,mod_suffix;
             @save mod_path_out*"nns"*mod_suffix*".bson" nns
             @save mod_path_out*"nnr"*mod_suffix*".bson" nnr
             @save mod_path_out*"Ae"*mod_suffix*".bson" Ae
+            @save mod_path_out*"Mo"*mod_suffix*".bson" Mo
         else
             early_stop += 1
         end
@@ -317,10 +323,11 @@ function train_nn(path_data,mod_path_out,mod_suffix;
     if  verbose == true
         println("loss Raman: $(loss_raman(X_raman_train, y_raman_train, nnr))")
         println("loss tg: $(loss_tg(X_tg_train, y_tg_train, nns))")
-        #println("loss sc: $(loss_sc(x_entro_train_, sc_entro_train_, nns))")
+        println("loss sc: $(loss_sc(x_sc_train, sc_train, nns))")
         println("loss density: $(loss_density(X_density_train, y_density_train, nns))")
-        #println("loss n train: $(loss_n_ag(x_train_, T_train_ , ap_train_, b_train_, y_train_, nns, Ae))")
-        println("loss am train: $(loss_n_myega(x_train_, T_train_ , y_train, nns, Ae))")
+        println("loss AG train: $(loss_n_ag(x_train_, T_train_ , ap_train_, b_train_, y_train_, nns, Ae))")
+        println("loss MYEGA train: $(loss_n_myega(x_train_, T_train_ , y_train, nns, Ae))")
+        println("loss Frag train: $(loss_frag(x_train_, ap_train_, b_train_, nns, Mo))")
     end
     println("Global loss:")
     println(mean(record_loss_train[end-5:end]))

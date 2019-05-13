@@ -152,7 +152,7 @@ function tens(size)
 end
 
 function init_both(dims)
-    return ones(dims).*[log.(1000.);log.(30.); log.(2.3)]
+    return ones(dims).*[log.(1000.);log.(10.0);log.(30.0); log.(2.3)]
 end
 
 #
@@ -162,26 +162,26 @@ function tg(x,network)
     return reshape(exp.(network(x[1:4,:])[1,:]),1,size(x,2))
 end
 
-function ScTg(x,ap, b, network,Ae)
-    return (ap .+ b.*tg(x,network))./(fragility(x,network)./(12.0 .- Ae) .- 1.0)
-    #return reshape(exp.(network(x[1:4,:])[2,:]),1,size(x,2))
+function ScTg(x, network)
+    #return (ap .+ b.*tg(x,network))./(fragility(x,network)./(12.0 .- Ae) .- 1.0)
+    return reshape(exp.(network(x[1:4,:])[2,:]),1,size(x,2))
 end
 
 function fragility(x,network) # Now calculated
     #return (12.0.-Ae).*(1.0 .+ (ap .+ b .* tg(x,network))./ScTg(x,network))
-    return reshape(exp.(network(x[1:4,:])[2,:]),1,size(x,2))
+    return reshape(exp.(network(x[1:4,:])[3,:]),1,size(x,2))
 end
 
 function density(x,network)
-    return reshape(exp.(network(x[1:4,:])[3,:]),1,size(x,2))
+    return reshape(exp.(network(x[1:4,:])[4,:]),1,size(x,2))
 end
 
 #
 # Thermodynamic equations : Adam and Gibbs model
 #
 
-function Be(x,ap, b, network, Ae)
-    return (12.0.-Ae).*(tg(x,network) .* ScTg(x,ap,b,network,Ae))
+function Be(x,network, Ae)
+    return (12.0.-Ae).*(tg(x,network) .* ScTg(x,network))
 end
 
 function dCp(x, T, ap, b, network)
@@ -190,7 +190,7 @@ end
 
 # AG EQUATION
 function ag(x, T, ap, b, network, Ae)
-    return Ae .+ Be(x,ap,b,network, Ae) ./ (T.* (ScTg(x,ap,b,network,Ae) .+ dCp(x, T, ap, b,network)))
+    return Ae .+ Be(x,network, Ae) ./ (T.* (ScTg(x,network) .+ dCp(x, T, ap, b,network)))
 end
 
 # MYEGA EQUATION
@@ -227,8 +227,8 @@ function loss_n_tvf(x, T, y_target,network)
     return mse(tvf(x,T,network),y_target) # viscosity TVF
 end
 
-function loss_sc(X_, ap_, b_, Sc_, nns, Ae)
-    return mse(ScTg(X_, ap_, b_, nns, Ae),Sc_)
+function loss_sc(X_, Sc_, nns)
+    return mse(ScTg(X_, nns),Sc_)
 end
 
 function loss_tg(x,tg_target,network)
@@ -247,11 +247,15 @@ function loss_tg_d(x,tg_target,x_d, d_target,nns; L2_norm = 0.001, s_scale = 100
         return tg_scale.*loss_tg(x,tg_target,nns) .+ d_scale.*loss_density(x_d,d_target,nns) .+ L2_norm*sum(norm, params(nns))# Add this to your loss
 end
 
-function loss_tg_d_sc(x_tg, y_tg, x_d, y_d, x_s, ap_s, b_s, y_s, nns, Ae; L2_norm = 0.001, K_s = 100.0, K_t = 1.0, K_d = 1000.)
+function loss_tg_d_sc(x_tg, y_tg, x_d, y_d, x_s, y_s, nns; L2_norm = 0.001, K_s = 100.0, K_t = 1.0, K_d = 1000.)
         return K_t.*loss_tg(x_tg,y_tg,nns)
         .+ K_d.*loss_density(x_d,y_d,nns)
-        .+ K_s.*loss_sc(x_s, ap_s, b_s, y_s, nns, Ae)
+        .+ K_s.*loss_sc(x_s, y_s, nns)
         .+ L2_norm*sum(norm, params(nns))# Add this to your loss
+end
+
+function loss_frag(x,ap,b,network,Mo) # we add this as a constraint
+    return mse(fragility(x,network), Mo.*(1.0.+(ap .+ b.*tg(x,network))./ScTg(x,network)))
 end
 
 # s_scale.*loss_sc(x,sc_target,nns) .+
