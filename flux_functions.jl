@@ -151,54 +151,80 @@ function tens(size)
     return ones(size).*log.(10.0)
 end
 
-function init_both(dims)
-    return ones(dims).*[log.(1000.);log.(10.0);log.(30.0); log.(2.3)]
-end
+"""
+    init_both(dims)
+
+bias initialisation to values close to physical ones
+"""
+init_both(dims) = ones(dims).*[log.(1000.);log.(10.0);log.(30.0); log.(2.3)]
 
 #
 # Function for extracting parameters from the network
 #
-function tg(x,network)
-    return reshape(exp.(network(x[1:4,:])[1,:]),1,size(x,2))
-end
+"""
+    tg(x,network)
 
-function ScTg(x, network)
-    #return (ap .+ b.*tg(x,network))./(fragility(x,network)./(12.0 .- Ae) .- 1.0)
-    return reshape(exp.(network(x[1:4,:])[2,:]),1,size(x,2))
-end
+predict glass transition temperature given entries X and neural network
+"""
+tg(x,network) = reshape(exp.(network(x[1:4,:])[1,:]),1,size(x,2))
 
-function fragility(x,network) # Now calculated
-    #return (12.0.-Ae).*(1.0 .+ (ap .+ b .* tg(x,network))./ScTg(x,network))
-    return reshape(exp.(network(x[1:4,:])[3,:]),1,size(x,2))
-end
+"""
+    ScTg(x,network)
 
-function density(x,network)
-    return reshape(exp.(network(x[1:4,:])[4,:]),1,size(x,2))
-end
+predict configurational entropy given entries X and neural network
+"""
+ScTg(x, network) = reshape(exp.(network(x[1:4,:])[2,:]),1,size(x,2))
+
+"""
+    fragility(x,network)
+
+predict fragility given entries X and neural network
+"""
+fragility(x,network) = reshape(exp.(network(x[1:4,:])[3,:]),1,size(x,2))
+
+"""
+    density(x,network)
+
+predict density given entries X and neural network
+"""
+ density(x,network) = reshape(exp.(network(x[1:4,:])[4,:]),1,size(x,2))
 
 #
 # Thermodynamic equations : Adam and Gibbs model
 #
+"""
+    Be(x,network, Ae)
 
-function Be(x,network, Ae)
-    return (12.0.-Ae).*(tg(x,network) .* ScTg(x,network))
-end
+predict the Be term of the Adam-Gibbs equation given entries X, neural network and Ae
+"""
+Be(x,network, Ae) = (12.0.-Ae).*(tg(x,network) .* ScTg(x,network))
 
-function dCp(x, T, ap, b, network)
-    return ap.*(log.(T).-log.(tg(x,network))) .+ b.*(T.-tg(x,network))
-end
+"""
+    dCp(x, T, ap, b, network)
 
-# AG EQUATION
-function ag(x, T, ap, b, network, Ae)
-    return Ae .+ Be(x,network, Ae) ./ (T.* (ScTg(x,network) .+ dCp(x, T, ap, b,network)))
-end
+predict the delta_CpConf term of the Adam-Gibbs equation given entries X, temperature T, Cp terms ap and b, and neural network
+"""
+dCp(x, T, ap, b, network) = ap.*(log.(T).-log.(tg(x,network))) .+ b.*(T.-tg(x,network))
 
-# MYEGA EQUATION
-function myega(x, T, network, Ae)
-    return Ae .+ (12.0 .- Ae).*(tg(x,network)./T).*exp.((fragility(x, network)./(12.0.-Ae).-1.0).*(tg(x,network)./T.-1.0))
-end
+"""
+    ag(x, T, ap, b, network, Ae)
 
-# Avramov-Mitchell EQUATION
+predict viscosity using the Adam-Gibbs equation, given entries X, temperature T, Cp terms ap and b, neural network and Ae
+"""
+ag(x, T, ap, b, network, Ae) = Ae .+ Be(x,network, Ae) ./ (T.* (ScTg(x,network) .+ dCp(x, T, ap, b,network)))
+
+"""
+    myega(x, T, network, Ae)
+
+predict viscosity using the MYEGA equation, given entries X, temperature T, neural network and Ae
+"""
+myega(x, T, network, Ae) = Ae .+ (12.0 .- Ae).*(tg(x,network)./T).*exp.((fragility(x, network)./(12.0.-Ae).-1.0).*(tg(x,network)./T.-1.0))
+
+"""
+    am(x, T, network, Ae)
+
+predict viscosity using the Avramov-Mitchell equation, given entries X, temperature T, neural network and Ae
+"""
 function am(x, T, network, Ae)
     return Ae .+ (12.0 .- Ae).*(tg(x,network)./T).^(fragility(x, network)./12.0)
 end
@@ -206,47 +232,76 @@ end
 #
 # LOSS FUNCTIONS
 #
+"""
+    mse(yp, y)
 
-function mse(yp, y)
-    return sqrt(sum((yp .- y).^2)./size(y, 2))
-end
+root mean square error between yp and y
 
-function loss_n_ag(x, T, ap, b, y_target,network, Ae)
-    return mse(ag(x, T, ap, b,network, Ae), y_target) # viscosity AG
-end
+careful with the dimension... should be the same!
+"""
+mse(yp, y) = return sqrt(sum((yp .- y).^2)./size(y, 2))
 
-function loss_n_myega(x, T, y_target, network, Ae)
-    return mse(myega(x, T, network, Ae), y_target) # viscosity MYEGA
-end
+"""
+    loss_n_ag(x, T, ap, b, y_target,network, Ae)
 
-function loss_n_am(x, T, y_target, network, Ae)
-    return mse(am(x, T, network, Ae), y_target) # viscosity MYEGA
-end
+Adam-Gibbs viscosity loss function
+"""
+loss_n_ag(x, T, ap, b, y_target,network, Ae) = mse(ag(x, T, ap, b,network, Ae), y_target)
 
-function loss_n_tvf(x, T, y_target,network)
-    return mse(tvf(x,T,network),y_target) # viscosity TVF
-end
+"""
+    loss_n_myega(x, T, y_target, network, Ae)
 
-function loss_sc(X_, Sc_, nns)
-    return mse(ScTg(X_, nns),Sc_)
-end
+MYEGA viscosity loss function
+"""
+loss_n_myega(x, T, y_target, network, Ae) = mse(myega(x, T, network, Ae), y_target)
 
-function loss_tg(x,tg_target,network)
-    return mse(tg(x,network),tg_target) # glass transition T
-end
+"""
+    loss_n_am(x, T, y_target, network, Ae)
 
-function loss_raman(x,raman_target,network)
-    return mse(network(x),raman_target) # Raman spectra
-end
+AM viscosity loss function
+"""
+loss_n_am(x, T, y_target, network, Ae) = mse(am(x, T, network, Ae), y_target)
 
-function loss_density(x,density_target,network)
-    return mse(density(x,network),density_target)
-end
+"""
+    loss_n_tvf(x, T, y_target,network)
 
-function loss_tg_d(x,tg_target,x_d, d_target,nns; L2_norm = 0.001, s_scale = 100.0, tg_scale = 1.0, d_scale = 1000.)
-        return tg_scale.*loss_tg(x,tg_target,nns) .+ d_scale.*loss_density(x_d,d_target,nns) .+ L2_norm*sum(norm, params(nns))# Add this to your loss
-end
+VFT viscosity loss function
+"""
+loss_n_tvf(x, T, y_target,network) = mse(tvf(x,T,network),y_target) # viscosity TVF
 
+"""
+    loss_sc(X_, Sc_, nns)
+
+Sconf(Tg) loss function
+"""
+loss_sc(X_, Sc_, nns) = mse(ScTg(X_, nns),Sc_)
+
+"""
+    loss_tg(x,tg_target,network)
+
+Glass transition temperature Tg loss function
+"""
+loss_tg(x,tg_target,network) = mse(tg(x,network),tg_target) # glass transition T
+
+"""
+    loss_raman(x,raman_target,network)
+
+Raman spectra loss function
+"""
+loss_raman(x,raman_target,network) = mse(network(x),raman_target) # Raman spectra
+
+"""
+    loss_density(x,density_target,network)
+
+Density loss function
+"""
+loss_density(x,density_target,network) = mse(density(x,network),density_target)
+
+"""
+    loss_tg_d_sc(x_tg, y_tg, x_d, y_d, x_s, y_s, nns; L2_norm = 0.001, K_s = 100.0, K_t = 1.0, K_d = 1000.)
+
+For pretraining on Tg, Sconf(Tg) and density
+"""
 function loss_tg_d_sc(x_tg, y_tg, x_d, y_d, x_s, y_s, nns; L2_norm = 0.001, K_s = 100.0, K_t = 1.0, K_d = 1000.)
         return K_t.*loss_tg(x_tg,y_tg,nns)
         .+ K_d.*loss_density(x_d,y_d,nns)
@@ -254,10 +309,13 @@ function loss_tg_d_sc(x_tg, y_tg, x_d, y_d, x_s, y_s, nns; L2_norm = 0.001, K_s 
         .+ L2_norm*sum(norm, params(nns))# Add this to your loss
 end
 
+"""
+    loss_frag(x,ap,b,network,Mo)
+
+fragility should scale with the ration between Cpconf(Tg)/Sconf(Tg) (Webb, 2008, Giordano et Russell, 2017)
+
+We add a loss function to use this constraint in our model
+"""
 function loss_frag(x,ap,b,network,Mo) # we add this as a constraint
     return mse(fragility(x,network), Mo.*(1.0.+(ap .+ b.*tg(x,network))./ScTg(x,network)))
 end
-
-# s_scale.*loss_sc(x,sc_target,nns) .+
-    #return mse((12.-Ae).*(1+(ap.+tg(x,network).*b)./ScTg(x,network)) - fragility(x,network))
-    #function loss_constrain_m_cpsc(x,ap,b,tg_target,sc_target,network,Ae)

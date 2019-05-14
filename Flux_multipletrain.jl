@@ -17,6 +17,11 @@ mod_path_out= "./model/"
 
 dataset="./data/DataSet_0p20val.hdf5"
 
-train_nn(dataset, mod_path_out, "_test",
-nb_neurons = 20, p_drop = 0.3, nb_layers = 4,
-max_epoch=10,pretraining=true,figures=true)
+liste_suffix = ["4x100_1","4x100_2","4x100_3","4x100_4","4x100_5","4x100_6"]
+
+for i in 1:length(liste_suffix)
+    println("###########################\n ######   RUN "*liste_suffix[i]*"\n###########################")
+    train_nn(dataset, mod_path_out, liste_suffix[i],
+    nb_neurons = 100, p_drop = 0.3, nb_layers = 4,
+    max_epoch = 5000,pretraining=true,figures=true)
+end
