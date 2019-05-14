@@ -17,6 +17,6 @@ mod_path_out= "./model/"
 
 dataset="./data/DataSet_0p20val.hdf5"
 
-train_nn(dataset, mod_path_out, "_test",
-nb_neurons = 20, p_drop = 0.3, nb_layers = 4,
-max_epoch=10,pretraining=true,figures=true)
+train_nn(dataset, mod_path_out, "_100x3",
+nb_neurons = 100, p_drop = 0.3, nb_layers = 3,
+max_epoch=6000,pretraining=true,figures=true)

@@ -133,23 +133,39 @@ end
 #
 # Cp calculations
 #
-at_gfu(x) = 3.0.*x[1,:] .+ 5.0.*x[2,:] + 3.0.*x[3,:] + 3.0.*x[4,:]# + 2*MgO + 2*MgO
+"""
+    at_gfu(x)
+
+calculate atom per gram formula unit
+
+assumes rows are sio2 al2o3 na2o k2o
+"""
+at_gfu(x) = 3.0.*x[1,:] .+ 5.0.*x[2,:] + 3.0.*x[3,:] + 3.0.*x[4,:]
+
+"""
+    aCpl(x)
+
+calculate term a in equation Cpl = qCpl + bCpl*T
+"""
 aCpl(x) = 81.37.*x[1,:] .+ 27.21.*x[2,:] .+ 100.6.*x[3,:]  .+ 50.13.*x[4,:] .+ x[1,:].*(x[4,:].*x[4,:]).*151.7
 
-ap(x) = reshape(aCpl(x) - 3.0.*8.314.*at_gfu(x),1,size(x,2))
-b(x) = reshape(0.0943.*x[2,:] + 0.01578.*x[4,:],1,size(x,2)) #bCpl
+"""
+    b(x)
 
-#ST
+calculate term b in equation Cpl = aCpl + b*T
+"""
+b(x) = reshape(0.09428.*x[2,:] + 0.01578.*x[4,:],1,size(x,2)) #bCpl
+
+"""
+    ap(x)
+
+calculate term ap in equation dS = ap ln(T/Tg) + b(T-Tg)
+"""
+ap(x) = reshape(aCpl(x) - 3.0.*8.314.*at_gfu(x),1,size(x,2))
+
+#
 # Function for initial bias values
 #
-
-function thousands(size)
-    return ones(size).*log.(1000.0)
-    end
-
-function tens(size)
-    return ones(size).*log.(10.0)
-end
 
 """
     init_both(dims)
@@ -298,11 +314,11 @@ Density loss function
 loss_density(x,density_target,network) = mse(density(x,network),density_target)
 
 """
-    loss_tg_d_sc(x_tg, y_tg, x_d, y_d, x_s, y_s, nns; L2_norm = 0.001, K_s = 100.0, K_t = 1.0, K_d = 1000.)
+    loss_tg_d_sc(x_tg, y_tg, x_d, y_d, x_s, y_s, nns; L2_norm = 0.01, K_s = 100.0, K_t = 1.0, K_d = 1000.)
 
 For pretraining on Tg, Sconf(Tg) and density
 """
-function loss_tg_d_sc(x_tg, y_tg, x_d, y_d, x_s, y_s, nns; L2_norm = 0.001, K_s = 100.0, K_t = 1.0, K_d = 1000.)
+function loss_tg_d_sc(x_tg, y_tg, x_d, y_d, x_s, y_s, nns; L2_norm = 0.01, K_s = 1000.0, K_t = 1.0, K_d = 10000.)
         return K_t.*loss_tg(x_tg,y_tg,nns)
         .+ K_d.*loss_density(x_d,y_d,nns)
         .+ K_s.*loss_sc(x_s, y_s, nns)

@@ -1,6 +1,8 @@
 # Copyright Charles Le Losq
 """
-    train_nn(path_data,mod_path_out,mod_suffix)
+    train_nn(path_data,mod_path_out,mod_suffix;
+             max_epoch = 5000, nb_neurons = 100, p_drop = 0.3, nb_layers = 3,
+             pretraining=true, verbose = true, figures=false)
 
 General function to train the network and save it
 """
@@ -51,6 +53,11 @@ function train_nn(path_data,mod_path_out,mod_suffix;
     y_density_train = Float32.(h5read("./data/NKAS_density.hdf5","y_density_train"))
     y_density_valid = Float32.(h5read("./data/NKAS_density.hdf5","y_density_valid"))
     y_density_test = Float32.(h5read("./data/NKAS_density.hdf5","y_density_test"))
+
+    # Loading fake dataset for fragility - entropy constraint
+    X_FragLoss = Float32.(h5read("./data/X_FragLoss.hdf5","X_gen"))
+    ap_FragLoss = ap(X_FragLoss)
+    b_FragLoss = b(X_FragLoss)
 
     #
     # NETWORK DEFINITION
@@ -181,7 +188,7 @@ function train_nn(path_data,mod_path_out,mod_suffix;
 
         # loop details
         epoch_idx = 1; optimal_epochs_s = 0;
-        early_stop = 1; patience = 100
+        early_stop = 1; patience = 300
         min_loss_val = 30000000.0
 
         # loop
