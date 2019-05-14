@@ -92,8 +92,8 @@ function prepare_data(X_, y_)
 
     x = X_[1:4,:]
     T = reshape(X_[5,:],1,size(X_,2))
-    ap = ap(x)
-    b = b(x)
+    ap = ap_calc(x)
+    b = b_calc(x)
     return Float32.(x), Float32.(y), Float32.(T), Float32.(ap), Float32.(b)
 end
 
@@ -148,18 +148,18 @@ calculate term a in equation Cpl = qCpl + bCpl*T
 aCpl(x) = 81.37.*x[1,:] .+ 27.21.*x[2,:] .+ 100.6.*x[3,:]  .+ 50.13.*x[4,:] .+ x[1,:].*(x[4,:].*x[4,:]).*151.7
 
 """
-    b(x)
+    b_calc(x)
 
 calculate term b in equation Cpl = aCpl + b*T
 """
-b(x) = reshape(0.09428.*x[2,:] + 0.01578.*x[4,:],1,size(x,2)) #bCpl
+b_calc(x) = reshape(0.09428.*x[2,:] + 0.01578.*x[4,:],1,size(x,2)) #bCpl
 
 """
-    ap(x)
+    ap_calc(x)
 
 calculate term ap in equation dS = ap ln(T/Tg) + b(T-Tg)
 """
-ap(x) = reshape(aCpl(x) - 3.0.*8.314.*at_gfu(x),1,size(x,2))
+ap_calc(x) = reshape(aCpl(x) - 3.0.*8.314.*at_gfu(x),1,size(x,2))
 
 #
 # Function for initial bias values
@@ -332,4 +332,18 @@ We add a loss function to use this constraint in our model
 """
 function loss_frag(x,ap,b,network,Mo) # we add this as a constraint
     return mse(fragility(x,network), Mo.*(1.0.+(ap .+ b.*tg(x,network))./ScTg(x,network)))
+end
+
+"""
+    loss_full_pretrain(x_r, y_r, x_tg, y_tg, x_d, y_d, x_s, y_s, x_frag, ap_frag, b_frag, nns, Mo;L2_norm = 0.001, K_R = 10.0, K_s = 100.0, K_t = 1.0, K_d = 10000.0, K_frag = 50.0)
+
+For pretraining on Tg, Sconf(Tg) and density, with fragility-entropy constrain activated
+"""
+function loss_full_pretrain(x_r, y_r, x_tg, y_tg, x_d, y_d, x_s, y_s, x_frag, ap_frag, b_frag, nns, nnr, Mo;
+                            L2_norm = 0.001, K_R = 1.0, K_s = 100.0, K_t = 1.0, K_d = 10000.0, K_frag = 10.0)
+        return (K_R*loss_raman(x_r,y_r,nnr).+ K_t.*loss_tg(x_tg,y_tg,nns)
+        .+ K_d.*loss_density(x_d,y_d,nns)
+        .+ K_s.*loss_sc(x_s, y_s, nns)
+        .+ K_frag.*loss_frag(x_frag,ap_frag,b_frag,nns,Mo)
+        .+ L2_norm*sum(norm, params(nns)))# Add this to your loss
 end
