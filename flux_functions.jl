@@ -21,24 +21,24 @@ function load_data(path_data::String, path_raman::String, path_density::String;v
     datas["X_entropy_test"] = h5read(path_data, "X_entropy_test")
     datas["y_entropy_test"] = h5read(path_data, "y_entropy_test")
 
-    datas["X_tv"] = h5read(path_data, "X_tv")
-    datas["X_tv_sc"] = h5read(path_data, "X_tv_sc")
-    datas["y_tv"] = h5read(path_data, "y_tv")
+    #datas["X_tv"] = h5read(path_data, "X_tv")
+    #datas["X_tv_sc"] = h5read(path_data, "X_tv_sc")
+    #datas["y_tv"] = h5read(path_data, "y_tv")
 
     datas["X_train"] = h5read(path_data, "X_train")
-    datas["X_train_sc"] = h5read(path_data, "X_train_sc")
+    #datas["X_train_sc"] = h5read(path_data, "X_train_sc")
     datas["y_train"] = h5read(path_data, "y_train")
 
     datas["X_valid"] = h5read(path_data, "X_valid")
-    datas["X_valid_sc"] = h5read(path_data, "X_valid_sc")
+    #datas["X_valid_sc"] = h5read(path_data, "X_valid_sc")
     datas["y_valid"] = h5read(path_data, "y_valid")
 
     datas["X_test"] = h5read(path_data, "X_test")
-    datas["X_test_sc"] = h5read(path_data, "X_test_sc")
+    #datas["X_test_sc"] = h5read(path_data, "X_test_sc")
     datas["y_test"] = h5read(path_data, "y_test")
 
-    datas["X_scaler_mean"] = h5read(path_data, "X_scaler_mean")
-    datas["X_scaler_var"] = h5read(path_data, "X_scaler_var")
+    #datas["X_scaler_mean"] = h5read(path_data, "X_scaler_mean")
+    #datas["X_scaler_var"] = h5read(path_data, "X_scaler_var")
 
     # Loading viscous Tg
     datas["X_tg_train"] = h5read(path_data,"X_tg_train")
@@ -84,19 +84,17 @@ end
 """
     prepare_datas(X_,y_)
 
-Prepare datas
+Prepare datas for the viscosity dataset
 """
-function prepare_data(X_,y_)
+function prepare_data(X_, y_)
 
-    y = reshape(y_[:],1,length(y_))
+    y = reshape(y_[:],1,length(y_)) # we make sure this is at the good shape
 
     x = X_[1:4,:]
-    ap = reshape(X_[8,:],1,size(X_,2))
-    b = reshape(X_[9,:],1,size(X_,2))
-    T = reshape(X_[10,:],1,size(X_,2))
-    sc = reshape(X_[11,:],1,size(X_,2))
-    tg = reshape(X_[12,:],1,size(X_,2))
-    return Float32.(x), Float32.(y), Float32.(T), Float32.(ap), Float32.(b), Float32.(sc), Float32.(tg)
+    T = reshape(X_[5,:],1,size(X_,2))
+    ap = ap(x)
+    b = b(x)
+    return Float32.(x), Float32.(y), Float32.(T), Float32.(ap), Float32.(b)
 end
 
 """
