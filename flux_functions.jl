@@ -7,7 +7,7 @@
 
 load the viscosity and Raman datasets at path_dataset and path_raman, respectively
 """
-function load_data(path_data::String, path_raman::String, path_density::String;verbose=true)
+function load_data(path_data::String, path_raman::String, path_density::String;verbose=false)
 
     datas = Dict()
     datas["X_columns"] = h5read(path_data, "X_columns")
@@ -21,24 +21,14 @@ function load_data(path_data::String, path_raman::String, path_density::String;v
     datas["X_entropy_test"] = h5read(path_data, "X_entropy_test")
     datas["y_entropy_test"] = h5read(path_data, "y_entropy_test")
 
-    #datas["X_tv"] = h5read(path_data, "X_tv")
-    #datas["X_tv_sc"] = h5read(path_data, "X_tv_sc")
-    #datas["y_tv"] = h5read(path_data, "y_tv")
-
     datas["X_train"] = h5read(path_data, "X_train")
-    #datas["X_train_sc"] = h5read(path_data, "X_train_sc")
     datas["y_train"] = h5read(path_data, "y_train")
 
     datas["X_valid"] = h5read(path_data, "X_valid")
-    #datas["X_valid_sc"] = h5read(path_data, "X_valid_sc")
     datas["y_valid"] = h5read(path_data, "y_valid")
 
     datas["X_test"] = h5read(path_data, "X_test")
-    #datas["X_test_sc"] = h5read(path_data, "X_test_sc")
     datas["y_test"] = h5read(path_data, "y_test")
-
-    #datas["X_scaler_mean"] = h5read(path_data, "X_scaler_mean")
-    #datas["X_scaler_var"] = h5read(path_data, "X_scaler_var")
 
     # Loading viscous Tg
     datas["X_tg_train"] = h5read(path_data,"X_tg_train")
@@ -63,20 +53,6 @@ function load_data(path_data::String, path_raman::String, path_density::String;v
     datas["y_density_train"] = Float32.(h5read("./data/NKAS_density.hdf5","y_density_train"))
     datas["y_density_valid"] = Float32.(h5read("./data/NKAS_density.hdf5","y_density_valid"))
     datas["y_density_test"] = Float32.(h5read("./data/NKAS_density.hdf5","y_density_test"))
-
-    if verbose == true
-        println("loaded")
-        println("\nFeatures in X_ arrays are")
-        println(datas["X_columns"])
-        println("\nShape of X train and valid is")
-        println(size(datas["X_tv"]))
-
-        println("Size of Raman datasets")
-        println(size(datas["X_raman_train"]))
-        println(size(datas["y_raman_train"]))
-        println(size(datas["X_raman_valid"]))
-        println(size(datas["y_raman_valid"]))
-    end
 
     return datas
 end

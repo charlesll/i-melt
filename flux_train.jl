@@ -300,13 +300,13 @@ function train_nn(path_data,mod_path_out,mod_suffix;
     # Global loss function, weigth were manually adjusted
     L2_norm = 0.1
     loss_global(x, T, ap, b, y_target, x_tg, y_tg, x_raman, y_raman, x_density, y_density, x_sc, y_sc, x_frag, ap_frag, b_frag, nnr, nns, Ae, Mo) =
-        (200.0.*loss_n_ag(x, T, ap, b, y_target, nns, Ae) .+ # more important
+        (300.0.*loss_n_ag(x, T, ap, b, y_target, nns, Ae) .+ # more important
         100.0.*loss_n_myega(x, T, y_target, nns, Ae) .+ # less important
         loss_tg(x_tg,y_tg, nns) .+ # Tg loss, always important
         100.0.*loss_sc(x_sc, y_sc, nns) .+ # entropy, not very, just as a loose constraint
         1000.0.*loss_density(x_density,y_density, nns) .+ # density, important
         10.0.*loss_raman(x_raman, y_raman, nnr) .+ # Raman is a loose constraint too
-        50.0 .*loss_frag(x_frag, ap_frag, b_frag, nns, Mo) .+ # Minimizing the different between viscous fragility and its thermodynamic calculation
+        10.0 .*loss_frag(x_frag, ap_frag, b_frag, nns, Mo) .+ # Minimizing the different between viscous fragility and its thermodynamic calculation
         L2_norm*sum(norm, params(nnr,nns))) # avoiding overfitting by adding a L2_norm; forces weights toward 0
     # Loss record
     record_loss_train = Float64[]

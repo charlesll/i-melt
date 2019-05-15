@@ -19,4 +19,4 @@ dataset="./data/DataSet_0p20val.hdf5"
 
 train_nn(dataset, mod_path_out, "_100x3",
 nb_neurons = 100, p_drop = 0.3, nb_layers = 3,
-max_epoch=20,pretraining=true,figures=true)
+max_epoch=5000,pretraining=true,figures=true)
