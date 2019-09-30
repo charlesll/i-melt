@@ -197,6 +197,8 @@ class model(torch.nn.Module):
 
         self.out_thermo = torch.nn.Linear(self.hidden_size, 6) # Linear output
         self.out_raman = torch.nn.Linear(self.hidden_size, self.nb_channels_raman) # Linear output
+        
+        self.AAA = torch.nn.Parameter(data=torch.tensor([25.0,15.0]))
 
     def forward(self, x):
         """core neural network"""
@@ -403,7 +405,8 @@ def maintraining(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 5
         y_raman_pred_train = neuralmodel.raman_pred(ds.x_raman_train)
         y_density_pred_train = neuralmodel.density(ds.x_density_train)
         y_entro_pred_train = neuralmodel.sctg(ds.x_entro_train)
-
+        y_cp_pred_train = neuralmodel.dCp(ds.x_entro_train,neuralmodel.tg(ds.x_entro_train))
+        
         # on validation set
         y_ag_pred_valid = neuralmodel.ag(ds.x_visco_valid,ds.T_visco_valid)
         y_myega_pred_valid = neuralmodel.myega(ds.x_visco_valid,ds.T_visco_valid)
@@ -411,7 +414,8 @@ def maintraining(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 5
         y_raman_pred_valid = neuralmodel.raman_pred(ds.x_raman_valid)
         y_density_pred_valid = neuralmodel.density(ds.x_density_valid)
         y_entro_pred_valid = neuralmodel.sctg(ds.x_entro_valid)
-
+        y_cp_pred_valid = neuralmodel.dCp(ds.x_entro_valid,neuralmodel.tg(ds.x_entro_valid))
+        
         # Compute Loss
 
         # train
@@ -421,8 +425,9 @@ def maintraining(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 5
         loss_raman = criterion(y_raman_pred_train,ds.y_raman_train)
         loss_density = criterion(y_density_pred_train,ds.y_density_train)
         loss_entro = criterion(y_entro_pred_train,ds.y_entro_train)
-
-        loss = loss_ag + loss_myega + loss_am + 10*loss_raman + 1000*loss_density + loss_entro
+        loss_ = criterion(y_entro_pred_train,y_cp_pred_train/((neuralmodel.fragility(ds.x_entro_train)-neuralmodel.AAA[1])/neuralmodel.AAA[0]))
+        
+        loss = loss_ag + loss_myega + loss_am + 10*loss_raman + 1000*loss_density + loss_entro #+ loss_#
 
         # validation
         loss_ag_v = criterion(y_ag_pred_valid, ds.y_visco_valid)
