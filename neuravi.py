@@ -197,8 +197,6 @@ class model(torch.nn.Module):
 
         self.out_thermo = torch.nn.Linear(self.hidden_size, 6) # Linear output
         self.out_raman = torch.nn.Linear(self.hidden_size, self.nb_channels_raman) # Linear output
-        
-        self.AAA = torch.nn.Parameter(data=torch.tensor([25.0,15.0]))
 
     def forward(self, x):
         """core neural network"""
