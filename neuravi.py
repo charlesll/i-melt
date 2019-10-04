@@ -6,7 +6,7 @@ class data_loader():
     """custom data loader for batch training
 
     """
-    def __init__(self,path_viscosity,path_raman,path_density, device):
+    def __init__(self,path_viscosity,path_raman,path_density, path_ri, device):
         """Inputs
         ------
         path_viscosity : string
@@ -14,6 +14,8 @@ class data_loader():
         path_raman : string
 
         path_density : string
+        
+        path_ri : String
 
         device : CUDA"""
         f = h5py.File(path_viscosity, 'r')
@@ -70,6 +72,21 @@ class data_loader():
         y_density_valid = f["y_density_valid"].value
         y_density_test = f["y_density_test"].value
         f.close()
+        
+        # Refractive Index (ri) dataset
+        f = h5py.File(path_ri, 'r')
+        X_ri_train = f["X_ri_train"].value
+        X_ri_valid = f["X_ri_valid"].value
+        X_ri_test = f["X_ri_test"].value
+        
+        lbd_ri_train = f["lbd_ri_train"].value
+        lbd_ri_valid = f["lbd_ri_valid"].value
+        lbd_ri_test = f["lbd_ri_test"].value
+
+        y_ri_train = f["y_ri_train"].value
+        y_ri_valid = f["y_ri_valid"].value
+        y_ri_test = f["y_ri_test"].value
+        f.close()
 
         # grabbing number of Raman channels
         self.nb_channels_raman = y_raman_valid.shape[1]
@@ -122,6 +139,19 @@ class data_loader():
 
         self.x_density_test = torch.FloatTensor(self.scaling(X_density_test[:,0:4],X_scaler_mean,X_scaler_std)).to(device)
         self.y_density_test = torch.FloatTensor(y_density_test.reshape(-1,1)).to(device)
+        
+        # Optical
+        self.x_ri_train = torch.FloatTensor(self.scaling(X_ri_train[:,0:4],X_scaler_mean,X_scaler_std)).to(device)
+        self.lbd_ri_train = torch.FloatTensor(lbd_ri_train.reshape(-1,1)).to(device)
+        self.y_ri_train = torch.FloatTensor(y_ri_train.reshape(-1,1)).to(device)
+
+        self.x_ri_valid = torch.FloatTensor(self.scaling(X_ri_valid[:,0:4],X_scaler_mean,X_scaler_std)).to(device)
+        self.lbd_ri_valid = torch.FloatTensor(lbd_ri_valid.reshape(-1,1)).to(device)
+        self.y_ri_valid = torch.FloatTensor(y_ri_valid.reshape(-1,1)).to(device)
+
+        self.x_ri_test = torch.FloatTensor(self.scaling(X_ri_test[:,0:4],X_scaler_mean,X_scaler_std)).to(device)
+        self.lbd_ri_test = torch.FloatTensor(lbd_ri_test.reshape(-1,1)).to(device)
+        self.y_ri_test = torch.FloatTensor(y_ri_test.reshape(-1,1)).to(device)
 
         # Raman
         self.x_raman_train = torch.FloatTensor(self.scaling(X_raman_train[:,0:4],X_scaler_mean,X_scaler_std)).to(device)
@@ -134,7 +164,7 @@ class data_loader():
         return(X-mu)/s
 
     def print_data(self):
-        # testing shapes
+        # training shapes
         print("Visco shape")
         print(self.x_visco_train.shape)
         print(self.T_visco_train.shape)
@@ -151,6 +181,11 @@ class data_loader():
         print("Density shape")
         print(self.x_density_train.shape)
         print(self.y_density_train.shape)
+        
+        print("Refactive Index shape")
+        print(self.x_ri_train.shape)
+        print(self.lbd_ri_train.shape)
+        print(self.y_ri_train.shape)
 
         print("Raman shape")
         print(self.x_raman_train.shape)
@@ -174,6 +209,11 @@ class data_loader():
         print(self.x_density_train.device)
         print(self.y_density_train.device)
 
+        print("Refactive Index shape")
+        print(self.x_ri_test.shape)
+        print(self.lbd_ri_test.shape)
+        print(self.y_ri_test.shape)
+        
         print("Raman device")
         print(self.x_raman_train.device)
         print(self.y_raman_train.device)
@@ -195,7 +235,7 @@ class model(torch.nn.Module):
         self.linears = torch.nn.ModuleList([torch.nn.Linear(input_size, self.hidden_size)])
         self.linears.extend([torch.nn.Linear(self.hidden_size, self.hidden_size) for i in range(1, self.num_layers)])
 
-        self.out_thermo = torch.nn.Linear(self.hidden_size, 6) # Linear output
+        self.out_thermo = torch.nn.Linear(self.hidden_size, 15) # Linear output
         self.out_raman = torch.nn.Linear(self.hidden_size, self.nb_channels_raman) # Linear output
 
     def forward(self, x):
@@ -210,7 +250,11 @@ class model(torch.nn.Module):
 
         positions are Tg, Sconf(Tg), Ae, A_am, density, fragility (MYEGA one)
         """
-        self.out_thermo.bias = torch.nn.Parameter(data=torch.tensor([np.log(1000.),np.log(10.),-1.5,-1.5,np.log(2.3),np.log(20.0)]))
+        self.out_thermo.bias = torch.nn.Parameter(data=torch.tensor([np.log(1000.),np.log(10.), # Tg, ScTg
+                                                                     -1.5,-1.5,-1.5, # A_AG, A_AM, A_CG
+                                                                     np.log(1000.), np.log(100), # To_CG, C_CG
+                                                                     np.log(2.3),np.log(20.0), # density, fragility
+                                                                     .90,.20,.98,0.6,0.2,1.])) # Sellmeier coeffs B1, B2, B3, C1, C2, C3
 
     def at_gfu(self,x):
         """calculate atom per gram formula unit
@@ -265,16 +309,66 @@ class model(torch.nn.Module):
         """A parameter for Avramov-Mitchell"""
         out = self.out_thermo(self.forward(x))[:,3]
         return torch.reshape(out, (out.shape[0], 1))
+    
+    def a_cg(self,x):
+        """A parameter for Free Volume (CG)"""
+        out = self.out_thermo(self.forward(x))[:,4]
+        return torch.reshape(out, (out.shape[0], 1))
+    
+    def to_cg(self,x):
+        """A parameter for Free Volume (CG)"""
+        out = torch.exp(self.out_thermo(self.forward(x))[:,5])
+        return torch.reshape(out, (out.shape[0], 1))
+    
+    def c_cg(self,x):
+        """A parameter for Free Volume (CG)"""
+        out = torch.exp(self.out_thermo(self.forward(x))[:,6])
+        return torch.reshape(out, (out.shape[0], 1))
 
     def density(self,x):
         """glass density"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:,4])
+        out = torch.exp(self.out_thermo(self.forward(x))[:,7])
         return torch.reshape(out, (out.shape[0], 1))
 
     def fragility(self,x):
         """melt fragility"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:,5])
+        out = torch.exp(self.out_thermo(self.forward(x))[:,8])
         return torch.reshape(out, (out.shape[0], 1))
+    
+    def S_B1(self,x):
+        """Sellmeir B1"""
+        out = self.out_thermo(self.forward(x))[:,9]
+        return torch.reshape(out, (out.shape[0], 1))
+    
+    def S_B2(self,x):
+        """Sellmeir B1"""
+        out = self.out_thermo(self.forward(x))[:,10]
+        return torch.reshape(out, (out.shape[0], 1))
+    
+    def S_B3(self,x):
+        """Sellmeir B1"""
+        out = self.out_thermo(self.forward(x))[:,11]
+        return torch.reshape(out, (out.shape[0], 1))
+    
+    def S_C1(self,x):
+        """Sellmeir C1, with proper scaling"""
+        out = 0.01*self.out_thermo(self.forward(x))[:,12]
+        return torch.reshape(out, (out.shape[0], 1))
+    
+    def S_C2(self,x):
+        """Sellmeir C2, with proper scaling"""
+        out = 0.1*self.out_thermo(self.forward(x))[:,13]
+        
+        return torch.reshape(out, (out.shape[0], 1))
+    
+    def S_C3(self,x):
+        """Sellmeir C3, with proper scaling"""
+        out = 100*self.out_thermo(self.forward(x))[:,14]
+        return torch.reshape(out, (out.shape[0], 1))
+    
+    def b_cg(self, x):
+        """B in free volume (CG) equation"""
+        return (12.0 - self.a_cg(x))/2.0 * ( self.tg(x) - self.to_cg(x) + torch.sqrt( (self.tg(x) - self.to_cg(x))**2) + self.c_cg(x)*self.tg(x))
 
     def be(self,x):
         """Be term in Adam-Gibbs eq given Ae, Tg and Scong(Tg)"""
@@ -294,6 +388,18 @@ class model(torch.nn.Module):
         """viscosity from the Avramov-Mitchell equation, given entries X and temperature T
         """
         return self.a_am(x) + (12.0 - self.a_am(x))*(self.tg(x)/T)**(self.fragility(x)/(12.0 - self.a_am(x)))
+    
+    def cg(self,x, T):
+        """free volume theory viscosity equation, given entries X and temperature T
+        """
+        return self.a_cg(x) + 2.0*self.b_cg(x)/(T - self.to_cg(x) + torch.sqrt( (T-self.to_cg(x))**2 + self.c_cg(x)*T))
+                                                
+    def sellmeier(self, x, lbd):
+        """Sellmeier equation for refractive index calculation, with lbd in microns
+        """
+        return torch.sqrt( 1.0 + self.S_B1(x)*lbd**2/(lbd**2-self.S_C1(x)) 
+                             + self.S_B2(x)*lbd**2/(lbd**2-self.S_C2(x)) 
+                             + self.S_B3(x)*lbd**2/(lbd**2-self.S_C3(x)))
 
 def pretraining(neuralmodel,ds,criterion,optimizer, verbose=True):
     if verbose == True:
@@ -322,12 +428,14 @@ def pretraining(neuralmodel,ds,criterion,optimizer, verbose=True):
         y_density_pred_train = neuralmodel.density(ds.x_density_train)
         y_tg_pred_train = neuralmodel.tg(ds.x_tg_train)
         y_entro_pred_train = neuralmodel.sctg(ds.x_entro_train)
+        y_ri_pred_train = neuralmodel.sellmeier(ds.x_ri_train, ds.lbd_ri_train)
 
         # on validation set
         y_raman_pred_valid = neuralmodel.raman_pred(ds.x_raman_valid)
         y_density_pred_valid = neuralmodel.density(ds.x_density_valid)
         y_tg_pred_valid = neuralmodel.tg(ds.x_tg_valid)
         y_entro_pred_valid = neuralmodel.sctg(ds.x_entro_valid)
+        y_ri_pred_valid = neuralmodel.sellmeier(ds.x_ri_valid, ds.lbd_ri_valid)
 
         # Compute Loss
 
@@ -336,16 +444,18 @@ def pretraining(neuralmodel,ds,criterion,optimizer, verbose=True):
         loss_raman = criterion(y_raman_pred_train,ds.y_raman_train)
         loss_density = criterion(y_density_pred_train,ds.y_density_train)
         loss_entro = criterion(y_entro_pred_train,ds.y_entro_train)
-
-        loss = 0.001*loss_tg + 10*loss_raman + 1000*loss_density + loss_entro
+        loss_ri = criterion(y_ri_pred_train,ds.y_ri_train)
+        
+        loss = 0.001*loss_tg + 10*loss_raman + 1000*loss_density + loss_entro + loss_ri*1000
 
         # validation
         loss_tg_v = criterion(y_tg_pred_valid, ds.y_tg_valid)
         loss_raman_v = criterion(y_raman_pred_valid,ds.y_raman_valid)
         loss_density_v = criterion(y_density_pred_valid,ds.y_density_valid)
         loss_entro_v = criterion(y_entro_pred_valid,ds.y_entro_valid)
+        loss_ri_v = criterion(y_ri_pred_valid,ds.y_ri_valid)
 
-        loss_v = 0.001*loss_tg_v + 10*loss_raman_v + 1000*loss_density_v + loss_entro_v
+        loss_v = 0.001*loss_tg_v + 10*loss_raman_v + 1000*loss_density_v + loss_entro_v + loss_ri_v*1000
 
         record_pretrain_loss.append(loss.item())
         record_prevalid_loss.append(loss_v.item())
@@ -423,9 +533,9 @@ def maintraining(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 5
         loss_raman = criterion(y_raman_pred_train,ds.y_raman_train)
         loss_density = criterion(y_density_pred_train,ds.y_density_train)
         loss_entro = criterion(y_entro_pred_train,ds.y_entro_train)
-        loss_ = criterion(y_entro_pred_train,y_cp_pred_train/((neuralmodel.fragility(ds.x_entro_train)-neuralmodel.AAA[1])/neuralmodel.AAA[0]))
+        #loss_ = criterion(y_entro_pred_train,y_cp_pred_train/((neuralmodel.fragility(ds.x_entro_train)-neuralmodel.AAA[1])/neuralmodel.AAA[0]))
         
-        loss = loss_ag + loss_myega + loss_am + 10*loss_raman + 1000*loss_density + loss_entro #+ loss_#
+        loss = loss_ag + loss_myega + loss_am + 10*loss_raman + 1000*loss_density + loss_entro
 
         # validation
         loss_ag_v = criterion(y_ag_pred_valid, ds.y_visco_valid)
