@@ -252,8 +252,8 @@ class model(torch.nn.Module):
         """
         self.out_thermo.bias = torch.nn.Parameter(data=torch.tensor([np.log(1000.),np.log(10.), # Tg, ScTg
                                                                      -1.5,-1.5,-1.5, # A_AG, A_AM, A_CG
-                                                                     np.log(1000.), np.log(100), # To_CG, C_CG
-                                                                     np.log(2.3),np.log(20.0), # density, fragility
+                                                                     np.log(500.), np.log(100.), # To_CG, C_CG
+                                                                     np.log(2.3),np.log(25.0), # density, fragility
                                                                      .90,.20,.98,0.6,0.2,1.])) # Sellmeier coeffs B1, B2, B3, C1, C2, C3
 
     def at_gfu(self,x):
@@ -321,7 +321,7 @@ class model(torch.nn.Module):
         return torch.reshape(out, (out.shape[0], 1))
     
     def c_cg(self,x):
-        """A parameter for Free Volume (CG)"""
+        """C parameter for Free Volume (CG)"""
         out = torch.exp(self.out_thermo(self.forward(x))[:,6])
         return torch.reshape(out, (out.shape[0], 1))
 
@@ -368,7 +368,7 @@ class model(torch.nn.Module):
     
     def b_cg(self, x):
         """B in free volume (CG) equation"""
-        return (12.0 - self.a_cg(x))/2.0 * ( self.tg(x) - self.to_cg(x) + torch.sqrt( (self.tg(x) - self.to_cg(x))**2) + self.c_cg(x)*self.tg(x))
+        return 0.5*(12.0 - self.a_cg(x)) * (self.tg(x) - self.to_cg(x) + torch.sqrt( (self.tg(x) - self.to_cg(x))**2 + self.c_cg(x)*self.tg(x)))
 
     def be(self,x):
         """Be term in Adam-Gibbs eq given Ae, Tg and Scong(Tg)"""
@@ -510,6 +510,7 @@ def maintraining(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 5
         y_ag_pred_train = neuralmodel.ag(ds.x_visco_train,ds.T_visco_train)
         y_myega_pred_train = neuralmodel.myega(ds.x_visco_train,ds.T_visco_train)
         y_am_pred_train = neuralmodel.am(ds.x_visco_train,ds.T_visco_train)
+        y_cg_pred_train = neuralmodel.cg(ds.x_visco_train,ds.T_visco_train)
         y_raman_pred_train = neuralmodel.raman_pred(ds.x_raman_train)
         y_density_pred_train = neuralmodel.density(ds.x_density_train)
         y_entro_pred_train = neuralmodel.sctg(ds.x_entro_train)
@@ -519,6 +520,7 @@ def maintraining(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 5
         y_ag_pred_valid = neuralmodel.ag(ds.x_visco_valid,ds.T_visco_valid)
         y_myega_pred_valid = neuralmodel.myega(ds.x_visco_valid,ds.T_visco_valid)
         y_am_pred_valid = neuralmodel.am(ds.x_visco_valid,ds.T_visco_valid)
+        y_cg_pred_valid = neuralmodel.cg(ds.x_visco_valid,ds.T_visco_valid)
         y_raman_pred_valid = neuralmodel.raman_pred(ds.x_raman_valid)
         y_density_pred_valid = neuralmodel.density(ds.x_density_valid)
         y_entro_pred_valid = neuralmodel.sctg(ds.x_entro_valid)
@@ -530,22 +532,24 @@ def maintraining(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 5
         loss_ag = criterion(y_ag_pred_train, ds.y_visco_train)
         loss_myega = criterion(y_myega_pred_train, ds.y_visco_train)
         loss_am = criterion(y_am_pred_train, ds.y_visco_train)
+        loss_cg = criterion(y_cg_pred_train, ds.y_visco_train)
         loss_raman = criterion(y_raman_pred_train,ds.y_raman_train)
         loss_density = criterion(y_density_pred_train,ds.y_density_train)
         loss_entro = criterion(y_entro_pred_train,ds.y_entro_train)
         #loss_ = criterion(y_entro_pred_train,y_cp_pred_train/((neuralmodel.fragility(ds.x_entro_train)-neuralmodel.AAA[1])/neuralmodel.AAA[0]))
         
-        loss = loss_ag + loss_myega + loss_am + 10*loss_raman + 1000*loss_density + loss_entro
+        loss = loss_ag + loss_myega + loss_am + loss_cg + 10*loss_raman + 1000*loss_density + loss_entro
 
         # validation
         loss_ag_v = criterion(y_ag_pred_valid, ds.y_visco_valid)
         loss_myega_v = criterion(y_myega_pred_valid, ds.y_visco_valid)
         loss_am_v = criterion(y_am_pred_valid, ds.y_visco_valid)
+        loss_cg_v = criterion(y_cg_pred_valid, ds.y_visco_valid)
         loss_raman_v = criterion(y_raman_pred_valid,ds.y_raman_valid)
         loss_density_v = criterion(y_density_pred_valid,ds.y_density_valid)
         loss_entro_v = criterion(y_entro_pred_valid,ds.y_entro_valid)
 
-        loss_v = loss_ag_v + loss_myega_v + loss_am_v + 10*loss_raman_v + 1000*loss_density_v + loss_entro_v
+        loss_v = loss_ag_v + loss_myega_v + loss_am_v + loss_cg_v + 10*loss_raman_v + 1000*loss_density_v + loss_entro_v
 
         record_train_loss.append(loss.item())
         record_valid_loss.append(loss_v.item())
