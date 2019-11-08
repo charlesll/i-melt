@@ -76,7 +76,11 @@ for i in tqdm(range(nb_exp)):
     name = "./model/exp_arch/l"+str(nb_layers[i])+"_n"+str(nb_neurons[i])+"_p"+str(p_drop[i])+".pth"
     
 	# custom data loader, automatically sent to device
-    ds = neuravi.data_loader("./data/DataSet_0p20val.hdf5","./data/NKAS_Raman.hdf5","./data/NKAS_density.hdf5",device)
+    ds = neuravi.data_loader("./data/DataSet_0p20val.hdf5",
+			     "./data/NKAS_Raman.hdf5",
+                             "./data/NKAS_density.hdf5",
+                             "./data/NKAS_optical.hdf5",
+                             device)
     
     # declaring model
     neuralmodel = neuravi.model(4,nb_neurons[i],nb_layers[i],ds.nb_channels_raman,p_drop=p_drop[i]) 
@@ -93,12 +97,12 @@ for i in tqdm(range(nb_exp)):
     #
     # PRETRAINING
     #
-    neuralmodel, record_pretrain_loss, record_prevalid_loss = neuravi.pretraining(neuralmodel,ds,criterion,optimizer,verbose=False)
+    neuralmodel, record_pretrain_loss, record_prevalid_loss = neuravi.training(neuralmodel,ds,criterion,optimizer,name, mode="pretrain",verbose=False)
                 
     #
     # TRAINING
     #
-    neuralmodel, record_train_loss, record_valid_loss = neuravi.maintraining(neuralmodel,ds,criterion,optimizer,name,train_patience=50,verbose=False)
+    neuralmodel, record_train_loss, record_valid_loss = neuravi.training(neuralmodel,ds,criterion,optimizer,name,train_patience=50,verbose=False)
 
 
 

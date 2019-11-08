@@ -265,7 +265,7 @@ class model(torch.nn.Module):
         return torch.reshape(out, (out.shape[0], 1))
 
     def aCpl(self,x):
-        """calculate term a in equation Cpl = qCpl + bCpl*T
+        """calculate term a in equation Cpl = aCpl + bCpl*T
         """
         out = 81.37*x[:,0] + 27.21*x[:,1] + 100.6*x[:,2]  + 50.13*x[:,3] + x[:,0]*(x[:,3]*x[:,3])*151.7
         return torch.reshape(out, (out.shape[0], 1))
@@ -401,96 +401,14 @@ class model(torch.nn.Module):
                              + self.S_B2(x)*lbd**2/(lbd**2-self.S_C2(x)) 
                              + self.S_B3(x)*lbd**2/(lbd**2-self.S_C3(x)))
 
-def pretraining(neuralmodel,ds,criterion,optimizer, verbose=True):
+def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,verbose=True, mode="main"):
     if verbose == True:
-        print("Pretrain...\n")
-
         time1 = time.time()
-
-    neuralmodel.train()
-
-    # for early stopping
-    pretrain_patience = 50
-    epoch = 0
-    best_epoch = 0
-    val_ex = 0
-
-    # for recording losses
-    record_pretrain_loss = []
-    record_prevalid_loss = []
-
-    while val_ex <= pretrain_patience:
-
-        optimizer.zero_grad()
-
-        # Forward pass
-        y_raman_pred_train = neuralmodel.raman_pred(ds.x_raman_train)
-        y_density_pred_train = neuralmodel.density(ds.x_density_train)
-        y_tg_pred_train = neuralmodel.tg(ds.x_tg_train)
-        y_entro_pred_train = neuralmodel.sctg(ds.x_entro_train)
-        y_ri_pred_train = neuralmodel.sellmeier(ds.x_ri_train, ds.lbd_ri_train)
-
-        # on validation set
-        y_raman_pred_valid = neuralmodel.raman_pred(ds.x_raman_valid)
-        y_density_pred_valid = neuralmodel.density(ds.x_density_valid)
-        y_tg_pred_valid = neuralmodel.tg(ds.x_tg_valid)
-        y_entro_pred_valid = neuralmodel.sctg(ds.x_entro_valid)
-        y_ri_pred_valid = neuralmodel.sellmeier(ds.x_ri_valid, ds.lbd_ri_valid)
-
-        # Compute Loss
-
-        # train
-        loss_tg = criterion(y_tg_pred_train, ds.y_tg_train)
-        loss_raman = criterion(y_raman_pred_train,ds.y_raman_train)
-        loss_density = criterion(y_density_pred_train,ds.y_density_train)
-        loss_entro = criterion(y_entro_pred_train,ds.y_entro_train)
-        loss_ri = criterion(y_ri_pred_train,ds.y_ri_train)
         
-        loss = 0.001*loss_tg + 10*loss_raman + 1000*loss_density + loss_entro + loss_ri*1000
-
-        # validation
-        loss_tg_v = criterion(y_tg_pred_valid, ds.y_tg_valid)
-        loss_raman_v = criterion(y_raman_pred_valid,ds.y_raman_valid)
-        loss_density_v = criterion(y_density_pred_valid,ds.y_density_valid)
-        loss_entro_v = criterion(y_entro_pred_valid,ds.y_entro_valid)
-        loss_ri_v = criterion(y_ri_pred_valid,ds.y_ri_valid)
-
-        loss_v = 0.001*loss_tg_v + 10*loss_raman_v + 1000*loss_density_v + loss_entro_v + loss_ri_v*1000
-
-        record_pretrain_loss.append(loss.item())
-        record_prevalid_loss.append(loss_v.item())
-
-        if verbose == True:
-            if (epoch % 100 == 0):
-              print('Epoch {} => train loss: {}; valid loss: {}'.format(epoch, loss.item(), loss_v.item()))
-
-        # calculating early-stopping criterion
-        if epoch == 0:
-            val_ex = 0
-            best_loss_v = loss_v.item()
-        elif loss_v.item() <= best_loss_v:
-            val_ex = 0
-            best_epoch = epoch
-            best_loss_v = loss_v.item()
+        if mode == "pretrain":
+            print("! Pretrain mode...\n")
         else:
-            val_ex += 1
-
-        # Backward pass
-        loss.backward()
-        optimizer.step()
-
-        epoch += 1
-
-    if verbose == True:
-        time2 = time.time()
-
-        print("Running time in seconds:", time2-time1)
-
-    return neuralmodel, record_pretrain_loss, record_prevalid_loss
-
-def maintraining(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,verbose=True):
-    if verbose == True:
-        time1 = time.time()
+            print("Full training.\n")
 
     neuralmodel.train()
 
@@ -514,7 +432,9 @@ def maintraining(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 5
         y_raman_pred_train = neuralmodel.raman_pred(ds.x_raman_train)
         y_density_pred_train = neuralmodel.density(ds.x_density_train)
         y_entro_pred_train = neuralmodel.sctg(ds.x_entro_train)
+        y_tg_pred_train = neuralmodel.tg(ds.x_tg_train)
         y_cp_pred_train = neuralmodel.dCp(ds.x_entro_train,neuralmodel.tg(ds.x_entro_train))
+        y_ri_pred_train = neuralmodel.sellmeier(ds.x_ri_train, ds.lbd_ri_train)
         
         # on validation set
         y_ag_pred_valid = neuralmodel.ag(ds.x_visco_valid,ds.T_visco_valid)
@@ -524,7 +444,9 @@ def maintraining(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 5
         y_raman_pred_valid = neuralmodel.raman_pred(ds.x_raman_valid)
         y_density_pred_valid = neuralmodel.density(ds.x_density_valid)
         y_entro_pred_valid = neuralmodel.sctg(ds.x_entro_valid)
+        y_tg_pred_valid = neuralmodel.tg(ds.x_tg_valid)
         y_cp_pred_valid = neuralmodel.dCp(ds.x_entro_valid,neuralmodel.tg(ds.x_entro_valid))
+        y_ri_pred_valid = neuralmodel.sellmeier(ds.x_ri_valid, ds.lbd_ri_valid)
         
         # Compute Loss
 
@@ -534,11 +456,15 @@ def maintraining(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 5
         loss_am = criterion(y_am_pred_train, ds.y_visco_train)
         loss_cg = criterion(y_cg_pred_train, ds.y_visco_train)
         loss_raman = criterion(y_raman_pred_train,ds.y_raman_train)
+        loss_tg = criterion(y_tg_pred_train,ds.y_tg_train)
         loss_density = criterion(y_density_pred_train,ds.y_density_train)
         loss_entro = criterion(y_entro_pred_train,ds.y_entro_train)
-        #loss_ = criterion(y_entro_pred_train,y_cp_pred_train/((neuralmodel.fragility(ds.x_entro_train)-neuralmodel.AAA[1])/neuralmodel.AAA[0]))
+        loss_ri = criterion(y_ri_pred_train,ds.y_ri_train)
         
-        loss = loss_ag + loss_myega + loss_am + loss_cg + 10*loss_raman + 1000*loss_density + loss_entro
+        if mode == "pretrain":
+            loss = 0.001*loss_tg + 10*loss_raman + 1000*loss_density + loss_entro + loss_ri*1000
+        else:
+            loss = loss_ag + loss_myega + loss_am + loss_cg + 10*loss_raman + 1000*loss_density + loss_entro + loss_ri*1000
 
         # validation
         loss_ag_v = criterion(y_ag_pred_valid, ds.y_visco_valid)
@@ -546,10 +472,15 @@ def maintraining(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 5
         loss_am_v = criterion(y_am_pred_valid, ds.y_visco_valid)
         loss_cg_v = criterion(y_cg_pred_valid, ds.y_visco_valid)
         loss_raman_v = criterion(y_raman_pred_valid,ds.y_raman_valid)
+        loss_tg_v = criterion(y_tg_pred_valid,ds.y_tg_valid)
         loss_density_v = criterion(y_density_pred_valid,ds.y_density_valid)
         loss_entro_v = criterion(y_entro_pred_valid,ds.y_entro_valid)
+        loss_ri_v = criterion(y_ri_pred_valid,ds.y_ri_valid)
 
-        loss_v = loss_ag_v + loss_myega_v + loss_am_v + loss_cg_v + 10*loss_raman_v + 1000*loss_density_v + loss_entro_v
+        if mode == "pretrain":
+            loss_v = 0.001*loss_tg_v + 10*loss_raman_v + 1000*loss_density_v + loss_entro_v + loss_ri_v*1000
+        else:
+            loss_v = loss_ag_v + loss_myega_v + loss_am_v + loss_cg_v + 10*loss_raman_v + 1000*loss_density_v + loss_entro_v + loss_ri*1000
 
         record_train_loss.append(loss.item())
         record_valid_loss.append(loss_v.item())
