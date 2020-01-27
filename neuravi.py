@@ -7,7 +7,8 @@ class data_loader():
 
     """
     def __init__(self,path_viscosity,path_raman,path_density, path_ri, device):
-        """Inputs
+        """
+        Inputs
         ------
         path_viscosity : string
 
@@ -219,6 +220,9 @@ class data_loader():
         print(self.y_raman_train.device)
 
 class model(torch.nn.Module):
+    """neuravi model
+    
+    """
     def __init__(self, input_size, hidden_size, num_layers, nb_channels_raman,p_drop=0.5):
         super(model, self).__init__()
 
@@ -235,27 +239,26 @@ class model(torch.nn.Module):
         self.linears = torch.nn.ModuleList([torch.nn.Linear(input_size, self.hidden_size)])
         self.linears.extend([torch.nn.Linear(self.hidden_size, self.hidden_size) for i in range(1, self.num_layers)])
 
-        self.out_thermo = torch.nn.Linear(self.hidden_size, 15) # Linear output
+        self.out_thermo = torch.nn.Linear(self.hidden_size, 17) # Linear output
         self.out_raman = torch.nn.Linear(self.hidden_size, self.nb_channels_raman) # Linear output
-
-    def forward(self, x):
-        """core neural network"""
-        # Feedforward
-        for layer in self.linears:
-            x = self.dropout(self.relu(layer(x)))
-        return x
-
+        
     def output_bias_init(self):
         """bias initialisation for self.out_thermo
 
         positions are Tg, Sconf(Tg), Ae, A_am, density, fragility (MYEGA one)
         """
         self.out_thermo.bias = torch.nn.Parameter(data=torch.tensor([np.log(1000.),np.log(10.), # Tg, ScTg
-                                                                     -1.5,-1.5,-1.5, # A_AG, A_AM, A_CG
-                                                                     np.log(500.), np.log(100.), # To_CG, C_CG
+                                                                     -1.5,-1.5,-1.5, -4.5, # A_AG, A_AM, A_CG, A_TVF
+                                                                     np.log(500.), np.log(100.), np.log(400.), # To_CG, C_CG, C_TVF
                                                                      np.log(2.3),np.log(25.0), # density, fragility
                                                                      .90,.20,.98,0.6,0.2,1.])) # Sellmeier coeffs B1, B2, B3, C1, C2, C3
 
+    def forward(self, x):
+        """foward pass in core neural network"""
+        for layer in self.linears: # Feedforward
+            x = self.dropout(self.relu(layer(x)))
+        return x
+    
     def at_gfu(self,x):
         """calculate atom per gram formula unit
 
@@ -315,61 +318,74 @@ class model(torch.nn.Module):
         out = self.out_thermo(self.forward(x))[:,4]
         return torch.reshape(out, (out.shape[0], 1))
     
+    def a_tvf(self,x):
+        """A parameter for Free Volume (CG)"""
+        out = self.out_thermo(self.forward(x))[:,5]
+        return torch.reshape(out, (out.shape[0], 1))
+    
     def to_cg(self,x):
         """A parameter for Free Volume (CG)"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:,5])
+        out = torch.exp(self.out_thermo(self.forward(x))[:,6])
         return torch.reshape(out, (out.shape[0], 1))
     
     def c_cg(self,x):
         """C parameter for Free Volume (CG)"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:,6])
+        out = torch.exp(self.out_thermo(self.forward(x))[:,7])
+        return torch.reshape(out, (out.shape[0], 1))
+    
+    def c_tvf(self,x):
+        """C parameter for Free Volume (CG)"""
+        out = torch.exp(self.out_thermo(self.forward(x))[:,8])
         return torch.reshape(out, (out.shape[0], 1))
 
     def density(self,x):
         """glass density"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:,7])
+        out = torch.exp(self.out_thermo(self.forward(x))[:,9])
         return torch.reshape(out, (out.shape[0], 1))
 
     def fragility(self,x):
         """melt fragility"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:,8])
+        out = torch.exp(self.out_thermo(self.forward(x))[:,10])
         return torch.reshape(out, (out.shape[0], 1))
     
     def S_B1(self,x):
         """Sellmeir B1"""
-        out = self.out_thermo(self.forward(x))[:,9]
+        out = self.out_thermo(self.forward(x))[:,11]
         return torch.reshape(out, (out.shape[0], 1))
     
     def S_B2(self,x):
         """Sellmeir B1"""
-        out = self.out_thermo(self.forward(x))[:,10]
+        out = self.out_thermo(self.forward(x))[:,12]
         return torch.reshape(out, (out.shape[0], 1))
     
     def S_B3(self,x):
         """Sellmeir B1"""
-        out = self.out_thermo(self.forward(x))[:,11]
+        out = self.out_thermo(self.forward(x))[:,13]
         return torch.reshape(out, (out.shape[0], 1))
     
     def S_C1(self,x):
         """Sellmeir C1, with proper scaling"""
-        out = 0.01*self.out_thermo(self.forward(x))[:,12]
+        out = 0.01*self.out_thermo(self.forward(x))[:,14]
         return torch.reshape(out, (out.shape[0], 1))
     
     def S_C2(self,x):
         """Sellmeir C2, with proper scaling"""
-        out = 0.1*self.out_thermo(self.forward(x))[:,13]
+        out = 0.1*self.out_thermo(self.forward(x))[:,15]
         
         return torch.reshape(out, (out.shape[0], 1))
     
     def S_C3(self,x):
         """Sellmeir C3, with proper scaling"""
-        out = 100*self.out_thermo(self.forward(x))[:,14]
+        out = 100*self.out_thermo(self.forward(x))[:,16]
         return torch.reshape(out, (out.shape[0], 1))
     
     def b_cg(self, x):
         """B in free volume (CG) equation"""
         return 0.5*(12.0 - self.a_cg(x)) * (self.tg(x) - self.to_cg(x) + torch.sqrt( (self.tg(x) - self.to_cg(x))**2 + self.c_cg(x)*self.tg(x)))
 
+    def b_tvf(self,x):
+        return (12.0-self.a_tvf(x))*(self.tg(x)-self.c_tvf(x))
+    
     def be(self,x):
         """Be term in Adam-Gibbs eq given Ae, Tg and Scong(Tg)"""
         return (12.0-self.ae(x))*(self.tg(x)*self.sctg(x))
@@ -393,7 +409,12 @@ class model(torch.nn.Module):
         """free volume theory viscosity equation, given entries X and temperature T
         """
         return self.a_cg(x) + 2.0*self.b_cg(x)/(T - self.to_cg(x) + torch.sqrt( (T-self.to_cg(x))**2 + self.c_cg(x)*T))
-                                                
+       
+    def tvf(self,x, T):
+        """Tamman-Vogel-Fulscher empirical viscosity, given entries X and temperature T
+        """
+        return self.a_tvf(x) + self.b_tvf(x)/(T - self.c_tvf(x))
+    
     def sellmeier(self, x, lbd):
         """Sellmeier equation for refractive index calculation, with lbd in microns
         """
@@ -401,7 +422,44 @@ class model(torch.nn.Module):
                              + self.S_B2(x)*lbd**2/(lbd**2-self.S_C2(x)) 
                              + self.S_B3(x)*lbd**2/(lbd**2-self.S_C3(x)))
 
-def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,verbose=True, mode="main"):
+def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,min_delta=0.1,verbose=True, mode="main"):
+    """train neuralmodel given a dataset, criterion and optimizer
+    
+    Parameters
+    ----------
+    neuralmodel : model
+        a neuravi model
+    ds : dataset
+        dataset from data_loader()
+    criterion : pytorch criterion
+        the criterion for goodness of fit
+    optimizer : pytorch optimizer
+        the optimizer to use
+    save_name : string
+        the path to save the model during training
+        
+    Options
+    -------
+    train_patience : int, default = 50
+        the number of iterations
+    min_delta : float, default = 0.1
+        Minimum decrease in the loss to qualify as an improvement, 
+        a decrease of less than or equal to `min_delta` will count as no improvement.
+    verbose : bool, default = True
+        Do you want details during training?
+    mode : string, default = "main"
+        "main" or "pretrain"
+        
+    Returns
+    -------
+    neuralmodel : model
+        trained model
+    record_train_loss : list
+        training loss (global)
+    record_valid_loss : list
+        validation loss (global)
+    """
+    
     if verbose == True:
         time1 = time.time()
         
@@ -424,11 +482,12 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,ve
     while val_ex <= train_patience:
         optimizer.zero_grad()
 
-        # Forward pass
+        # Forward pass on training set
         y_ag_pred_train = neuralmodel.ag(ds.x_visco_train,ds.T_visco_train)
         y_myega_pred_train = neuralmodel.myega(ds.x_visco_train,ds.T_visco_train)
         y_am_pred_train = neuralmodel.am(ds.x_visco_train,ds.T_visco_train)
         y_cg_pred_train = neuralmodel.cg(ds.x_visco_train,ds.T_visco_train)
+        y_tvf_pred_train = neuralmodel.tvf(ds.x_visco_train,ds.T_visco_train)
         y_raman_pred_train = neuralmodel.raman_pred(ds.x_raman_train)
         y_density_pred_train = neuralmodel.density(ds.x_density_train)
         y_entro_pred_train = neuralmodel.sctg(ds.x_entro_train)
@@ -441,6 +500,7 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,ve
         y_myega_pred_valid = neuralmodel.myega(ds.x_visco_valid,ds.T_visco_valid)
         y_am_pred_valid = neuralmodel.am(ds.x_visco_valid,ds.T_visco_valid)
         y_cg_pred_valid = neuralmodel.cg(ds.x_visco_valid,ds.T_visco_valid)
+        y_tvf_pred_valid = neuralmodel.tvf(ds.x_visco_valid,ds.T_visco_valid)
         y_raman_pred_valid = neuralmodel.raman_pred(ds.x_raman_valid)
         y_density_pred_valid = neuralmodel.density(ds.x_density_valid)
         y_entro_pred_valid = neuralmodel.sctg(ds.x_entro_valid)
@@ -455,6 +515,7 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,ve
         loss_myega = criterion(y_myega_pred_train, ds.y_visco_train)
         loss_am = criterion(y_am_pred_train, ds.y_visco_train)
         loss_cg = criterion(y_cg_pred_train, ds.y_visco_train)
+        loss_tvf = criterion(y_tvf_pred_train, ds.y_visco_train)
         loss_raman = criterion(y_raman_pred_train,ds.y_raman_train)
         loss_tg = criterion(y_tg_pred_train,ds.y_tg_train)
         loss_density = criterion(y_density_pred_train,ds.y_density_train)
@@ -464,13 +525,14 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,ve
         if mode == "pretrain":
             loss = 0.001*loss_tg + 10*loss_raman + 1000*loss_density + loss_entro + loss_ri*1000
         else:
-            loss = loss_ag + loss_myega + loss_am + loss_cg + 10*loss_raman + 1000*loss_density + loss_entro + loss_ri*1000
+            loss = loss_ag + loss_myega + loss_am + loss_cg + loss_tvf + 10*loss_raman + 1000*loss_density + loss_entro + loss_ri*1000
 
         # validation
         loss_ag_v = criterion(y_ag_pred_valid, ds.y_visco_valid)
         loss_myega_v = criterion(y_myega_pred_valid, ds.y_visco_valid)
         loss_am_v = criterion(y_am_pred_valid, ds.y_visco_valid)
         loss_cg_v = criterion(y_cg_pred_valid, ds.y_visco_valid)
+        loss_tvf_v = criterion(y_tvf_pred_valid, ds.y_visco_valid)
         loss_raman_v = criterion(y_raman_pred_valid,ds.y_raman_valid)
         loss_tg_v = criterion(y_tg_pred_valid,ds.y_tg_valid)
         loss_density_v = criterion(y_density_pred_valid,ds.y_density_valid)
@@ -480,8 +542,9 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,ve
         if mode == "pretrain":
             loss_v = 0.001*loss_tg_v + 10*loss_raman_v + 1000*loss_density_v + loss_entro_v + loss_ri_v*1000
         else:
-            loss_v = loss_ag_v + loss_myega_v + loss_am_v + loss_cg_v + 10*loss_raman_v + 1000*loss_density_v + loss_entro_v + loss_ri*1000
+            loss_v = loss_ag_v + loss_myega_v + loss_am_v + loss_cg_v + loss_tvf_v + 10*loss_raman_v + 1000*loss_density_v + loss_entro_v + loss_ri*1000
 
+        # record global loss
         record_train_loss.append(loss.item())
         record_valid_loss.append(loss_v.item())
 
@@ -493,7 +556,7 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,ve
         if epoch == 0:
             val_ex = 0
             best_loss_v = loss_v.item()
-        elif loss_v.item() <= best_loss_v:
+        elif loss_v.item() <= best_loss_v - min_delta: # if improvement is significant, this saves the model
             val_ex = 0
             best_epoch = epoch
             best_loss_v = loss_v.item()

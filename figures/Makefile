@@ -2,7 +2,7 @@ TARGETS = copy
 
 copy :
 	cp Figure2.png ~/GoogleDrive/Manuscripts/neuravi/Figures/Figure2.png
-	cp Figure3_dataset_size.pdf ~/GoogleDrive/Manuscripts/neuravi/Figures/Figure3.png
+	cp Figure3_dataset_size.pdf ~/GoogleDrive/Manuscripts/neuravi/Figures/Figure3.pdf
 	cp Figure4_entromaps.png ~/GoogleDrive/Manuscripts/neuravi/Figures/Figure4.png
 	cp Figure5_fragility_maps.png ~/GoogleDrive/Manuscripts/neuravi/Figures/Figure5.png
 	cp Figure6_Raman_m_Tg.png ~/GoogleDrive/Manuscripts/neuravi/Figures/Figure6.png
