@@ -23,24 +23,24 @@ All data are given in a Database_IPGP.xlsx file in the data folder. Raman spectr
 
 ## Data preparation
 
-The notebook Dataset_preparation allows preparation of the datasets, which are subsequently saved in HDF5 format in the data folder.
+The notebook **Dataset_preparation.ipynb** allows preparation of the datasets, which are subsequently saved in HDF5 format in the data folder.
 
-The Dataset_visualization notebook show the distribution of data in ternary plots.
+The **Dataset_visualization.ipynb** notebook shows the distribution of data in ternary plots.
 
-The preparation for Raman spectra is done in a notebook present in the data folder, see Raman_prep_python.ipynb.
+The preparation for Raman spectra is done in a notebook present in the data folder, see **Raman_prep_python.ipynb**.
 
 ## Training the networks
 
-2,000 models were trained in the Training_experiments.ipynb notebook. The effect of the dataset size is also tested. Due to the large amount of calculations, training is best done on GPU.
+2,000 models were trained in the **Training_experiments.ipynb** notebook. The effect of the dataset size is also tested. Due to the large amount of calculations, training is best done on GPU.
 
-Training takes 24 hours on a Dell Precision 5251 equipped with a RTX 4000 NVIDIA GPU.
+**Training takes 24 hours on a Dell Precision 5251 equipped with a RTX 4000 NVIDIA GPU.**
 
-The notebook Training_single_forexampleonly.ipynb allows training a single network, and is useful to play around.
+The notebook **Training_single_forexampleonly.ipynb** allows training a single network, and is useful to play around.
 
 ## Repeating the result analysis
 
-Analysis of training results is done in two steps.
+Analysis of training results is done in two steps:
 
-- First, run the Results_experiments.ipynb notebook, which will allow observing the results of the experimenbts and generate already some supplementary figures. In this notebook, the 10 best networks (given validation data error) are selected and their reference saved.
+- First, run the **Results_experiments.ipynb** notebook, which will allow observing the results of the experimenbts and generate already some supplementary figures. In this notebook, the 10 best networks (given validation data error) are selected and their reference saved.
 
-- Then, run the Results_predictions.ipynb to generate all the other figures and the analysis presented in the paper.
+- Then, run the **Results_predictions.ipynb (this is the most interesting notebook)** to generate all the other figures and the analysis presented in the paper.
