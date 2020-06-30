@@ -6,7 +6,7 @@ class data_loader():
     """custom data loader for batch training
 
     """
-    def __init__(self,path_viscosity,path_raman,path_density, path_ri, device):
+    def __init__(self,path_viscosity,path_raman,path_density, path_ri, path_liquidus, device):
         """
         Inputs
         ------
@@ -15,78 +15,91 @@ class data_loader():
         path_raman : string
 
         path_density : string
-        
+
         path_ri : String
+
+        path_liquidus : String
 
         device : CUDA"""
         f = h5py.File(path_viscosity, 'r')
 
         # List all groups
-        self.X_columns = f['X_columns'].value
+        self.X_columns = f['X_columns'][()]
 
         # Entropy dataset
-        X_entropy_train = f["X_entropy_train"].value
-        y_entropy_train = f["y_entropy_train"].value
+        X_entropy_train = f["X_entropy_train"][()]
+        y_entropy_train = f["y_entropy_train"][()]
 
-        X_entropy_valid = f["X_entropy_valid"].value
-        y_entropy_valid = f["y_entropy_valid"].value
+        X_entropy_valid = f["X_entropy_valid"][()]
+        y_entropy_valid = f["y_entropy_valid"][()]
 
-        X_entropy_test = f["X_entropy_test"].value
-        y_entropy_test = f["y_entropy_test"].value
+        X_entropy_test = f["X_entropy_test"][()]
+        y_entropy_test = f["y_entropy_test"][()]
 
         # Viscosity dataset
-        X_train = f["X_train"].value
-        y_train = f["y_train"].value
+        X_train = f["X_train"][()]
+        y_train = f["y_train"][()]
 
-        X_valid = f["X_valid"].value
-        y_valid = f["y_valid"].value
+        X_valid = f["X_valid"][()]
+        y_valid = f["y_valid"][()]
 
-        X_test = f["X_test"].value
-        y_test = f["y_test"].value
+        X_test = f["X_test"][()]
+        y_test = f["y_test"][()]
 
         # Tg dataset
-        X_tg_train = f["X_tg_train"].value
-        X_tg_valid= f["X_tg_valid"].value
-        X_tg_test = f["X_tg_test"].value
+        X_tg_train = f["X_tg_train"][()]
+        X_tg_valid= f["X_tg_valid"][()]
+        X_tg_test = f["X_tg_test"][()]
 
-        y_tg_train = f["y_tg_train"].value
-        y_tg_valid = f["y_tg_valid"].value
-        y_tg_test = f["y_tg_test"].value
+        y_tg_train = f["y_tg_train"][()]
+        y_tg_valid = f["y_tg_valid"][()]
+        y_tg_test = f["y_tg_test"][()]
 
         f.close()
 
         # Raman dataset
         f = h5py.File(path_raman, 'r')
-        X_raman_train = f["X_raman_train"].value
-        y_raman_train = f["y_raman_train"].value
-        X_raman_valid = f["X_raman_test"].value
-        y_raman_valid = f["y_raman_test"].value
+        X_raman_train = f["X_raman_train"][()]
+        y_raman_train = f["y_raman_train"][()]
+        X_raman_valid = f["X_raman_test"][()]
+        y_raman_valid = f["y_raman_test"][()]
         f.close()
 
         # Density dataset
         f = h5py.File(path_density, 'r')
-        X_density_train = f["X_density_train"].value
-        X_density_valid = f["X_density_valid"].value
-        X_density_test = f["X_density_test"].value
+        X_density_train = f["X_density_train"][()]
+        X_density_valid = f["X_density_valid"][()]
+        X_density_test = f["X_density_test"][()]
 
-        y_density_train = f["y_density_train"].value
-        y_density_valid = f["y_density_valid"].value
-        y_density_test = f["y_density_test"].value
+        y_density_train = f["y_density_train"][()]
+        y_density_valid = f["y_density_valid"][()]
+        y_density_test = f["y_density_test"][()]
         f.close()
-        
+
         # Refractive Index (ri) dataset
         f = h5py.File(path_ri, 'r')
-        X_ri_train = f["X_ri_train"].value
-        X_ri_valid = f["X_ri_valid"].value
-        X_ri_test = f["X_ri_test"].value
-        
-        lbd_ri_train = f["lbd_ri_train"].value
-        lbd_ri_valid = f["lbd_ri_valid"].value
-        lbd_ri_test = f["lbd_ri_test"].value
+        X_ri_train = f["X_ri_train"][()]
+        X_ri_valid = f["X_ri_valid"][()]
+        X_ri_test = f["X_ri_test"][()]
 
-        y_ri_train = f["y_ri_train"].value
-        y_ri_valid = f["y_ri_valid"].value
-        y_ri_test = f["y_ri_test"].value
+        lbd_ri_train = f["lbd_ri_train"][()]
+        lbd_ri_valid = f["lbd_ri_valid"][()]
+        lbd_ri_test = f["lbd_ri_test"][()]
+
+        y_ri_train = f["y_ri_train"][()]
+        y_ri_valid = f["y_ri_valid"][()]
+        y_ri_test = f["y_ri_test"][()]
+        f.close()
+
+        # Liquidus dataset
+        f = h5py.File(path_liquidus, 'r')
+        X_tl_train = f["X_tl_train"][()]
+        X_tl_valid = f["X_tl_valid"][()]
+        X_tl_test = f["X_tl_test"][()]
+
+        Tl_train = f["Tl_train"][()]
+        Tl_valid = f["Tl_valid"][()]
+        Tl_test = f["Tl_test"][()]
         f.close()
 
         # grabbing number of Raman channels
@@ -140,7 +153,7 @@ class data_loader():
 
         self.x_density_test = torch.FloatTensor(self.scaling(X_density_test[:,0:4],X_scaler_mean,X_scaler_std)).to(device)
         self.y_density_test = torch.FloatTensor(y_density_test.reshape(-1,1)).to(device)
-        
+
         # Optical
         self.x_ri_train = torch.FloatTensor(self.scaling(X_ri_train[:,0:4],X_scaler_mean,X_scaler_std)).to(device)
         self.lbd_ri_train = torch.FloatTensor(lbd_ri_train.reshape(-1,1)).to(device)
@@ -154,6 +167,16 @@ class data_loader():
         self.lbd_ri_test = torch.FloatTensor(lbd_ri_test.reshape(-1,1)).to(device)
         self.y_ri_test = torch.FloatTensor(y_ri_test.reshape(-1,1)).to(device)
 
+        # Liquidus
+        self.x_tl_train = torch.FloatTensor(self.scaling(X_tl_train[:,0:4],X_scaler_mean,X_scaler_std)).to(device)
+        self.y_tl_train = torch.FloatTensor(Tl_train[:,0:4].reshape(-1,1)).to(device)
+
+        self.x_tl_valid = torch.FloatTensor(self.scaling(X_tl_valid[:,0:4],X_scaler_mean,X_scaler_std)).to(device)
+        self.y_tl_valid = torch.FloatTensor(Tl_valid[:,0:4].reshape(-1,1)).to(device)
+
+        self.x_tl_test = torch.FloatTensor(self.scaling(X_tl_test[:,0:4],X_scaler_mean,X_scaler_std)).to(device)
+        self.y_tl_test = torch.FloatTensor(Tl_test[:,0:4].reshape(-1,1)).to(device)
+
         # Raman
         self.x_raman_train = torch.FloatTensor(self.scaling(X_raman_train[:,0:4],X_scaler_mean,X_scaler_std)).to(device)
         self.y_raman_train = torch.FloatTensor(y_raman_train).to(device)
@@ -166,29 +189,33 @@ class data_loader():
 
     def print_data(self):
         # training shapes
-        print("Visco shape")
+        print("Visco train shape")
         print(self.x_visco_train.shape)
         print(self.T_visco_train.shape)
         print(self.y_visco_train.shape)
 
-        print("Entropy shape")
+        print("Entropy train shape")
         print(self.x_entro_train.shape)
         print(self.y_entro_train.shape)
 
-        print("Tg shape")
+        print("Tg train shape")
         print(self.x_tg_train.shape)
         print(self.y_tg_train.shape)
 
-        print("Density shape")
+        print("Density train shape")
         print(self.x_density_train.shape)
         print(self.y_density_train.shape)
-        
-        print("Refactive Index shape")
+
+        print("Refactive Index train shape")
         print(self.x_ri_train.shape)
         print(self.lbd_ri_train.shape)
         print(self.y_ri_train.shape)
 
-        print("Raman shape")
+        print("Liquidus train shape")
+        print(self.x_tl_train.shape)
+        print(self.y_tl_train.shape)
+
+        print("Raman train shape")
         print(self.x_raman_train.shape)
         print(self.y_raman_train.shape)
 
@@ -202,7 +229,7 @@ class data_loader():
         print(self.x_entro_train.device)
         print(self.y_entro_train.device)
 
-        print("Tg shape")
+        print("Tg device")
         print(self.x_tg_train.device)
         print(self.y_tg_train.device)
 
@@ -210,18 +237,22 @@ class data_loader():
         print(self.x_density_train.device)
         print(self.y_density_train.device)
 
-        print("Refactive Index shape")
-        print(self.x_ri_test.shape)
-        print(self.lbd_ri_test.shape)
-        print(self.y_ri_test.shape)
-        
+        print("Refactive Index device")
+        print(self.x_ri_test.device)
+        print(self.lbd_ri_test.device)
+        print(self.y_ri_test.device)
+
+        print("Liquidus device")
+        print(self.x_tl_test.device)
+        print(self.y_tl_train.device)
+
         print("Raman device")
         print(self.x_raman_train.device)
         print(self.y_raman_train.device)
 
 class model(torch.nn.Module):
     """neuravi model
-    
+
     """
     def __init__(self, input_size, hidden_size, num_layers, nb_channels_raman,p_drop=0.5):
         super(model, self).__init__()
@@ -239,9 +270,9 @@ class model(torch.nn.Module):
         self.linears = torch.nn.ModuleList([torch.nn.Linear(input_size, self.hidden_size)])
         self.linears.extend([torch.nn.Linear(self.hidden_size, self.hidden_size) for i in range(1, self.num_layers)])
 
-        self.out_thermo = torch.nn.Linear(self.hidden_size, 17) # Linear output
+        self.out_thermo = torch.nn.Linear(self.hidden_size, 18) # Linear output
         self.out_raman = torch.nn.Linear(self.hidden_size, self.nb_channels_raman) # Linear output
-        
+
     def output_bias_init(self):
         """bias initialisation for self.out_thermo
 
@@ -251,14 +282,16 @@ class model(torch.nn.Module):
                                                                      -1.5,-1.5,-1.5, -4.5, # A_AG, A_AM, A_CG, A_TVF
                                                                      np.log(500.), np.log(100.), np.log(400.), # To_CG, C_CG, C_TVF
                                                                      np.log(2.3),np.log(25.0), # density, fragility
-                                                                     .90,.20,.98,0.6,0.2,1.])) # Sellmeier coeffs B1, B2, B3, C1, C2, C3
+                                                                     .90,.20,.98,0.6,0.2,1.,
+                                                                     np.log(1000) # liquidus
+                                                                     ])) # Sellmeier coeffs B1, B2, B3, C1, C2, C3
 
     def forward(self, x):
         """foward pass in core neural network"""
         for layer in self.linears: # Feedforward
             x = self.dropout(self.relu(layer(x)))
         return x
-    
+
     def at_gfu(self,x):
         """calculate atom per gram formula unit
 
@@ -312,27 +345,27 @@ class model(torch.nn.Module):
         """A parameter for Avramov-Mitchell"""
         out = self.out_thermo(self.forward(x))[:,3]
         return torch.reshape(out, (out.shape[0], 1))
-    
+
     def a_cg(self,x):
         """A parameter for Free Volume (CG)"""
         out = self.out_thermo(self.forward(x))[:,4]
         return torch.reshape(out, (out.shape[0], 1))
-    
+
     def a_tvf(self,x):
         """A parameter for Free Volume (CG)"""
         out = self.out_thermo(self.forward(x))[:,5]
         return torch.reshape(out, (out.shape[0], 1))
-    
+
     def to_cg(self,x):
         """A parameter for Free Volume (CG)"""
         out = torch.exp(self.out_thermo(self.forward(x))[:,6])
         return torch.reshape(out, (out.shape[0], 1))
-    
+
     def c_cg(self,x):
         """C parameter for Free Volume (CG)"""
         out = torch.exp(self.out_thermo(self.forward(x))[:,7])
         return torch.reshape(out, (out.shape[0], 1))
-    
+
     def c_tvf(self,x):
         """C parameter for Free Volume (CG)"""
         out = torch.exp(self.out_thermo(self.forward(x))[:,8])
@@ -347,45 +380,50 @@ class model(torch.nn.Module):
         """melt fragility"""
         out = torch.exp(self.out_thermo(self.forward(x))[:,10])
         return torch.reshape(out, (out.shape[0], 1))
-    
+
     def S_B1(self,x):
         """Sellmeir B1"""
         out = self.out_thermo(self.forward(x))[:,11]
         return torch.reshape(out, (out.shape[0], 1))
-    
+
     def S_B2(self,x):
         """Sellmeir B1"""
         out = self.out_thermo(self.forward(x))[:,12]
         return torch.reshape(out, (out.shape[0], 1))
-    
+
     def S_B3(self,x):
         """Sellmeir B1"""
         out = self.out_thermo(self.forward(x))[:,13]
         return torch.reshape(out, (out.shape[0], 1))
-    
+
     def S_C1(self,x):
         """Sellmeir C1, with proper scaling"""
         out = 0.01*self.out_thermo(self.forward(x))[:,14]
         return torch.reshape(out, (out.shape[0], 1))
-    
+
     def S_C2(self,x):
         """Sellmeir C2, with proper scaling"""
         out = 0.1*self.out_thermo(self.forward(x))[:,15]
-        
+
         return torch.reshape(out, (out.shape[0], 1))
-    
+
     def S_C3(self,x):
         """Sellmeir C3, with proper scaling"""
         out = 100*self.out_thermo(self.forward(x))[:,16]
         return torch.reshape(out, (out.shape[0], 1))
-    
+
+    def tl(self,x):
+        """liquidus temperature, K"""
+        out = torch.exp(self.out_thermo(self.forward(x))[:,17])
+        return torch.reshape(out, (out.shape[0], 1))
+
     def b_cg(self, x):
         """B in free volume (CG) equation"""
         return 0.5*(12.0 - self.a_cg(x)) * (self.tg(x) - self.to_cg(x) + torch.sqrt( (self.tg(x) - self.to_cg(x))**2 + self.c_cg(x)*self.tg(x)))
 
     def b_tvf(self,x):
         return (12.0-self.a_tvf(x))*(self.tg(x)-self.c_tvf(x))
-    
+
     def be(self,x):
         """Be term in Adam-Gibbs eq given Ae, Tg and Scong(Tg)"""
         return (12.0-self.ae(x))*(self.tg(x)*self.sctg(x))
@@ -404,27 +442,27 @@ class model(torch.nn.Module):
         """viscosity from the Avramov-Mitchell equation, given entries X and temperature T
         """
         return self.a_am(x) + (12.0 - self.a_am(x))*(self.tg(x)/T)**(self.fragility(x)/(12.0 - self.a_am(x)))
-    
+
     def cg(self,x, T):
         """free volume theory viscosity equation, given entries X and temperature T
         """
         return self.a_cg(x) + 2.0*self.b_cg(x)/(T - self.to_cg(x) + torch.sqrt( (T-self.to_cg(x))**2 + self.c_cg(x)*T))
-       
+
     def tvf(self,x, T):
         """Tamman-Vogel-Fulscher empirical viscosity, given entries X and temperature T
         """
         return self.a_tvf(x) + self.b_tvf(x)/(T - self.c_tvf(x))
-    
+
     def sellmeier(self, x, lbd):
         """Sellmeier equation for refractive index calculation, with lbd in microns
         """
-        return torch.sqrt( 1.0 + self.S_B1(x)*lbd**2/(lbd**2-self.S_C1(x)) 
-                             + self.S_B2(x)*lbd**2/(lbd**2-self.S_C2(x)) 
+        return torch.sqrt( 1.0 + self.S_B1(x)*lbd**2/(lbd**2-self.S_C1(x))
+                             + self.S_B2(x)*lbd**2/(lbd**2-self.S_C2(x))
                              + self.S_B3(x)*lbd**2/(lbd**2-self.S_C3(x)))
 
 def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,min_delta=0.1,verbose=True, mode="main"):
     """train neuralmodel given a dataset, criterion and optimizer
-    
+
     Parameters
     ----------
     neuralmodel : model
@@ -437,19 +475,19 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
         the optimizer to use
     save_name : string
         the path to save the model during training
-        
+
     Options
     -------
     train_patience : int, default = 50
         the number of iterations
     min_delta : float, default = 0.1
-        Minimum decrease in the loss to qualify as an improvement, 
+        Minimum decrease in the loss to qualify as an improvement,
         a decrease of less than or equal to `min_delta` will count as no improvement.
     verbose : bool, default = True
         Do you want details during training?
     mode : string, default = "main"
         "main" or "pretrain"
-        
+
     Returns
     -------
     neuralmodel : model
@@ -459,10 +497,10 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
     record_valid_loss : list
         validation loss (global)
     """
-    
+
     if verbose == True:
         time1 = time.time()
-        
+
         if mode == "pretrain":
             print("! Pretrain mode...\n")
         else:
@@ -494,7 +532,8 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
         y_tg_pred_train = neuralmodel.tg(ds.x_tg_train)
         y_cp_pred_train = neuralmodel.dCp(ds.x_entro_train,neuralmodel.tg(ds.x_entro_train))
         y_ri_pred_train = neuralmodel.sellmeier(ds.x_ri_train, ds.lbd_ri_train)
-        
+        y_tl_pred_train = neuralmodel.tl(ds.x_tl_train)
+
         # on validation set
         y_ag_pred_valid = neuralmodel.ag(ds.x_visco_valid,ds.T_visco_valid)
         y_myega_pred_valid = neuralmodel.myega(ds.x_visco_valid,ds.T_visco_valid)
@@ -507,7 +546,8 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
         y_tg_pred_valid = neuralmodel.tg(ds.x_tg_valid)
         y_cp_pred_valid = neuralmodel.dCp(ds.x_entro_valid,neuralmodel.tg(ds.x_entro_valid))
         y_ri_pred_valid = neuralmodel.sellmeier(ds.x_ri_valid, ds.lbd_ri_valid)
-        
+        y_tl_pred_valid = neuralmodel.tg(ds.x_tl_valid)
+
         # Compute Loss
 
         # train
@@ -521,11 +561,12 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
         loss_density = criterion(y_density_pred_train,ds.y_density_train)
         loss_entro = criterion(y_entro_pred_train,ds.y_entro_train)
         loss_ri = criterion(y_ri_pred_train,ds.y_ri_train)
-        
+        loss_tl = criterion(y_tl_pred_train,ds.y_tl_train)
+
         if mode == "pretrain":
-            loss = 0.001*loss_tg + 10*loss_raman + 1000*loss_density + loss_entro + loss_ri*1000
+            loss = 0.001*loss_tg + 20*loss_raman + 1000*loss_density + loss_entro + loss_ri*1000 + 0.00001*loss_tl
         else:
-            loss = loss_ag + loss_myega + loss_am + loss_cg + loss_tvf + 10*loss_raman + 1000*loss_density + loss_entro + loss_ri*1000
+            loss = loss_ag + loss_myega + loss_am + loss_cg + loss_tvf + 20*loss_raman + 1000*loss_density + loss_entro + loss_ri*1000 + 0.00001*loss_tl
 
         # validation
         loss_ag_v = criterion(y_ag_pred_valid, ds.y_visco_valid)
@@ -538,11 +579,12 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
         loss_density_v = criterion(y_density_pred_valid,ds.y_density_valid)
         loss_entro_v = criterion(y_entro_pred_valid,ds.y_entro_valid)
         loss_ri_v = criterion(y_ri_pred_valid,ds.y_ri_valid)
+        loss_tl_v = criterion(y_tl_pred_valid,ds.y_tl_valid)
 
         if mode == "pretrain":
-            loss_v = 0.001*loss_tg_v + 10*loss_raman_v + 1000*loss_density_v + loss_entro_v + loss_ri_v*1000
+            loss_v = 0.001*loss_tg_v + 20*loss_raman_v + 1000*loss_density_v + loss_entro_v + loss_ri_v*1000 + 0.00001*loss_tl_v
         else:
-            loss_v = loss_ag_v + loss_myega_v + loss_am_v + loss_cg_v + loss_tvf_v + 10*loss_raman_v + 1000*loss_density_v + loss_entro_v + loss_ri*1000
+            loss_v = loss_ag_v + loss_myega_v + loss_am_v + loss_cg_v + loss_tvf_v + 20*loss_raman_v + 1000*loss_density_v + loss_entro_v + loss_ri*1000 + 0.00001*loss_tl_v
 
         # record global loss
         record_train_loss.append(loss.item())
@@ -575,6 +617,9 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
     if verbose == True:
         time2 = time.time()
         print("Running time in seconds:", time2-time1)
+        print('Scaled valid loss values are {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f} for Tg, Raman, density, entropy, ri, Tl and viscosity (AG)'.format(
+        0.001*loss_tg_v, 10*loss_raman_v, 1000*loss_density_v, loss_entro_v,  loss_ri_v*1000, 0.00001*loss_tl_v, loss_ag_v
+        ))
 
     return neuralmodel, record_train_loss, record_valid_loss
 
@@ -628,12 +673,12 @@ def bary2cart(bary, corners):
 
 def CLR(input_array):
     """Transform chemical composition in colors
-    
+
     Inputs
     ------
     input_array: n*4 array
         4 chemical inputs with sio2, al2o3, k2o and na2o in 4 columns, n samples in rows
-        
+
     Returns
     -------
     out: n*3 array
@@ -647,3 +692,44 @@ def CLR(input_array):
     out[:,1] = (out[:,1]-out[:,1].min())/(out[:,1].max()-out[:,1].min())
     out[:,2] = (out[:,2]-out[:,2].min())/(out[:,2].max()-out[:,2].min())
     return out
+
+def chimie_control(data):
+    """check that all needed oxides are there and setup correctly the Pandas datalist.
+    Parameters
+    ----------
+    data : Pandas dataframe
+        the user input list.
+    Returns
+    -------
+    out : Pandas dataframe
+        the output list with all required oxides.
+    """
+    list_oxides = ["sio2","al2o3","tio2","fe2o3","h2o","li2o","na2o","k2o","mgo","cao","bao","sro","feo","nio","mno","p2o5"]
+    datalist = data.copy() # safety network
+
+    for i in list_oxides:
+        try:
+            oxd = datalist[i]
+        except:
+            datalist[i] = 0.
+
+    if (datalist["sio2"] > 1).any(): # if values were in percentsifs(self.chimie)
+
+        datalist["sio2"] = datalist["sio2"]/100.0
+        datalist["al2o3"] = datalist["al2o3"]/100.0
+        datalist["tio2"] = datalist["tio2"]/100.0
+        datalist["fe2o3"] = datalist["fe2o3"]/100.0
+        datalist["h2o"] = datalist["h2o"]/100.0
+        datalist["li2o"] = datalist["li2o"]/100.0
+        datalist["na2o"] = datalist["na2o"]/100.0
+        datalist["k2o"] = datalist["k2o"]/100.0
+        datalist["mgo"] = datalist["mgo"]/100.0
+        datalist["cao"] = datalist["cao"]/100.0
+        datalist["bao"] = datalist["bao"]/100.0
+        datalist["sro"] = datalist["sro"]/100.0
+        datalist["feo"] = datalist["feo"]/100.0
+        datalist["nio"] = datalist["nio"]/100.0
+        datalist["mno"] = datalist["mno"]/100.0
+        datalist["p2o5"] = datalist["p2o5"]/100.0
+
+    return datalist
