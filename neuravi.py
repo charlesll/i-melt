@@ -282,9 +282,9 @@ class model(torch.nn.Module):
                                                                      -1.5,-1.5,-1.5, -4.5, # A_AG, A_AM, A_CG, A_TVF
                                                                      np.log(500.), np.log(100.), np.log(400.), # To_CG, C_CG, C_TVF
                                                                      np.log(2.3),np.log(25.0), # density, fragility
-                                                                     .90,.20,.98,0.6,0.2,1.,
-                                                                     np.log(1000) # liquidus
-                                                                     ])) # Sellmeier coeffs B1, B2, B3, C1, C2, C3
+                                                                     .90,.20,.98,0.6,0.2,1., # Sellmeier coeffs B1, B2, B3, C1, C2, C3
+                                                                     np.log(1500.) # liquidus
+                                                                     ])) 
 
     def forward(self, x):
         """foward pass in core neural network"""
@@ -506,6 +506,15 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
         else:
             print("Full training.\n")
 
+    # scaling coefficients for loss function
+    # viscosity is always one
+    entro_scale = 1.
+    raman_scale = 20.
+    density_scale = 1000.
+    ri_scale = 10000.
+    tl_scale = 0.00001
+    tg_scale = 0.001
+            
     neuralmodel.train()
 
     # for early stopping
@@ -564,9 +573,9 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
         loss_tl = criterion(y_tl_pred_train,ds.y_tl_train)
 
         if mode == "pretrain":
-            loss = 0.001*loss_tg + 20*loss_raman + 1000*loss_density + loss_entro + loss_ri*1000 + 0.00001*loss_tl
+            loss = tg_scale*loss_tg + raman_scale*loss_raman + density_scale*loss_density + entro_scale*loss_entro + ri_scale*loss_ri + tl_scale*loss_tl
         else:
-            loss = loss_ag + loss_myega + loss_am + loss_cg + loss_tvf + 20*loss_raman + 1000*loss_density + loss_entro + loss_ri*1000 + 0.00001*loss_tl
+            loss = loss_ag + loss_myega + loss_am + loss_cg + loss_tvf + raman_scale*loss_raman + density_scale*loss_density + entro_scale*loss_entro + ri_scale*loss_ri + tl_scale*loss_tl
 
         # validation
         loss_ag_v = criterion(y_ag_pred_valid, ds.y_visco_valid)
@@ -582,9 +591,9 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
         loss_tl_v = criterion(y_tl_pred_valid,ds.y_tl_valid)
 
         if mode == "pretrain":
-            loss_v = 0.001*loss_tg_v + 20*loss_raman_v + 1000*loss_density_v + loss_entro_v + loss_ri_v*1000 + 0.00001*loss_tl_v
+            loss_v = tg_scale*loss_tg_v + raman_scale*loss_raman_v + density_scale*loss_density_v + entro_scale*loss_entro_v + ri_scale*loss_ri_v + tl_scale*loss_tl_v
         else:
-            loss_v = loss_ag_v + loss_myega_v + loss_am_v + loss_cg_v + loss_tvf_v + 20*loss_raman_v + 1000*loss_density_v + loss_entro_v + loss_ri*1000 + 0.00001*loss_tl_v
+            loss_v = loss_ag_v + loss_myega_v + loss_am_v + loss_cg_v + loss_tvf_v + raman_scale*loss_raman_v + density_scale*loss_density_v + entro_scale*loss_entro_v + ri_scale*loss_ri + tl_scale*loss_tl_v
 
         # record global loss
         record_train_loss.append(loss.item())
@@ -618,7 +627,7 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
         time2 = time.time()
         print("Running time in seconds:", time2-time1)
         print('Scaled valid loss values are {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f} for Tg, Raman, density, entropy, ri, Tl and viscosity (AG)'.format(
-        0.001*loss_tg_v, 10*loss_raman_v, 1000*loss_density_v, loss_entro_v,  loss_ri_v*1000, 0.00001*loss_tl_v, loss_ag_v
+        tg_scale*loss_tg_v, raman_scale*loss_raman_v, density_scale*loss_density_v, entro_scale*loss_entro_v,  ri_scale*loss_ri_v, tl_scale*loss_tl_v, loss_ag_v
         ))
 
     return neuralmodel, record_train_loss, record_valid_loss
