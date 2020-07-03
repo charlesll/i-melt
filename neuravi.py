@@ -270,7 +270,7 @@ class model(torch.nn.Module):
         self.linears = torch.nn.ModuleList([torch.nn.Linear(input_size, self.hidden_size)])
         self.linears.extend([torch.nn.Linear(self.hidden_size, self.hidden_size) for i in range(1, self.num_layers)])
 
-        self.out_thermo = torch.nn.Linear(self.hidden_size, 18) # Linear output
+        self.out_thermo = torch.nn.Linear(self.hidden_size, 17) # Linear output, change to 18 to activate liquidus
         self.out_raman = torch.nn.Linear(self.hidden_size, self.nb_channels_raman) # Linear output
 
     def output_bias_init(self):
@@ -283,7 +283,7 @@ class model(torch.nn.Module):
                                                                      np.log(500.), np.log(100.), np.log(400.), # To_CG, C_CG, C_TVF
                                                                      np.log(2.3),np.log(25.0), # density, fragility
                                                                      .90,.20,.98,0.6,0.2,1., # Sellmeier coeffs B1, B2, B3, C1, C2, C3
-                                                                     np.log(1500.) # liquidus
+                                                                     #np.log(1500.) # liquidus
                                                                      ])) 
 
     def forward(self, x):
@@ -412,10 +412,10 @@ class model(torch.nn.Module):
         out = 100*self.out_thermo(self.forward(x))[:,16]
         return torch.reshape(out, (out.shape[0], 1))
 
-    def tl(self,x):
-        """liquidus temperature, K"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:,17])
-        return torch.reshape(out, (out.shape[0], 1))
+    #def tl(self,x):
+    #    """liquidus temperature, K"""
+    #    out = torch.exp(self.out_thermo(self.forward(x))[:,17])
+    #    return torch.reshape(out, (out.shape[0], 1))
 
     def b_cg(self, x):
         """B in free volume (CG) equation"""
