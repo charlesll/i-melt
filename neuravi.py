@@ -284,7 +284,7 @@ class model(torch.nn.Module):
                                                                      np.log(2.3),np.log(25.0), # density, fragility
                                                                      .90,.20,.98,0.6,0.2,1., # Sellmeier coeffs B1, B2, B3, C1, C2, C3
                                                                      #np.log(1500.) # liquidus
-                                                                     ])) 
+                                                                     ]))
 
     def forward(self, x):
         """foward pass in core neural network"""
@@ -514,7 +514,7 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
     ri_scale = 10000.
     tl_scale = 0.00001
     tg_scale = 0.001
-            
+
     neuralmodel.train()
 
     # for early stopping
@@ -541,7 +541,7 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
         y_tg_pred_train = neuralmodel.tg(ds.x_tg_train)
         y_cp_pred_train = neuralmodel.dCp(ds.x_entro_train,neuralmodel.tg(ds.x_entro_train))
         y_ri_pred_train = neuralmodel.sellmeier(ds.x_ri_train, ds.lbd_ri_train)
-        y_tl_pred_train = neuralmodel.tl(ds.x_tl_train)
+        #y_tl_pred_train = neuralmodel.tl(ds.x_tl_train)
 
         # on validation set
         y_ag_pred_valid = neuralmodel.ag(ds.x_visco_valid,ds.T_visco_valid)
@@ -555,7 +555,7 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
         y_tg_pred_valid = neuralmodel.tg(ds.x_tg_valid)
         y_cp_pred_valid = neuralmodel.dCp(ds.x_entro_valid,neuralmodel.tg(ds.x_entro_valid))
         y_ri_pred_valid = neuralmodel.sellmeier(ds.x_ri_valid, ds.lbd_ri_valid)
-        y_tl_pred_valid = neuralmodel.tg(ds.x_tl_valid)
+        #y_tl_pred_valid = neuralmodel.tg(ds.x_tl_valid)
 
         # Compute Loss
 
@@ -570,12 +570,12 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
         loss_density = criterion(y_density_pred_train,ds.y_density_train)
         loss_entro = criterion(y_entro_pred_train,ds.y_entro_train)
         loss_ri = criterion(y_ri_pred_train,ds.y_ri_train)
-        loss_tl = criterion(y_tl_pred_train,ds.y_tl_train)
+        #loss_tl = criterion(y_tl_pred_train,ds.y_tl_train)
 
         if mode == "pretrain":
-            loss = tg_scale*loss_tg + raman_scale*loss_raman + density_scale*loss_density + entro_scale*loss_entro + ri_scale*loss_ri + tl_scale*loss_tl
+            loss = tg_scale*loss_tg + raman_scale*loss_raman + density_scale*loss_density + entro_scale*loss_entro + ri_scale*loss_ri #+ tl_scale*loss_tl
         else:
-            loss = loss_ag + loss_myega + loss_am + loss_cg + loss_tvf + raman_scale*loss_raman + density_scale*loss_density + entro_scale*loss_entro + ri_scale*loss_ri + tl_scale*loss_tl
+            loss = loss_ag + loss_myega + loss_am + loss_cg + loss_tvf + raman_scale*loss_raman + density_scale*loss_density + entro_scale*loss_entro + ri_scale*loss_ri #+ tl_scale*loss_tl
 
         # validation
         loss_ag_v = criterion(y_ag_pred_valid, ds.y_visco_valid)
@@ -588,12 +588,12 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
         loss_density_v = criterion(y_density_pred_valid,ds.y_density_valid)
         loss_entro_v = criterion(y_entro_pred_valid,ds.y_entro_valid)
         loss_ri_v = criterion(y_ri_pred_valid,ds.y_ri_valid)
-        loss_tl_v = criterion(y_tl_pred_valid,ds.y_tl_valid)
+        #loss_tl_v = criterion(y_tl_pred_valid,ds.y_tl_valid)
 
         if mode == "pretrain":
-            loss_v = tg_scale*loss_tg_v + raman_scale*loss_raman_v + density_scale*loss_density_v + entro_scale*loss_entro_v + ri_scale*loss_ri_v + tl_scale*loss_tl_v
+            loss_v = tg_scale*loss_tg_v + raman_scale*loss_raman_v + density_scale*loss_density_v + entro_scale*loss_entro_v + ri_scale*loss_ri_v #+ tl_scale*loss_tl_v
         else:
-            loss_v = loss_ag_v + loss_myega_v + loss_am_v + loss_cg_v + loss_tvf_v + raman_scale*loss_raman_v + density_scale*loss_density_v + entro_scale*loss_entro_v + ri_scale*loss_ri + tl_scale*loss_tl_v
+            loss_v = loss_ag_v + loss_myega_v + loss_am_v + loss_cg_v + loss_tvf_v + raman_scale*loss_raman_v + density_scale*loss_density_v + entro_scale*loss_entro_v + ri_scale*loss_ri #+ tl_scale*loss_tl_v
 
         # record global loss
         record_train_loss.append(loss.item())
@@ -626,8 +626,8 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
     if verbose == True:
         time2 = time.time()
         print("Running time in seconds:", time2-time1)
-        print('Scaled valid loss values are {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f} for Tg, Raman, density, entropy, ri, Tl and viscosity (AG)'.format(
-        tg_scale*loss_tg_v, raman_scale*loss_raman_v, density_scale*loss_density_v, entro_scale*loss_entro_v,  ri_scale*loss_ri_v, tl_scale*loss_tl_v, loss_ag_v
+        print('Scaled valid loss values are {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, for Tg, Raman, density, entropy, ri, and viscosity (AG)'.format(
+        tg_scale*loss_tg_v, raman_scale*loss_raman_v, density_scale*loss_density_v, entro_scale*loss_entro_v,  ri_scale*loss_ri_v, loss_ag_v
         ))
 
     return neuralmodel, record_train_loss, record_valid_loss
