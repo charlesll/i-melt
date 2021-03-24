@@ -626,7 +626,7 @@ def training(neuralmodel,ds,criterion,optimizer,save_name,train_patience = 50,mi
     if verbose == True:
         time2 = time.time()
         print("Running time in seconds:", time2-time1)
-        print('Scaled valid loss values are {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, for Tg, Raman, density, entropy, ri, and viscosity (AG)'.format(
+        print('Scaled valid loss values are {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f} for Tg, Raman, density, entropy, ri, viscosity (AG)'.format(
         tg_scale*loss_tg_v, raman_scale*loss_raman_v, density_scale*loss_density_v, entro_scale*loss_entro_v,  ri_scale*loss_ri_v, loss_ag_v
         ))
 
