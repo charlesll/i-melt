@@ -2,7 +2,7 @@
 
 (c) Charles Le Losq, lelosq@ipgp.fr
 
-License to be determined.
+MIT licence
 
 ## REQUIREMENTS
 
@@ -31,9 +31,9 @@ The preparation for Raman spectra is done in a notebook present in the data fold
 
 ## Training the networks
 
-2,000 models were trained in the **Training_experiments.ipynb** notebook. The effect of the dataset size is also tested. Due to the large amount of calculations, training is best done on GPU.
+3,000 models were trained in the **Training_experiments.ipynb** notebook. The effect of the dataset size is also tested. Due to the large amount of calculations, training is best done on GPU.
 
-**Training takes 24 hours on a Dell Precision 5251 equipped with a RTX 4000 NVIDIA GPU.**
+**Training takes ~24 hours or more on a Dell Precision 5251 equipped with a RTX 4000 NVIDIA GPU.**
 
 The notebook **Training_single_forexampleonly.ipynb** allows training a single network, and is useful to play around.
 

@@ -6,3 +6,5 @@ model/exp_multitask
 model/exp_trainsize
 data/dev/
 dev/TF_src/model/
+dev/
+manuscript/
