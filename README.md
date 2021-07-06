@@ -1,21 +1,18 @@
-# neuravi
+# i-Melt
 
-(c) Charles Le Losq, lelosq@ipgp.fr
+(c) 2021 Charles Le Losq, lelosq@ipgp.fr
 
-MIT licence
+## LICENSE
+
+Any material in this repository is under the MIT licence
+
+See MIT license file for details
 
 ## REQUIREMENTS
 
-- Python 3.7 + Jupyter stack
-- pytorch
-- numpy
-- pandas
-- scipy
-- matplotlib
-- mpltern
-- tqdm
+see requirements.txt file
 
-The model and useful functions are contained in the neuravi.py file.
+The model and useful functions are contained in the imelt.py file.
 
 ## Data
 
@@ -27,20 +24,26 @@ The notebook **Dataset_preparation.ipynb** allows preparation of the datasets, w
 
 The **Dataset_visualization.ipynb** notebook shows the distribution of data in ternary plots.
 
-The preparation for Raman spectra is done in a notebook present in the data folder, see **Raman_prep_python.ipynb**.
-
 ## Training the networks
 
-3,000 models were trained in the **Training_experiments.ipynb** notebook. The effect of the dataset size is also tested. Due to the large amount of calculations, training is best done on GPU.
+### Hyperparameter tuning
 
-**Training takes ~24 hours or more on a Dell Precision 5251 equipped with a RTX 4000 NVIDIA GPU.**
+- A Random search experiment as well as the experiment about the dataset size are done in the **Training_experiments.ipynb** notebook. Due to the large amount of calculations, training is best done on GPU. *Training takes ~72 hours or more on a Dell Precision 5251 equipped with a RTX 4000 NVIDIA GPU.*
 
-The notebook **Training_single_forexampleonly.ipynb** allows training a single network, and is useful to play around.
+- The **Training_BO.ipynb** notebook allows to perform Bayesian Optimization for hyperparameter selection using AX plateform.
+
+### Training candidates
+
+The notebook **Training_Candidates.ipynb** allows training 50 networks with the selected architecture and selects the 10 best, which are saved in ./model/best/ and used for future predictions.
 
 ## Repeating the result analysis
 
-Analysis of training results is done in two steps:
+Analysis of results and predictions from the 10 best trained networks is done in several steps:
 
-- First, run the **Results_experiments.ipynb** notebook, which will allow observing the results of the experimenbts and generate already some supplementary figures. In this notebook, the 10 best networks (given validation data error) are selected and their reference saved.
+- The **Results_experiments.ipynb** notebook allows observing the results of the random search and dataset size experiments, and alows generating Supplementary Figure 1. 
 
-- Then, run the **Results_predictions.ipynb (this is the most interesting notebook)** to generate all the other figures and the analysis presented in the paper.
+- The **Results_model_performance.ipynb** makes a statistical analysis fo the performance fo the bagged 10 best models.
+
+- The **Results_predictions.ipynb** allows generating all the other figures and the analysis presented in the paper.
+
+
