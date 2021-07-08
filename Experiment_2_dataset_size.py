@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[11]:
-
-
 #
 # Load libraries
 #
@@ -12,7 +9,7 @@ import matplotlib
 import matplotlib.pyplot as plt # plotting
 import numpy as np
 
-import time, h5py, imelt, torch
+import time, h5py, imelt, torch, sys, os
 
 from sklearn.metrics import mean_squared_error
 
@@ -80,9 +77,20 @@ nb_neurons = 200
 nb_layers = 4
 p_drop = 0.01
 
+# search and create, if necessary, the folder for saving models
+# Create directory
+dirName = './model/exp_trainsize/'
+try:
+    # Create target Directory
+    os.mkdir(dirName)
+    print("Directory " , dirName ,  " Created ")
+except FileExistsError:
+    print("Directory " , dirName ,  " already exists")
+
 #
 # Main loop for the experiment
 #
+time1 = time.time()
 for i in range(len(path_data)):
     print('Experiment on dataset {} started...'.format(i))
     ds = imelt.data_loader(path_data[i],
@@ -94,49 +102,10 @@ for i in range(len(path_data)):
     for j in tqdm(range(10)):
         train_model(ds, nb_neurons, nb_layers, p_drop, 
                     save_names[i]+"_{}.pth".format(j), device)
-        
-        
-    
 
+time2 = time.time()
+print("Experiment 2 took {:.1f} seconds".format(time2-time1))
 
-# # Dataset size experiment
-
-# In[13]:
-
-
-
-
-
-# # Architecture experiment
-
-# In[15]:
-
-
-#
-# Start calculations
-#
-nb_exp = 3000
-nb_neurons = np.random.randint(10,high=500,size=nb_exp)
-nb_layers = np.random.randint(1,high=7,size=nb_exp)
-p_drop = np.around(np.random.random_sample(nb_exp)*0.5,2)
-
-# custom data loader, automatically sent to device
-ds = imelt.data_loader("./data/NKAS_viscosity_reference.hdf5",
-                         "./data/NKAS_Raman.hdf5",
-                         "./data/NKAS_density.hdf5",
-                         "./data/NKAS_optical.hdf5",
-                         device)
-    
-for i in tqdm(range(nb_exp)):
-        
-    # name for saving
-    name = "./model/exp_arch/l"+str(nb_layers[i])+"_n"+str(nb_neurons[i])+"_p"+str(p_drop[i])+".pth"
-    
-    train_model(ds,nb_neurons[i],nb_layers[i],p_drop[i], name, device)
-
-
-# In[ ]:
-
-
-
+with open('./model/exp_trainsize/report.txt', 'w+') as f:
+    f.write("Experiment 2 took {:.1f} seconds".format(time2-time1))
 
