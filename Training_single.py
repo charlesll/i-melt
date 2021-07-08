@@ -76,11 +76,15 @@ neuralmodel.to(device)
 #
 # TRAINING
 #
+time1 = time.time()
 optimizer = torch.optim.Adam(neuralmodel.parameters(), lr = 0.0006) # optimizer
 neuralmodel, record_train_loss, record_valid_loss = imelt.training(neuralmodel,ds,
                                                                      criterion,optimizer,save_switch=True,save_name=name,
                                                                      train_patience=400,min_delta=0.05,
                                                                      verbose=True)
+
+time2 = time.time()
+print("It took {:.1f} seconds".format(time2-time1))
 
 print(name)
 plt.figure()
