@@ -2,7 +2,7 @@
 
 #SBATCH --job-name=single-test
 #SBATCH --output=single-test.out
-#SBATCH --nodes=2
+#SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --partition=ngpua
 #SBATCH --gres=gpu:1
