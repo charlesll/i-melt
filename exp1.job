@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#SBATCH --job-name=exp1
+#SBATCH --output=exp1.out
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --partition=ngpua
+#SBATCH --gres=gpu:1
+
+module purge
+module load python
+module load cuda
+python3 Experiment_1_architecture.py

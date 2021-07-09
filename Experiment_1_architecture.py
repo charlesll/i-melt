@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[8]:
-
-
 #
 # Load libraries
 #
@@ -53,6 +50,17 @@ def train_model(ds, nb_neurons, nb_layers, p_drop, save_name, device, patience=2
     del neuralmodel, criterion
     torch.cuda.empty_cache()
 
+# search and create, if necessary, the folder for saving models
+# Create directory
+dirName = './model/exp_arch/'
+try:
+    # Create target Directory
+    os.mkdir(dirName)
+    print("Directory " , dirName ,  " Created ")
+except FileExistsError:
+    print("Directory " , dirName ,  " already exists")
+    
+    
 #
 # Start calculations
 #
