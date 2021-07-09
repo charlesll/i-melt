@@ -28,22 +28,28 @@ The **Dataset_visualization.ipynb** notebook shows the distribution of data in t
 
 ### Hyperparameter tuning
 
-- A Random search experiment as well as the experiment about the dataset size are done in the **Training_experiments.ipynb** notebook. Due to the large amount of calculations, training is best done on GPU. *Training takes ~72 hours or more on a Dell Precision 5251 equipped with a RTX 4000 NVIDIA GPU.*
+- A Random search experiment as well as the experiment about the dataset size are done in the **Training_experiments.py** code. Due to the large amount of calculations, training is best done on GPU. *Training takes ~72 hours or more on a Dell Precision 5251 equipped with a RTX 4000 NVIDIA GPU.*
 
 - The **Training_BO.ipynb** notebook allows to perform Bayesian Optimization for hyperparameter selection using AX plateform.
 
 ### Training candidates
 
-The notebook **Training_Candidates.ipynb** allows training 50 networks with the selected architecture and selects the 10 best, which are saved in ./model/best/ and used for future predictions.
+The code **Training_Candidates.py** allows training 50 networks with the selected architecture and selects the 10 best ones, which are saved in ./model/best/ and used for future predictions.
 
-## Repeating the result analysis
+## Repeating the result analysis of Le Losq et al. GCA 2021
 
 Analysis of results and predictions from the 10 best trained networks is done in several steps:
 
-- The **Results_experiments.ipynb** notebook allows observing the results of the random search and dataset size experiments, and alows generating Supplementary Figure 1. 
+- The **Results_experiments.py** code allows observing the results of the random search and dataset size experiments in Supplementary Figure 1 (see ./figures folder). 
 
 - The **Results_model_performance.ipynb** makes a statistical analysis fo the performance fo the bagged 10 best models.
 
 - The **Results_predictions.ipynb** allows generating all the other figures and the analysis presented in the paper.
+
+All figures are saved in ./figures
+
+### Training one network
+
+The code Training_single.ipynb allows training only one network and playing with it.
 
 

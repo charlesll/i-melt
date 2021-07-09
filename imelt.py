@@ -559,7 +559,7 @@ class loss_scales():
         self.tg = 0.001
 
     
-def training(neuralmodel,ds,criterion,optimizer,save_switch=True,save_name="./temp",train_patience = 50,min_delta=0.1,verbose=True, mode="main"):
+def training(neuralmodel,ds,criterion,optimizer,save_switch=True,save_name="./temp",train_patience = 50,min_delta=0.1,verbose=True, mode="main", max_epochs = 5000):
     """train neuralmodel given a dataset, criterion and optimizer
 
         Parameters
@@ -586,6 +586,8 @@ def training(neuralmodel,ds,criterion,optimizer,save_switch=True,save_name="./te
             Do you want details during training?
         mode : string, default = "main"
             "main" or "pretrain"
+        max_epochs : int
+            maximum number of epochs to perform. Useful in case of prototyping, etc.
 
         Returns
         -------
@@ -721,6 +723,10 @@ def training(neuralmodel,ds,criterion,optimizer,save_switch=True,save_name="./te
         optimizer.step()
 
         epoch += 1
+        
+        # we test is we are still under a reasonable number of epochs, if not break
+        if epoch > max_epochs:
+            break
 
     if verbose == True:
         time2 = time.time()

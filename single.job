@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#SBATCH --job-name=single-test
+#SBATCH --output=single-test.out
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=1
+#SBATCH --partition=ngpua
+#SBATCH --gres=gpu:1
+
+module purge
+module load python
+module load cuda
+python3 Training_single.py

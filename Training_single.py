@@ -100,12 +100,21 @@ plt.savefig("./figures/single/loss.pdf")
 
 from sklearn.metrics import mean_squared_error
 
+RMSE_train_visco = mean_squared_error(neuralmodel.ag(ds.x_visco_train,ds.T_visco_train).cpu().detach().numpy(), ds.y_visco_train.cpu().detach().numpy(),squared=False)
+RMSE_valid_visco = mean_squared_error(neuralmodel.ag(ds.x_visco_valid,ds.T_visco_valid).cpu().detach().numpy(), ds.y_visco_valid.cpu().detach().numpy(),squared=False)
+
 print("Viscosity RMSE on training and validation subsets are:")
-print(mean_squared_error(neuralmodel.ag(ds.x_visco_train,ds.T_visco_train).cpu().detach().numpy(), ds.y_visco_train.cpu().detach().numpy(),squared=False))
-print(mean_squared_error(neuralmodel.ag(ds.x_visco_valid,ds.T_visco_valid).cpu().detach().numpy(), ds.y_visco_valid.cpu().detach().numpy(),squared=False))
+print(RMSE_train_visco)
+print(RMSE_valid_visco)
 
 print("\n DONE")
 
+with open('./single_report.txt', 'w+') as f:
+    f.write("\nModel name is "+name)
+    f.write("\nExperiment 2 took {:.1f} seconds".format(time2-time1))
+    f.write("\nViscosity RMSE on training and validation subsets are:")
+    f.write("\n"+str(RMSE_train_visco))
+    f.write("\n"+str(RMSE_valid_visco))
 
 # In[ ]:
 
