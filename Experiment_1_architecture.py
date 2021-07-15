@@ -9,7 +9,7 @@ import matplotlib
 import matplotlib.pyplot as plt # plotting
 import numpy as np
 
-import time, h5py, imelt, torch
+import time, h5py, imelt, torch, os
 
 from sklearn.metrics import mean_squared_error
 
