@@ -1040,6 +1040,7 @@ class bagging_models:
             nb_layers = int(name[name.find("l")+1:name.find("_n")])
             nb_neurons = int(name[name.find("n")+1:name.rfind("_p")])
             p_drop = float(name[name.find("p")+1:name.rfind("_m")])
+            #p_drop = float(name[name.find("p")+1:name.rfind(".pth")])
 
             self.models[i] = model(4,nb_neurons,nb_layers,ds.nb_channels_raman,p_drop=p_drop) 
             self.models[i].load_state_dict(torch.load(path+name,map_location='cpu'))
