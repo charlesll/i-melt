@@ -28,7 +28,7 @@ The **Dataset_visualization.ipynb** notebook shows the distribution of data in t
 
 ### Hyperparameter tuning
 
-- A Random search experiment as well as the experiment about the dataset size are done in the **Training_experiments.py** code. Due to the large amount of calculations, training is best done on GPU. *Training takes ~72 hours or more on a Dell Precision 5251 equipped with a RTX 4000 NVIDIA GPU.*
+- A Random search experiment as well as the experiment about the dataset size are done in the **Experiment_1_architecture.py** and **Experiment_2_dataset_size.py** codes. Due to the large amount of calculations, training is best done on GPU. *Training takes ~72 hours or more on a Dell Precision 5251 equipped with a RTX 4000 NVIDIA GPU.*
 
 - The **Training_BO.ipynb** notebook allows to perform Bayesian Optimization for hyperparameter selection using AX plateform.
 

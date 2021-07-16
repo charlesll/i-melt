@@ -11,3 +11,4 @@ ax
 seaborn
 mpltern
 uncertainties
+jupyter
