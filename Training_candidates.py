@@ -56,7 +56,7 @@ nb_layers = 4
 nb_neurons = 300
 p_drop = 0.01
 
-nb_exp = 50
+nb_exp = 100 
 
 for i in range(nb_exp):
     
