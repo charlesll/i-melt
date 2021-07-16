@@ -5,1371 +5,1374 @@ Training model 0
 
 Full training.
 
-Epoch 0 => train loss: 162.3735809326172; valid loss: 119.01144409179688
-Epoch 200 => train loss: 3.07425594329834; valid loss: 6.428812026977539
-Epoch 400 => train loss: 1.7039201259613037; valid loss: 3.218531370162964
-Epoch 600 => train loss: 1.2903316020965576; valid loss: 2.2685983180999756
-Epoch 800 => train loss: 1.0846805572509766; valid loss: 2.538431406021118
-Epoch 1000 => train loss: 0.9533196687698364; valid loss: 2.3661413192749023
-Running time in seconds: 57.7617392539978
-Scaled valid loss values are 0.84, 0.21, 0.40, 0.67, 0.17, 0.16 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 182.94351196289062; valid loss: 146.32521057128906
+Epoch 200 => train loss: 3.028939962387085; valid loss: 6.988338470458984
+Epoch 400 => train loss: 1.6594170331954956; valid loss: 2.7944560050964355
+Epoch 600 => train loss: 1.2978078126907349; valid loss: 2.8386826515197754
+Epoch 800 => train loss: 1.164385437965393; valid loss: 3.2935404777526855
+Running time in seconds: 49.4013409614563
+Scaled valid loss values are 1.20, 0.20, 0.48, 1.57, 0.18, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 1
 ...
 
 Full training.
 
-Epoch 0 => train loss: 195.50244140625; valid loss: 161.39051818847656
-Epoch 200 => train loss: 3.001770257949829; valid loss: 6.126004219055176
-Epoch 400 => train loss: 1.765579104423523; valid loss: 3.242795944213867
-Epoch 600 => train loss: 1.2728697061538696; valid loss: 2.70857572555542
-Epoch 800 => train loss: 1.1113803386688232; valid loss: 2.1893181800842285
-Running time in seconds: 51.70695996284485
-Scaled valid loss values are 1.05, 0.19, 0.35, 0.67, 0.19, 0.15 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 187.81301879882812; valid loss: 150.04104614257812
+Epoch 200 => train loss: 2.9656009674072266; valid loss: 6.369849681854248
+Epoch 400 => train loss: 1.9366105794906616; valid loss: 3.129499673843384
+Epoch 600 => train loss: 1.3111965656280518; valid loss: 2.3589110374450684
+Epoch 800 => train loss: 1.0663201808929443; valid loss: 2.9129514694213867
+Running time in seconds: 51.06336998939514
+Scaled valid loss values are 1.15, 0.20, 0.37, 0.94, 0.20, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 2
 ...
 
 Full training.
 
-Epoch 0 => train loss: 172.2095947265625; valid loss: 126.07284545898438
-Epoch 200 => train loss: 3.2238590717315674; valid loss: 6.824331760406494
-Epoch 400 => train loss: 1.7413675785064697; valid loss: 2.7182111740112305
-Epoch 600 => train loss: 1.327763557434082; valid loss: 2.175797700881958
-Epoch 800 => train loss: 1.126386284828186; valid loss: 2.099858522415161
-Epoch 1000 => train loss: 1.050007700920105; valid loss: 2.1168885231018066
-Epoch 1200 => train loss: 0.9611076712608337; valid loss: 2.404259443283081
-Running time in seconds: 73.03754925727844
-Scaled valid loss values are 1.05, 0.18, 0.48, 0.98, 0.18, 0.15 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 167.25784301757812; valid loss: 128.6089630126953
+Epoch 200 => train loss: 3.163388967514038; valid loss: 7.7678422927856445
+Epoch 400 => train loss: 1.9552425146102905; valid loss: 3.6194236278533936
+Epoch 600 => train loss: 1.336569905281067; valid loss: 2.6698758602142334
+Epoch 800 => train loss: 1.1304806470870972; valid loss: 2.979546070098877
+Running time in seconds: 46.67234992980957
+Scaled valid loss values are 1.08, 0.23, 0.59, 1.23, 0.19, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 3
 ...
 
 Full training.
 
-Epoch 0 => train loss: 173.3614501953125; valid loss: 133.59906005859375
-Epoch 200 => train loss: 2.8477158546447754; valid loss: 6.620870113372803
-Epoch 400 => train loss: 1.7781213521957397; valid loss: 3.9951703548431396
-Epoch 600 => train loss: 1.2816200256347656; valid loss: 2.364809989929199
-Epoch 800 => train loss: 1.0474885702133179; valid loss: 2.786093235015869
-Epoch 1000 => train loss: 0.9430361390113831; valid loss: 2.445648193359375
-Epoch 1200 => train loss: 0.835252046585083; valid loss: 2.849242687225342
-Running time in seconds: 67.26900625228882
-Scaled valid loss values are 1.39, 0.17, 0.40, 1.25, 0.19, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 220.80674743652344; valid loss: 175.42860412597656
+Epoch 200 => train loss: 3.3347315788269043; valid loss: 8.474710464477539
+Epoch 400 => train loss: 1.744731068611145; valid loss: 3.4964120388031006
+Epoch 600 => train loss: 1.2729109525680542; valid loss: 2.804837465286255
+Epoch 800 => train loss: 1.143599271774292; valid loss: 2.6884777545928955
+Epoch 1000 => train loss: 0.9295758008956909; valid loss: 2.911262035369873
+Running time in seconds: 57.9395854473114
+Scaled valid loss values are 1.06, 0.18, 0.66, 0.79, 0.23, 0.17 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 4
 ...
 
 Full training.
 
-Epoch 0 => train loss: 170.74217224121094; valid loss: 137.44424438476562
-Epoch 200 => train loss: 3.306241512298584; valid loss: 6.923648834228516
-Epoch 400 => train loss: 1.7208197116851807; valid loss: 2.928823709487915
-Epoch 600 => train loss: 1.280287504196167; valid loss: 2.740678310394287
-Epoch 800 => train loss: 1.1268445253372192; valid loss: 2.7336206436157227
-Running time in seconds: 51.73232841491699
-Scaled valid loss values are 1.37, 0.20, 0.46, 0.96, 0.20, 0.22 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 230.52207946777344; valid loss: 182.97279357910156
+Epoch 200 => train loss: 3.2279603481292725; valid loss: 5.989320278167725
+Epoch 400 => train loss: 1.834031343460083; valid loss: 2.8089795112609863
+Epoch 600 => train loss: 1.302786111831665; valid loss: 2.6247050762176514
+Epoch 800 => train loss: 1.1688411235809326; valid loss: 2.4305646419525146
+Epoch 1000 => train loss: 1.0022832155227661; valid loss: 2.85041880607605
+Running time in seconds: 57.943965911865234
+Scaled valid loss values are 1.08, 0.19, 0.43, 1.01, 0.23, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 5
 ...
 
 Full training.
 
-Epoch 0 => train loss: 183.19627380371094; valid loss: 138.6790008544922
-Epoch 200 => train loss: 3.074817657470703; valid loss: 6.764674186706543
-Epoch 400 => train loss: 1.7218725681304932; valid loss: 3.363115072250366
-Epoch 600 => train loss: 1.2924292087554932; valid loss: 2.8497066497802734
-Epoch 800 => train loss: 1.0935235023498535; valid loss: 2.5521750450134277
-Epoch 1000 => train loss: 1.0140870809555054; valid loss: 2.7752315998077393
-Running time in seconds: 53.26018667221069
-Scaled valid loss values are 1.41, 0.18, 0.39, 1.35, 0.18, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 243.55020141601562; valid loss: 172.68263244628906
+Epoch 200 => train loss: 3.2941439151763916; valid loss: 8.442378997802734
+Epoch 400 => train loss: 1.9752674102783203; valid loss: 3.1696388721466064
+Epoch 600 => train loss: 1.2409571409225464; valid loss: 2.9515321254730225
+Epoch 800 => train loss: 1.1386727094650269; valid loss: 3.0481784343719482
+Epoch 1000 => train loss: 0.9524112343788147; valid loss: 2.7496113777160645
+Epoch 1200 => train loss: 0.8632068037986755; valid loss: 2.8809964656829834
+Running time in seconds: 66.13329839706421
+Scaled valid loss values are 1.63, 0.19, 0.40, 1.31, 0.19, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 6
 ...
 
 Full training.
 
-Epoch 0 => train loss: 183.38853454589844; valid loss: 151.39132690429688
-Epoch 200 => train loss: 3.2245399951934814; valid loss: 8.27718448638916
-Epoch 400 => train loss: 1.7952903509140015; valid loss: 2.8440935611724854
-Epoch 600 => train loss: 1.338668942451477; valid loss: 2.371781587600708
-Epoch 800 => train loss: 1.0859324932098389; valid loss: 2.2457234859466553
-Epoch 1000 => train loss: 1.0068378448486328; valid loss: 2.6637489795684814
-Epoch 1200 => train loss: 0.8788734674453735; valid loss: 2.2923340797424316
-Epoch 1400 => train loss: 0.8147842884063721; valid loss: 2.902074098587036
-Running time in seconds: 76.5402307510376
-Scaled valid loss values are 0.91, 0.17, 0.43, 0.82, 0.12, 0.26 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 174.9650421142578; valid loss: 134.9864044189453
+Epoch 200 => train loss: 2.9405035972595215; valid loss: 7.221333026885986
+Epoch 400 => train loss: 1.6704076528549194; valid loss: 3.026740074157715
+Epoch 600 => train loss: 1.2578446865081787; valid loss: 2.119032859802246
+Epoch 800 => train loss: 1.0872914791107178; valid loss: 2.488313674926758
+Epoch 1000 => train loss: 0.9558815956115723; valid loss: 2.2384772300720215
+Running time in seconds: 59.015543937683105
+Scaled valid loss values are 1.40, 0.19, 0.41, 0.61, 0.15, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 7
 ...
 
 Full training.
 
-Epoch 0 => train loss: 187.87423706054688; valid loss: 150.13882446289062
-Epoch 200 => train loss: 3.120112895965576; valid loss: 7.014908790588379
-Epoch 400 => train loss: 1.8500193357467651; valid loss: 2.6097161769866943
-Epoch 600 => train loss: 1.298065185546875; valid loss: 2.5185976028442383
-Epoch 800 => train loss: 1.1200031042099; valid loss: 2.6681296825408936
-Running time in seconds: 51.11383080482483
-Scaled valid loss values are 0.97, 0.20, 0.48, 1.20, 0.19, 0.17 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 182.27037048339844; valid loss: 137.9965057373047
+Epoch 200 => train loss: 2.8704519271850586; valid loss: 5.898029804229736
+Epoch 400 => train loss: 1.595674991607666; valid loss: 2.885542154312134
+Epoch 600 => train loss: 1.1913185119628906; valid loss: 2.6188199520111084
+Epoch 800 => train loss: 1.070563793182373; valid loss: 2.5412373542785645
+Running time in seconds: 53.25242257118225
+Scaled valid loss values are 1.16, 0.22, 0.41, 0.55, 0.18, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 8
 ...
 
 Full training.
 
-Epoch 0 => train loss: 184.6153106689453; valid loss: 138.78201293945312
-Epoch 200 => train loss: 3.1405792236328125; valid loss: 6.347022533416748
-Epoch 400 => train loss: 1.7778220176696777; valid loss: 2.659557580947876
-Epoch 600 => train loss: 1.2404571771621704; valid loss: 2.4163243770599365
-Epoch 800 => train loss: 1.036178708076477; valid loss: 2.70613956451416
-Running time in seconds: 43.959237575531006
-Scaled valid loss values are 1.67, 0.21, 0.57, 0.93, 0.22, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 187.4256591796875; valid loss: 163.41311645507812
+Epoch 200 => train loss: 2.814643621444702; valid loss: 5.788156032562256
+Epoch 400 => train loss: 1.7198394536972046; valid loss: 3.0044713020324707
+Epoch 600 => train loss: 1.2363499402999878; valid loss: 2.7648255825042725
+Epoch 800 => train loss: 1.0663741827011108; valid loss: 3.0191285610198975
+Running time in seconds: 48.50026750564575
+Scaled valid loss values are 1.38, 0.22, 0.41, 1.00, 0.16, 0.17 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 9
 ...
 
 Full training.
 
-Epoch 0 => train loss: 195.7296905517578; valid loss: 156.43746948242188
-Epoch 200 => train loss: 3.030238151550293; valid loss: 6.393320560455322
-Epoch 400 => train loss: 1.7633196115493774; valid loss: 3.42297101020813
-Epoch 600 => train loss: 1.3240511417388916; valid loss: 2.497541666030884
-Epoch 800 => train loss: 1.1404390335083008; valid loss: 2.6431140899658203
-Epoch 1000 => train loss: 0.9989104866981506; valid loss: 2.5545661449432373
-Running time in seconds: 61.78167247772217
-Scaled valid loss values are 0.97, 0.19, 0.51, 0.90, 0.18, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 207.24691772460938; valid loss: 162.91163635253906
+Epoch 200 => train loss: 3.2598719596862793; valid loss: 6.105071067810059
+Epoch 400 => train loss: 1.686075210571289; valid loss: 3.487700939178467
+Epoch 600 => train loss: 1.3515554666519165; valid loss: 2.5340538024902344
+Epoch 800 => train loss: 1.202803134918213; valid loss: 3.1389248371124268
+Running time in seconds: 47.88818860054016
+Scaled valid loss values are 0.96, 0.21, 0.60, 1.23, 0.18, 0.26 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 10
 ...
 
 Full training.
 
-Epoch 0 => train loss: 158.09735107421875; valid loss: 124.00608825683594
-Epoch 200 => train loss: 3.5639102458953857; valid loss: 6.763397216796875
-Epoch 400 => train loss: 1.935929536819458; valid loss: 3.1051745414733887
-Epoch 600 => train loss: 1.4948527812957764; valid loss: 3.6705195903778076
-Epoch 800 => train loss: 1.1638383865356445; valid loss: 3.188500165939331
-Epoch 1000 => train loss: 1.0459548234939575; valid loss: 3.5327236652374268
-Epoch 1200 => train loss: 1.0309702157974243; valid loss: 3.6314103603363037
-Running time in seconds: 66.12545418739319
-Scaled valid loss values are 1.21, 0.20, 0.65, 1.79, 0.17, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 225.42494201660156; valid loss: 180.21307373046875
+Epoch 200 => train loss: 3.362013816833496; valid loss: 6.866844654083252
+Epoch 400 => train loss: 1.9292564392089844; valid loss: 3.0377278327941895
+Epoch 600 => train loss: 1.3072234392166138; valid loss: 2.2325551509857178
+Epoch 800 => train loss: 1.1014292240142822; valid loss: 2.1698288917541504
+Epoch 1000 => train loss: 1.0223883390426636; valid loss: 2.3451852798461914
+Running time in seconds: 62.22102165222168
+Scaled valid loss values are 1.16, 0.20, 0.43, 0.58, 0.16, 0.15 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 11
 ...
 
 Full training.
 
-Epoch 0 => train loss: 240.99337768554688; valid loss: 200.00738525390625
-Epoch 200 => train loss: 3.2195582389831543; valid loss: 7.067378997802734
-Epoch 400 => train loss: 1.9346767663955688; valid loss: 3.0343997478485107
-Epoch 600 => train loss: 1.3658528327941895; valid loss: 2.593592643737793
-Epoch 800 => train loss: 1.15766179561615; valid loss: 2.575350761413574
-Running time in seconds: 48.86194682121277
-Scaled valid loss values are 1.57, 0.21, 0.41, 1.14, 0.23, 0.23 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 196.02276611328125; valid loss: 157.5596923828125
+Epoch 200 => train loss: 3.2337212562561035; valid loss: 5.923489570617676
+Epoch 400 => train loss: 1.8790490627288818; valid loss: 3.0199320316314697
+Epoch 600 => train loss: 1.3408396244049072; valid loss: 2.5083253383636475
+Epoch 800 => train loss: 1.163611888885498; valid loss: 2.3995087146759033
+Epoch 1000 => train loss: 0.9429576992988586; valid loss: 2.856079578399658
+Running time in seconds: 54.85007882118225
+Scaled valid loss values are 1.37, 0.21, 0.51, 1.41, 0.21, 0.22 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 12
 ...
 
 Full training.
 
-Epoch 0 => train loss: 176.61685180664062; valid loss: 134.56533813476562
-Epoch 200 => train loss: 3.0317461490631104; valid loss: 6.086131572723389
-Epoch 400 => train loss: 1.695586919784546; valid loss: 2.921384334564209
-Epoch 600 => train loss: 1.2133018970489502; valid loss: 2.528636932373047
-Epoch 800 => train loss: 1.0243372917175293; valid loss: 2.1757404804229736
-Running time in seconds: 46.579315185546875
-Scaled valid loss values are 1.22, 0.17, 0.44, 0.76, 0.21, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 208.96185302734375; valid loss: 175.0714569091797
+Epoch 200 => train loss: 3.057006597518921; valid loss: 6.935340881347656
+Epoch 400 => train loss: 1.7298096418380737; valid loss: 3.0839970111846924
+Epoch 600 => train loss: 1.3978118896484375; valid loss: 2.778136730194092
+Epoch 800 => train loss: 1.1443465948104858; valid loss: 2.4768574237823486
+Epoch 1000 => train loss: 0.960557222366333; valid loss: 2.435046911239624
+Running time in seconds: 61.79411864280701
+Scaled valid loss values are 1.66, 0.21, 0.33, 1.01, 0.20, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 13
 ...
 
 Full training.
 
-Epoch 0 => train loss: 144.7449188232422; valid loss: 112.46311950683594
-Epoch 200 => train loss: 2.8876230716705322; valid loss: 6.428099632263184
-Epoch 400 => train loss: 1.706767201423645; valid loss: 3.002061605453491
-Epoch 600 => train loss: 1.3865212202072144; valid loss: 2.431886672973633
-Epoch 800 => train loss: 1.0983384847640991; valid loss: 2.52079439163208
-Epoch 1000 => train loss: 0.9066048860549927; valid loss: 2.5870063304901123
-Running time in seconds: 56.77413010597229
-Scaled valid loss values are 0.96, 0.20, 0.53, 0.79, 0.20, 0.16 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 189.48663330078125; valid loss: 142.44268798828125
+Epoch 200 => train loss: 3.27500581741333; valid loss: 6.63944149017334
+Epoch 400 => train loss: 1.7990342378616333; valid loss: 2.9152212142944336
+Epoch 600 => train loss: 1.348082184791565; valid loss: 3.061448097229004
+Epoch 800 => train loss: 1.1194449663162231; valid loss: 2.463413715362549
+Epoch 1000 => train loss: 0.9814359545707703; valid loss: 2.830075740814209
+Running time in seconds: 63.02111005783081
+Scaled valid loss values are 1.01, 0.19, 0.38, 0.87, 0.18, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 14
 ...
 
 Full training.
 
-Epoch 0 => train loss: 180.35202026367188; valid loss: 141.98822021484375
-Epoch 200 => train loss: 3.2342076301574707; valid loss: 6.178792953491211
-Epoch 400 => train loss: 1.711936593055725; valid loss: 3.2543556690216064
-Epoch 600 => train loss: 1.2184070348739624; valid loss: 2.5867745876312256
-Epoch 800 => train loss: 1.1230133771896362; valid loss: 2.702946662902832
-Running time in seconds: 50.34735894203186
-Scaled valid loss values are 1.21, 0.21, 0.41, 1.10, 0.17, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 160.76043701171875; valid loss: 122.12353515625
+Epoch 200 => train loss: 3.3737845420837402; valid loss: 9.007715225219727
+Epoch 400 => train loss: 1.900081753730774; valid loss: 3.6776037216186523
+Epoch 600 => train loss: 1.3730618953704834; valid loss: 3.160661220550537
+Epoch 800 => train loss: 1.1467769145965576; valid loss: 3.500196933746338
+Running time in seconds: 50.069921016693115
+Scaled valid loss values are 1.58, 0.23, 0.38, 1.68, 0.19, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 15
 ...
 
 Full training.
 
-Epoch 0 => train loss: 198.0251007080078; valid loss: 158.19639587402344
-Epoch 200 => train loss: 3.125433921813965; valid loss: 6.964935779571533
-Epoch 400 => train loss: 1.7208313941955566; valid loss: 3.4031341075897217
-Epoch 600 => train loss: 1.2577626705169678; valid loss: 2.426398515701294
-Epoch 800 => train loss: 1.1514047384262085; valid loss: 2.8594281673431396
-Running time in seconds: 52.20896005630493
-Scaled valid loss values are 1.53, 0.18, 0.41, 1.06, 0.17, 0.22 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 178.6396026611328; valid loss: 138.75662231445312
+Epoch 200 => train loss: 2.869652271270752; valid loss: 5.762518882751465
+Epoch 400 => train loss: 1.5320183038711548; valid loss: 2.8267598152160645
+Epoch 600 => train loss: 1.182185411453247; valid loss: 2.416238784790039
+Epoch 800 => train loss: 1.054151177406311; valid loss: 2.89963698387146
+Running time in seconds: 50.41184759140015
+Scaled valid loss values are 1.37, 0.19, 0.45, 1.21, 0.20, 0.23 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 16
 ...
 
 Full training.
 
-Epoch 0 => train loss: 142.8001708984375; valid loss: 109.34486389160156
-Epoch 200 => train loss: 3.0867278575897217; valid loss: 5.935973167419434
-Epoch 400 => train loss: 1.7970421314239502; valid loss: 2.788517713546753
-Epoch 600 => train loss: 1.3361420631408691; valid loss: 2.3068840503692627
-Epoch 800 => train loss: 1.0879621505737305; valid loss: 2.397331714630127
-Epoch 1000 => train loss: 0.9447894096374512; valid loss: 2.5956008434295654
-Running time in seconds: 59.69513273239136
-Scaled valid loss values are 1.01, 0.19, 0.50, 0.95, 0.15, 0.16 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 185.95022583007812; valid loss: 144.38702392578125
+Epoch 200 => train loss: 3.091323137283325; valid loss: 6.744438171386719
+Epoch 400 => train loss: 1.9181888103485107; valid loss: 2.6980879306793213
+Epoch 600 => train loss: 1.2673447132110596; valid loss: 2.487384796142578
+Epoch 800 => train loss: 1.0828840732574463; valid loss: 3.2414472103118896
+Running time in seconds: 48.811678409576416
+Scaled valid loss values are 1.00, 0.22, 0.43, 1.56, 0.18, 0.15 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 17
 ...
 
 Full training.
 
-Epoch 0 => train loss: 207.68592834472656; valid loss: 171.96377563476562
-Epoch 200 => train loss: 3.270615339279175; valid loss: 7.255779266357422
-Epoch 400 => train loss: 2.014509677886963; valid loss: 4.057602882385254
-Epoch 600 => train loss: 1.3769495487213135; valid loss: 3.043301820755005
-Epoch 800 => train loss: 1.177030324935913; valid loss: 3.341840982437134
-Epoch 1000 => train loss: 1.0367692708969116; valid loss: 3.2101593017578125
-Running time in seconds: 53.36645317077637
-Scaled valid loss values are 1.08, 0.19, 0.57, 1.92, 0.17, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 200.97096252441406; valid loss: 149.721435546875
+Epoch 200 => train loss: 3.260702133178711; valid loss: 6.73751974105835
+Epoch 400 => train loss: 1.9081556797027588; valid loss: 3.001924514770508
+Epoch 600 => train loss: 1.3374875783920288; valid loss: 2.4298882484436035
+Epoch 800 => train loss: 1.1499853134155273; valid loss: 3.464519739151001
+Running time in seconds: 53.382866859436035
+Scaled valid loss values are 1.47, 0.19, 0.42, 1.02, 0.23, 0.22 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 18
 ...
 
 Full training.
 
-Epoch 0 => train loss: 199.07406616210938; valid loss: 156.06399536132812
-Epoch 200 => train loss: 3.0931107997894287; valid loss: 7.065112590789795
-Epoch 400 => train loss: 1.875312089920044; valid loss: 3.7793264389038086
-Epoch 600 => train loss: 1.427710771560669; valid loss: 3.1430490016937256
-Epoch 800 => train loss: 1.1331571340560913; valid loss: 2.5284063816070557
-Epoch 1000 => train loss: 0.9876724481582642; valid loss: 3.32145094871521
-Running time in seconds: 59.820449113845825
-Scaled valid loss values are 1.16, 0.19, 0.51, 1.15, 0.20, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 230.75218200683594; valid loss: 179.41912841796875
+Epoch 200 => train loss: 3.564141273498535; valid loss: 8.18035888671875
+Epoch 400 => train loss: 2.0367424488067627; valid loss: 4.378419399261475
+Epoch 600 => train loss: 1.4594019651412964; valid loss: 2.625666618347168
+Epoch 800 => train loss: 1.1032607555389404; valid loss: 2.317305564880371
+Epoch 1000 => train loss: 0.9737729430198669; valid loss: 2.0728445053100586
+Running time in seconds: 62.53556180000305
+Scaled valid loss values are 1.17, 0.17, 0.35, 0.84, 0.21, 0.15 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 19
 ...
 
 Full training.
 
-Epoch 0 => train loss: 167.23085021972656; valid loss: 133.9719696044922
-Epoch 200 => train loss: 3.5058822631835938; valid loss: 7.979639053344727
-Epoch 400 => train loss: 1.8230714797973633; valid loss: 3.3672266006469727
-Epoch 600 => train loss: 1.2796849012374878; valid loss: 2.752809762954712
-Epoch 800 => train loss: 1.1210471391677856; valid loss: 2.6153647899627686
-Epoch 1000 => train loss: 0.969906210899353; valid loss: 2.805293560028076
-Running time in seconds: 58.12900900840759
-Scaled valid loss values are 1.31, 0.19, 0.52, 1.15, 0.16, 0.23 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 183.9366912841797; valid loss: 150.66445922851562
+Epoch 200 => train loss: 3.1275105476379395; valid loss: 5.977285861968994
+Epoch 400 => train loss: 1.8124399185180664; valid loss: 2.723215341567993
+Epoch 600 => train loss: 1.3129695653915405; valid loss: 2.5123696327209473
+Epoch 800 => train loss: 1.0758382081985474; valid loss: 2.5210378170013428
+Epoch 1000 => train loss: 0.9750975370407104; valid loss: 2.49114727973938
+Epoch 1200 => train loss: 0.9122375845909119; valid loss: 2.4038710594177246
+Running time in seconds: 70.76960134506226
+Scaled valid loss values are 1.13, 0.19, 0.44, 1.05, 0.17, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 20
 ...
 
 Full training.
 
-Epoch 0 => train loss: 217.5359344482422; valid loss: 171.21615600585938
-Epoch 200 => train loss: 3.3018572330474854; valid loss: 6.636501312255859
-Epoch 400 => train loss: 1.8842556476593018; valid loss: 3.354505777359009
-Epoch 600 => train loss: 1.298220157623291; valid loss: 2.797703981399536
-Epoch 800 => train loss: 1.114844560623169; valid loss: 2.9552104473114014
-Epoch 1000 => train loss: 1.006889820098877; valid loss: 2.5492961406707764
-Running time in seconds: 58.82666492462158
-Scaled valid loss values are 1.29, 0.18, 0.40, 1.05, 0.17, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 187.29515075683594; valid loss: 138.59861755371094
+Epoch 200 => train loss: 3.3345096111297607; valid loss: 7.316700458526611
+Epoch 400 => train loss: 1.9275094270706177; valid loss: 3.300111770629883
+Epoch 600 => train loss: 1.3874062299728394; valid loss: 2.4549970626831055
+Epoch 800 => train loss: 1.1783839464187622; valid loss: 2.2054948806762695
+Epoch 1000 => train loss: 1.0202391147613525; valid loss: 2.3500914573669434
+Running time in seconds: 59.38267731666565
+Scaled valid loss values are 0.78, 0.19, 0.44, 0.83, 0.26, 0.14 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 21
 ...
 
 Full training.
 
-Epoch 0 => train loss: 217.0177459716797; valid loss: 167.0525360107422
-Epoch 200 => train loss: 3.278690814971924; valid loss: 6.896422386169434
-Epoch 400 => train loss: 1.9716675281524658; valid loss: 3.8817105293273926
-Epoch 600 => train loss: 1.3570114374160767; valid loss: 2.5880231857299805
-Epoch 800 => train loss: 1.1416332721710205; valid loss: 2.6420624256134033
-Epoch 1000 => train loss: 0.9823383092880249; valid loss: 2.591982364654541
-Running time in seconds: 53.857547760009766
-Scaled valid loss values are 1.19, 0.20, 0.52, 0.84, 0.19, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 197.00921630859375; valid loss: 154.7947540283203
+Epoch 200 => train loss: 2.81998348236084; valid loss: 6.928668022155762
+Epoch 400 => train loss: 1.5552645921707153; valid loss: 2.964657783508301
+Epoch 600 => train loss: 1.2563073635101318; valid loss: 2.5660088062286377
+Epoch 800 => train loss: 1.077556848526001; valid loss: 2.600992441177368
+Epoch 1000 => train loss: 0.889657199382782; valid loss: 2.665754556655884
+Epoch 1200 => train loss: 0.8309190273284912; valid loss: 3.0947957038879395
+Running time in seconds: 67.95136284828186
+Scaled valid loss values are 1.31, 0.18, 0.44, 0.92, 0.22, 0.17 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 22
 ...
 
 Full training.
 
-Epoch 0 => train loss: 188.40170288085938; valid loss: 145.94503784179688
-Epoch 200 => train loss: 2.895263433456421; valid loss: 5.980873107910156
-Epoch 400 => train loss: 1.5471268892288208; valid loss: 3.015350103378296
-Epoch 600 => train loss: 1.2536429166793823; valid loss: 2.4448046684265137
-Epoch 800 => train loss: 1.2399425506591797; valid loss: 2.4918482303619385
-Running time in seconds: 42.41448092460632
-Scaled valid loss values are 1.39, 0.22, 0.38, 0.72, 0.25, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 172.91639709472656; valid loss: 135.4482879638672
+Epoch 200 => train loss: 3.0115880966186523; valid loss: 7.471717834472656
+Epoch 400 => train loss: 1.7568789720535278; valid loss: 3.346947431564331
+Epoch 600 => train loss: 1.2760937213897705; valid loss: 2.651782512664795
+Epoch 800 => train loss: 1.051145315170288; valid loss: 2.7053098678588867
+Running time in seconds: 44.89933228492737
+Scaled valid loss values are 1.04, 0.23, 0.42, 0.98, 0.14, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 23
 ...
 
 Full training.
 
-Epoch 0 => train loss: 211.885986328125; valid loss: 166.96719360351562
-Epoch 200 => train loss: 3.2346243858337402; valid loss: 7.475841999053955
-Epoch 400 => train loss: 1.8190985918045044; valid loss: 3.6090121269226074
-Epoch 600 => train loss: 1.3433903455734253; valid loss: 2.3156800270080566
-Epoch 800 => train loss: 1.1707037687301636; valid loss: 2.46705961227417
-Epoch 1000 => train loss: 0.9722058176994324; valid loss: 2.7942569255828857
-Running time in seconds: 55.24741506576538
-Scaled valid loss values are 1.54, 0.18, 0.44, 1.08, 0.18, 0.26 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 183.0736083984375; valid loss: 147.74473571777344
+Epoch 200 => train loss: 3.4365532398223877; valid loss: 7.6832146644592285
+Epoch 400 => train loss: 2.048119306564331; valid loss: 4.173973083496094
+Epoch 600 => train loss: 1.4686013460159302; valid loss: 2.5487539768218994
+Epoch 800 => train loss: 1.1369564533233643; valid loss: 2.5271382331848145
+Running time in seconds: 50.009602308273315
+Scaled valid loss values are 1.45, 0.19, 0.44, 0.87, 0.19, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 24
 ...
 
 Full training.
 
-Epoch 0 => train loss: 187.27218627929688; valid loss: 144.57302856445312
-Epoch 200 => train loss: 3.3289296627044678; valid loss: 6.369379997253418
-Epoch 400 => train loss: 1.944166660308838; valid loss: 3.2981159687042236
-Epoch 600 => train loss: 1.3972948789596558; valid loss: 3.1927480697631836
-Epoch 800 => train loss: 1.1290656328201294; valid loss: 3.101284980773926
-Running time in seconds: 51.11593198776245
-Scaled valid loss values are 1.27, 0.22, 0.45, 1.30, 0.21, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 209.94712829589844; valid loss: 152.70980834960938
+Epoch 200 => train loss: 3.1524839401245117; valid loss: 6.391857147216797
+Epoch 400 => train loss: 1.6470928192138672; valid loss: 2.81705904006958
+Epoch 600 => train loss: 1.232898235321045; valid loss: 2.4458746910095215
+Epoch 800 => train loss: 1.093798279762268; valid loss: 2.3485429286956787
+Epoch 1000 => train loss: 0.9826619625091553; valid loss: 2.44407057762146
+Epoch 1200 => train loss: 0.9807934761047363; valid loss: 2.2035040855407715
+Running time in seconds: 65.51538586616516
+Scaled valid loss values are 0.61, 0.20, 0.40, 0.93, 0.15, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 25
 ...
 
 Full training.
 
-Epoch 0 => train loss: 160.74790954589844; valid loss: 124.0489730834961
-Epoch 200 => train loss: 3.014436721801758; valid loss: 6.023458957672119
-Epoch 400 => train loss: 1.7101516723632812; valid loss: 2.610600471496582
-Epoch 600 => train loss: 1.244350790977478; valid loss: 2.473391532897949
-Epoch 800 => train loss: 1.0359188318252563; valid loss: 2.3039894104003906
-Running time in seconds: 50.06576752662659
-Scaled valid loss values are 1.28, 0.18, 0.20, 0.71, 0.17, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 206.22598266601562; valid loss: 159.44383239746094
+Epoch 200 => train loss: 3.1891274452209473; valid loss: 6.441231727600098
+Epoch 400 => train loss: 1.8974196910858154; valid loss: 3.328394651412964
+Epoch 600 => train loss: 1.5060412883758545; valid loss: 3.5368735790252686
+Epoch 800 => train loss: 1.1675552129745483; valid loss: 2.4210119247436523
+Epoch 1000 => train loss: 1.0423541069030762; valid loss: 2.429025650024414
+Running time in seconds: 62.25389838218689
+Scaled valid loss values are 1.05, 0.21, 0.52, 1.30, 0.18, 0.15 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 26
 ...
 
 Full training.
 
-Epoch 0 => train loss: 173.10311889648438; valid loss: 128.339599609375
-Epoch 200 => train loss: 3.2296395301818848; valid loss: 5.6904096603393555
-Epoch 400 => train loss: 1.929110050201416; valid loss: 3.1711699962615967
-Epoch 600 => train loss: 1.4243600368499756; valid loss: 2.5238890647888184
-Epoch 800 => train loss: 1.1046401262283325; valid loss: 2.1917364597320557
-Epoch 1000 => train loss: 0.9970895051956177; valid loss: 2.474679708480835
-Running time in seconds: 53.206783056259155
-Scaled valid loss values are 1.32, 0.22, 0.29, 0.94, 0.17, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 176.03916931152344; valid loss: 141.10617065429688
+Epoch 200 => train loss: 3.195474624633789; valid loss: 7.196575164794922
+Epoch 400 => train loss: 1.8135347366333008; valid loss: 3.147684335708618
+Epoch 600 => train loss: 1.20050847530365; valid loss: 2.5969290733337402
+Epoch 800 => train loss: 1.057593822479248; valid loss: 2.705338716506958
+Running time in seconds: 53.19255232810974
+Scaled valid loss values are 1.71, 0.19, 0.51, 1.07, 0.18, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 27
 ...
 
 Full training.
 
-Epoch 0 => train loss: 210.77394104003906; valid loss: 168.16282653808594
-Epoch 200 => train loss: 3.150506019592285; valid loss: 7.778602600097656
-Epoch 400 => train loss: 1.80972421169281; valid loss: 3.320770740509033
-Epoch 600 => train loss: 1.3070567846298218; valid loss: 2.804194211959839
-Epoch 800 => train loss: 1.0962101221084595; valid loss: 2.6183652877807617
-Running time in seconds: 47.918474435806274
-Scaled valid loss values are 1.54, 0.20, 0.48, 0.84, 0.20, 0.22 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 176.1839141845703; valid loss: 141.6935577392578
+Epoch 200 => train loss: 3.153303623199463; valid loss: 5.617863655090332
+Epoch 400 => train loss: 1.5744786262512207; valid loss: 3.341742992401123
+Epoch 600 => train loss: 1.165259838104248; valid loss: 2.8004372119903564
+Epoch 800 => train loss: 1.069519281387329; valid loss: 2.6560616493225098
+Running time in seconds: 53.8568959236145
+Scaled valid loss values are 0.87, 0.21, 0.34, 0.95, 0.17, 0.15 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 28
 ...
 
 Full training.
 
-Epoch 0 => train loss: 174.58560180664062; valid loss: 134.89646911621094
-Epoch 200 => train loss: 3.151484727859497; valid loss: 6.2421746253967285
-Epoch 400 => train loss: 1.711301326751709; valid loss: 3.0588860511779785
-Epoch 600 => train loss: 1.3368353843688965; valid loss: 2.3620190620422363
-Epoch 800 => train loss: 1.095224142074585; valid loss: 2.573601722717285
-Epoch 1000 => train loss: 0.9994819164276123; valid loss: 2.4988110065460205
-Running time in seconds: 54.12737464904785
-Scaled valid loss values are 1.01, 0.22, 0.49, 1.31, 0.17, 0.17 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 166.2080535888672; valid loss: 122.20311737060547
+Epoch 200 => train loss: 2.9199562072753906; valid loss: 5.99275541305542
+Epoch 400 => train loss: 1.7249555587768555; valid loss: 3.1002180576324463
+Epoch 600 => train loss: 1.2999624013900757; valid loss: 2.3981471061706543
+Epoch 800 => train loss: 1.0400536060333252; valid loss: 2.3769984245300293
+Epoch 1000 => train loss: 0.9819133281707764; valid loss: 2.3025386333465576
+Running time in seconds: 57.21229314804077
+Scaled valid loss values are 1.01, 0.19, 0.54, 0.94, 0.16, 0.16 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 29
 ...
 
 Full training.
 
-Epoch 0 => train loss: 168.93243408203125; valid loss: 133.1515655517578
-Epoch 200 => train loss: 3.1848299503326416; valid loss: 6.71201229095459
-Epoch 400 => train loss: 1.6916635036468506; valid loss: 3.3081862926483154
-Epoch 600 => train loss: 1.3323034048080444; valid loss: 2.4001481533050537
-Epoch 800 => train loss: 1.0880184173583984; valid loss: 2.6114695072174072
-Running time in seconds: 50.496739864349365
-Scaled valid loss values are 1.10, 0.21, 0.45, 0.71, 0.18, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 212.42218017578125; valid loss: 162.384521484375
+Epoch 200 => train loss: 3.3208506107330322; valid loss: 7.828456401824951
+Epoch 400 => train loss: 1.8989617824554443; valid loss: 3.8288705348968506
+Epoch 600 => train loss: 1.5685749053955078; valid loss: 2.214862823486328
+Epoch 800 => train loss: 1.1617071628570557; valid loss: 2.221567392349243
+Epoch 1000 => train loss: 1.0063540935516357; valid loss: 2.3363993167877197
+Running time in seconds: 58.30586218833923
+Scaled valid loss values are 0.95, 0.21, 0.54, 0.67, 0.18, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 30
 ...
 
 Full training.
 
-Epoch 0 => train loss: 193.24842834472656; valid loss: 139.42990112304688
-Epoch 200 => train loss: 3.2874131202697754; valid loss: 7.361588001251221
-Epoch 400 => train loss: 2.002201795578003; valid loss: 4.392971515655518
-Epoch 600 => train loss: 1.334567904472351; valid loss: 2.808340549468994
-Epoch 800 => train loss: 1.1187148094177246; valid loss: 2.4058761596679688
-Epoch 1000 => train loss: 0.9430712461471558; valid loss: 2.4399678707122803
-Epoch 1200 => train loss: 0.8721739053726196; valid loss: 2.716308355331421
-Running time in seconds: 68.5671763420105
-Scaled valid loss values are 1.18, 0.19, 0.53, 1.07, 0.21, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 217.81170654296875; valid loss: 180.21649169921875
+Epoch 200 => train loss: 3.2349603176116943; valid loss: 7.530091285705566
+Epoch 400 => train loss: 1.9637861251831055; valid loss: 3.518021583557129
+Epoch 600 => train loss: 1.4411498308181763; valid loss: 2.4664199352264404
+Epoch 800 => train loss: 1.198894739151001; valid loss: 2.5739197731018066
+Epoch 1000 => train loss: 1.059170126914978; valid loss: 2.877612590789795
+Epoch 1200 => train loss: 0.9414241313934326; valid loss: 2.502519369125366
+Running time in seconds: 70.84174513816833
+Scaled valid loss values are 1.19, 0.18, 0.41, 1.17, 0.17, 0.17 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 31
 ...
 
 Full training.
 
-Epoch 0 => train loss: 182.6632843017578; valid loss: 144.11968994140625
-Epoch 200 => train loss: 2.9214141368865967; valid loss: 4.9508280754089355
-Epoch 400 => train loss: 1.719277024269104; valid loss: 2.7845842838287354
-Epoch 600 => train loss: 1.3017911911010742; valid loss: 2.21064829826355
-Epoch 800 => train loss: 1.1841511726379395; valid loss: 2.154972791671753
-Epoch 1000 => train loss: 1.0460633039474487; valid loss: 2.291912794113159
-Running time in seconds: 56.26099467277527
-Scaled valid loss values are 1.01, 0.22, 0.37, 0.81, 0.15, 0.13 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 173.9186248779297; valid loss: 147.3561248779297
+Epoch 200 => train loss: 3.24949049949646; valid loss: 6.193112373352051
+Epoch 400 => train loss: 1.8109745979309082; valid loss: 2.7881407737731934
+Epoch 600 => train loss: 1.3290151357650757; valid loss: 3.1075360774993896
+Epoch 800 => train loss: 1.165096402168274; valid loss: 2.402329206466675
+Epoch 1000 => train loss: 0.9170176386833191; valid loss: 2.4746525287628174
+Running time in seconds: 57.86803197860718
+Scaled valid loss values are 1.12, 0.20, 0.61, 1.29, 0.21, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 32
 ...
 
 Full training.
 
-Epoch 0 => train loss: 198.3938446044922; valid loss: 159.1875762939453
-Epoch 200 => train loss: 3.366767168045044; valid loss: 7.910065650939941
-Epoch 400 => train loss: 1.7729028463363647; valid loss: 2.9048924446105957
-Epoch 600 => train loss: 1.5166484117507935; valid loss: 2.976569414138794
-Epoch 800 => train loss: 1.0707157850265503; valid loss: 3.1170992851257324
-Running time in seconds: 50.64594078063965
-Scaled valid loss values are 1.81, 0.23, 0.64, 1.62, 0.20, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 198.602783203125; valid loss: 153.37725830078125
+Epoch 200 => train loss: 3.4102745056152344; valid loss: 6.8681511878967285
+Epoch 400 => train loss: 1.919481635093689; valid loss: 2.7295706272125244
+Epoch 600 => train loss: 1.3348639011383057; valid loss: 2.6901636123657227
+Epoch 800 => train loss: 1.2555524110794067; valid loss: 2.3232109546661377
+Running time in seconds: 50.899152994155884
+Scaled valid loss values are 0.81, 0.21, 0.33, 1.07, 0.25, 0.16 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 33
 ...
 
 Full training.
 
-Epoch 0 => train loss: 149.45635986328125; valid loss: 122.74382019042969
-Epoch 200 => train loss: 2.937605142593384; valid loss: 5.418518543243408
-Epoch 400 => train loss: 1.648858666419983; valid loss: 2.8568506240844727
-Epoch 600 => train loss: 1.2960374355316162; valid loss: 3.0520858764648438
-Epoch 800 => train loss: 1.160575032234192; valid loss: 2.6229982376098633
-Running time in seconds: 50.23940300941467
-Scaled valid loss values are 1.20, 0.20, 0.39, 0.97, 0.16, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 192.7169647216797; valid loss: 147.9530029296875
+Epoch 200 => train loss: 3.1137208938598633; valid loss: 6.077917575836182
+Epoch 400 => train loss: 1.7591632604599; valid loss: 2.8930251598358154
+Epoch 600 => train loss: 1.3483675718307495; valid loss: 2.8717591762542725
+Epoch 800 => train loss: 1.0927414894104004; valid loss: 2.51312255859375
+Epoch 1000 => train loss: 0.9403411746025085; valid loss: 2.9179093837738037
+Running time in seconds: 61.136011362075806
+Scaled valid loss values are 1.00, 0.20, 0.46, 1.10, 0.22, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 34
 ...
 
 Full training.
 
-Epoch 0 => train loss: 172.15760803222656; valid loss: 143.5353546142578
-Epoch 200 => train loss: 3.1253409385681152; valid loss: 6.16652774810791
-Epoch 400 => train loss: 1.6738910675048828; valid loss: 2.838087558746338
-Epoch 600 => train loss: 1.2035480737686157; valid loss: 3.0926883220672607
-Running time in seconds: 41.53314924240112
-Scaled valid loss values are 1.48, 0.18, 0.50, 1.14, 0.20, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 207.16903686523438; valid loss: 169.11512756347656
+Epoch 200 => train loss: 2.955939769744873; valid loss: 7.2323737144470215
+Epoch 400 => train loss: 1.61510169506073; valid loss: 3.0363829135894775
+Epoch 600 => train loss: 1.2227691411972046; valid loss: 2.366600751876831
+Epoch 800 => train loss: 1.0496494770050049; valid loss: 2.576855421066284
+Epoch 1000 => train loss: 0.9179052114486694; valid loss: 2.613635778427124
+Running time in seconds: 62.18603777885437
+Scaled valid loss values are 1.34, 0.20, 0.51, 0.97, 0.21, 0.16 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 35
 ...
 
 Full training.
 
-Epoch 0 => train loss: 193.3168487548828; valid loss: 153.2047119140625
-Epoch 200 => train loss: 3.3268678188323975; valid loss: 7.380481719970703
-Epoch 400 => train loss: 1.8194319009780884; valid loss: 3.928323268890381
-Epoch 600 => train loss: 1.2915185689926147; valid loss: 2.33280873298645
-Epoch 800 => train loss: 1.0409430265426636; valid loss: 2.3954029083251953
-Epoch 1000 => train loss: 1.024362564086914; valid loss: 2.8281073570251465
-Running time in seconds: 53.89549446105957
-Scaled valid loss values are 1.27, 0.20, 0.42, 1.01, 0.20, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 189.788818359375; valid loss: 138.8739013671875
+Epoch 200 => train loss: 3.2321372032165527; valid loss: 8.886058807373047
+Epoch 400 => train loss: 1.8516647815704346; valid loss: 3.195277690887451
+Epoch 600 => train loss: 1.3313981294631958; valid loss: 2.3977224826812744
+Epoch 800 => train loss: 1.0496042966842651; valid loss: 2.4414355754852295
+Epoch 1000 => train loss: 1.034129023551941; valid loss: 2.5957555770874023
+Running time in seconds: 54.35980248451233
+Scaled valid loss values are 1.34, 0.19, 0.41, 0.89, 0.16, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 36
 ...
 
 Full training.
 
-Epoch 0 => train loss: 205.56533813476562; valid loss: 163.56739807128906
-Epoch 200 => train loss: 2.7423601150512695; valid loss: 5.853671073913574
-Epoch 400 => train loss: 1.7023123502731323; valid loss: 2.5321290493011475
-Epoch 600 => train loss: 1.3501372337341309; valid loss: 2.4727277755737305
-Epoch 800 => train loss: 1.0802645683288574; valid loss: 2.3866004943847656
-Epoch 1000 => train loss: 0.9276474118232727; valid loss: 2.441678762435913
-Running time in seconds: 62.40262532234192
-Scaled valid loss values are 1.17, 0.18, 0.60, 1.07, 0.15, 0.14 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 240.12762451171875; valid loss: 178.66952514648438
+Epoch 200 => train loss: 3.2447421550750732; valid loss: 7.135256767272949
+Epoch 400 => train loss: 1.7439038753509521; valid loss: 3.3022594451904297
+Epoch 600 => train loss: 1.3949816226959229; valid loss: 2.90962290763855
+Epoch 800 => train loss: 1.1877121925354004; valid loss: 2.6521730422973633
+Running time in seconds: 51.67221474647522
+Scaled valid loss values are 1.37, 0.19, 0.27, 1.26, 0.17, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 37
 ...
 
 Full training.
 
-Epoch 0 => train loss: 204.7345733642578; valid loss: 164.80783081054688
-Epoch 200 => train loss: 3.3951854705810547; valid loss: 6.0293169021606445
-Epoch 400 => train loss: 2.1014554500579834; valid loss: 3.5648014545440674
-Epoch 600 => train loss: 1.4575862884521484; valid loss: 2.927701473236084
-Epoch 800 => train loss: 1.174829125404358; valid loss: 2.581317663192749
-Epoch 1000 => train loss: 1.026298999786377; valid loss: 2.7527217864990234
-Running time in seconds: 57.63288378715515
-Scaled valid loss values are 1.09, 0.20, 0.36, 1.26, 0.14, 0.16 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 199.86569213867188; valid loss: 155.9890594482422
+Epoch 200 => train loss: 3.2098896503448486; valid loss: 8.567304611206055
+Epoch 400 => train loss: 1.9058897495269775; valid loss: 4.099971771240234
+Epoch 600 => train loss: 1.3283696174621582; valid loss: 2.5567193031311035
+Epoch 800 => train loss: 1.2165621519088745; valid loss: 2.277068853378296
+Epoch 1000 => train loss: 0.9942430257797241; valid loss: 2.700024366378784
+Running time in seconds: 60.38092923164368
+Scaled valid loss values are 1.37, 0.19, 0.43, 0.71, 0.18, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 38
 ...
 
 Full training.
 
-Epoch 0 => train loss: 211.1751708984375; valid loss: 166.57139587402344
-Epoch 200 => train loss: 3.1677727699279785; valid loss: 6.6841583251953125
-Epoch 400 => train loss: 1.7791670560836792; valid loss: 3.331427574157715
-Epoch 600 => train loss: 1.329573631286621; valid loss: 2.719341278076172
-Epoch 800 => train loss: 1.1390926837921143; valid loss: 2.8432059288024902
-Running time in seconds: 52.02006244659424
-Scaled valid loss values are 1.48, 0.19, 0.49, 1.28, 0.18, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 156.16970825195312; valid loss: 116.88990783691406
+Epoch 200 => train loss: 3.1513662338256836; valid loss: 6.3704833984375
+Epoch 400 => train loss: 1.742355465888977; valid loss: 3.3830084800720215
+Epoch 600 => train loss: 1.335616111755371; valid loss: 2.8072102069854736
+Epoch 800 => train loss: 1.0786861181259155; valid loss: 2.408820629119873
+Epoch 1000 => train loss: 1.0107630491256714; valid loss: 2.564246892929077
+Running time in seconds: 61.701399087905884
+Scaled valid loss values are 1.19, 0.18, 0.48, 1.03, 0.15, 0.17 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 39
 ...
 
 Full training.
 
-Epoch 0 => train loss: 203.40133666992188; valid loss: 157.26443481445312
-Epoch 200 => train loss: 3.0866212844848633; valid loss: 7.342796802520752
-Epoch 400 => train loss: 1.9541317224502563; valid loss: 3.2884762287139893
-Epoch 600 => train loss: 1.5110788345336914; valid loss: 3.1932437419891357
-Epoch 800 => train loss: 1.060079574584961; valid loss: 2.3169639110565186
-Epoch 1000 => train loss: 1.0380291938781738; valid loss: 2.3851897716522217
-Running time in seconds: 56.6517550945282
-Scaled valid loss values are 0.94, 0.19, 0.31, 0.71, 0.13, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 181.06101989746094; valid loss: 148.93714904785156
+Epoch 200 => train loss: 3.0822913646698; valid loss: 7.156251430511475
+Epoch 400 => train loss: 2.001495122909546; valid loss: 3.3728485107421875
+Epoch 600 => train loss: 1.401407241821289; valid loss: 2.9341788291931152
+Epoch 800 => train loss: 1.1434414386749268; valid loss: 3.065525531768799
+Epoch 1000 => train loss: 0.9725910425186157; valid loss: 3.1299686431884766
+Running time in seconds: 56.1455819606781
+Scaled valid loss values are 0.97, 0.19, 0.35, 1.07, 0.18, 0.17 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 40
 ...
 
 Full training.
 
-Epoch 0 => train loss: 200.37974548339844; valid loss: 152.66513061523438
-Epoch 200 => train loss: 2.8541722297668457; valid loss: 5.910112380981445
-Epoch 400 => train loss: 1.6336865425109863; valid loss: 2.622701406478882
-Epoch 600 => train loss: 1.1863892078399658; valid loss: 2.6311495304107666
-Epoch 800 => train loss: 1.080817461013794; valid loss: 2.4369444847106934
-Epoch 1000 => train loss: 0.9436532855033875; valid loss: 2.5641071796417236
-Running time in seconds: 59.13918089866638
-Scaled valid loss values are 0.86, 0.22, 0.43, 0.80, 0.15, 0.17 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 181.92706298828125; valid loss: 135.32115173339844
+Epoch 200 => train loss: 3.243425130844116; valid loss: 7.329559326171875
+Epoch 400 => train loss: 1.780751347541809; valid loss: 3.287794589996338
+Epoch 600 => train loss: 1.3356411457061768; valid loss: 2.7822749614715576
+Epoch 800 => train loss: 1.1234314441680908; valid loss: 2.5647969245910645
+Epoch 1000 => train loss: 1.0090510845184326; valid loss: 3.0262668132781982
+Epoch 1200 => train loss: 0.8588383793830872; valid loss: 3.1896703243255615
+Running time in seconds: 66.70839262008667
+Scaled valid loss values are 1.49, 0.20, 0.46, 1.87, 0.20, 0.15 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 41
 ...
 
 Full training.
 
-Epoch 0 => train loss: 199.26620483398438; valid loss: 154.74591064453125
-Epoch 200 => train loss: 3.0922906398773193; valid loss: 7.214140892028809
-Epoch 400 => train loss: 1.6780818700790405; valid loss: 3.238708257675171
-Epoch 600 => train loss: 1.257771372795105; valid loss: 2.5971004962921143
-Epoch 800 => train loss: 1.0329136848449707; valid loss: 2.4658260345458984
-Epoch 1000 => train loss: 1.0416195392608643; valid loss: 2.8012216091156006
-Epoch 1200 => train loss: 0.9197790622711182; valid loss: 2.5088729858398438
-Running time in seconds: 65.53552317619324
-Scaled valid loss values are 0.93, 0.19, 0.53, 1.10, 0.18, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 165.59332275390625; valid loss: 121.77110290527344
+Epoch 200 => train loss: 3.071948289871216; valid loss: 7.470044136047363
+Epoch 400 => train loss: 1.7298647165298462; valid loss: 3.165966033935547
+Epoch 600 => train loss: 1.2019070386886597; valid loss: 2.286820411682129
+Epoch 800 => train loss: 1.144538164138794; valid loss: 2.5008440017700195
+Epoch 1000 => train loss: 0.9724529385566711; valid loss: 2.764303684234619
+Epoch 1200 => train loss: 0.8692672848701477; valid loss: 2.796631097793579
+Running time in seconds: 65.6555655002594
+Scaled valid loss values are 1.33, 0.18, 0.43, 1.32, 0.14, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 42
 ...
 
 Full training.
 
-Epoch 0 => train loss: 197.18663024902344; valid loss: 150.6667938232422
-Epoch 200 => train loss: 3.174421548843384; valid loss: 7.493211269378662
-Epoch 400 => train loss: 1.7176417112350464; valid loss: 2.851142168045044
-Epoch 600 => train loss: 1.3791931867599487; valid loss: 2.628229856491089
-Epoch 800 => train loss: 1.1574578285217285; valid loss: 2.418663740158081
-Epoch 1000 => train loss: 1.06964111328125; valid loss: 3.0963194370269775
-Running time in seconds: 57.73798871040344
-Scaled valid loss values are 1.18, 0.18, 0.46, 1.17, 0.21, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 178.6969757080078; valid loss: 135.49620056152344
+Epoch 200 => train loss: 3.3609793186187744; valid loss: 7.67891263961792
+Epoch 400 => train loss: 1.960134506225586; valid loss: 3.8439345359802246
+Epoch 600 => train loss: 1.424288034439087; valid loss: 2.8511228561401367
+Epoch 800 => train loss: 1.1749920845031738; valid loss: 2.7834396362304688
+Epoch 1000 => train loss: 1.0337640047073364; valid loss: 3.095370292663574
+Running time in seconds: 55.57564163208008
+Scaled valid loss values are 1.02, 0.23, 0.39, 1.27, 0.17, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 43
 ...
 
 Full training.
 
-Epoch 0 => train loss: 189.50527954101562; valid loss: 148.83372497558594
-Epoch 200 => train loss: 2.816894054412842; valid loss: 6.131101608276367
-Epoch 400 => train loss: 1.7898073196411133; valid loss: 2.5867795944213867
-Epoch 600 => train loss: 1.2855206727981567; valid loss: 2.170485734939575
-Epoch 800 => train loss: 1.0735816955566406; valid loss: 2.5483438968658447
-Epoch 1000 => train loss: 0.9184813499450684; valid loss: 2.720668315887451
-Running time in seconds: 56.22862148284912
-Scaled valid loss values are 1.01, 0.20, 0.50, 0.86, 0.14, 0.17 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 205.2091064453125; valid loss: 164.49278259277344
+Epoch 200 => train loss: 3.110912561416626; valid loss: 5.891679763793945
+Epoch 400 => train loss: 1.7685047388076782; valid loss: 3.248861074447632
+Epoch 600 => train loss: 1.284653902053833; valid loss: 3.3087596893310547
+Epoch 800 => train loss: 1.1078624725341797; valid loss: 3.5083110332489014
+Epoch 1000 => train loss: 0.9574616551399231; valid loss: 3.345369577407837
+Running time in seconds: 63.079078674316406
+Scaled valid loss values are 1.49, 0.16, 0.36, 1.70, 0.19, 0.22 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 44
 ...
 
 Full training.
 
-Epoch 0 => train loss: 196.07176208496094; valid loss: 149.90875244140625
-Epoch 200 => train loss: 3.1983673572540283; valid loss: 7.623219966888428
-Epoch 400 => train loss: 1.869399070739746; valid loss: 4.030010223388672
-Epoch 600 => train loss: 1.3164952993392944; valid loss: 2.482210397720337
-Epoch 800 => train loss: 1.1535996198654175; valid loss: 2.3738601207733154
-Epoch 1000 => train loss: 0.9846143126487732; valid loss: 2.7863402366638184
-Running time in seconds: 54.53799271583557
-Scaled valid loss values are 1.18, 0.21, 0.45, 1.26, 0.17, 0.16 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 178.11033630371094; valid loss: 140.32012939453125
+Epoch 200 => train loss: 3.02669095993042; valid loss: 7.145094871520996
+Epoch 400 => train loss: 1.7126370668411255; valid loss: 2.9974284172058105
+Epoch 600 => train loss: 1.2370672225952148; valid loss: 2.5125627517700195
+Epoch 800 => train loss: 1.1935330629348755; valid loss: 2.5684452056884766
+Running time in seconds: 52.42125678062439
+Scaled valid loss values are 1.39, 0.18, 0.41, 0.75, 0.20, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 45
 ...
 
 Full training.
 
-Epoch 0 => train loss: 182.9338836669922; valid loss: 140.42572021484375
-Epoch 200 => train loss: 3.1590189933776855; valid loss: 8.25869369506836
-Epoch 400 => train loss: 1.7494927644729614; valid loss: 2.935098648071289
-Epoch 600 => train loss: 1.3543391227722168; valid loss: 2.496950149536133
-Epoch 800 => train loss: 1.0471100807189941; valid loss: 2.394632577896118
-Epoch 1000 => train loss: 0.9854211807250977; valid loss: 2.5914249420166016
-Running time in seconds: 54.850825548172
-Scaled valid loss values are 1.31, 0.19, 0.50, 1.02, 0.14, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 193.3843994140625; valid loss: 149.01531982421875
+Epoch 200 => train loss: 3.1792893409729004; valid loss: 7.392220973968506
+Epoch 400 => train loss: 1.7545113563537598; valid loss: 3.546853542327881
+Epoch 600 => train loss: 1.346011996269226; valid loss: 2.7292189598083496
+Epoch 800 => train loss: 1.0209473371505737; valid loss: 3.431276321411133
+Running time in seconds: 51.39146113395691
+Scaled valid loss values are 1.42, 0.19, 0.38, 1.33, 0.22, 0.25 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 46
 ...
 
 Full training.
 
-Epoch 0 => train loss: 169.9683837890625; valid loss: 132.2549591064453
-Epoch 200 => train loss: 2.7968876361846924; valid loss: 6.731810092926025
-Epoch 400 => train loss: 1.6827647686004639; valid loss: 3.3071508407592773
-Epoch 600 => train loss: 1.278570294380188; valid loss: 2.8171544075012207
-Epoch 800 => train loss: 1.07746160030365; valid loss: 2.5606775283813477
-Running time in seconds: 45.53946375846863
-Scaled valid loss values are 0.90, 0.20, 0.52, 1.06, 0.19, 0.16 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 168.33863830566406; valid loss: 128.59048461914062
+Epoch 200 => train loss: 3.2158055305480957; valid loss: 6.52119779586792
+Epoch 400 => train loss: 1.835732102394104; valid loss: 3.366802930831909
+Epoch 600 => train loss: 1.368473768234253; valid loss: 2.7875654697418213
+Epoch 800 => train loss: 1.0718594789505005; valid loss: 2.563971519470215
+Running time in seconds: 51.845417499542236
+Scaled valid loss values are 1.44, 0.18, 0.14, 0.96, 0.16, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 47
 ...
 
 Full training.
 
-Epoch 0 => train loss: 170.6486358642578; valid loss: 136.75123596191406
-Epoch 200 => train loss: 3.1532986164093018; valid loss: 7.5597710609436035
-Epoch 400 => train loss: 1.6572808027267456; valid loss: 3.2798759937286377
-Epoch 600 => train loss: 1.3202675580978394; valid loss: 2.544745683670044
-Epoch 800 => train loss: 1.200682520866394; valid loss: 2.9198145866394043
-Epoch 1000 => train loss: 0.9645111560821533; valid loss: 3.025702476501465
-Running time in seconds: 54.680744886398315
-Scaled valid loss values are 1.63, 0.18, 0.34, 1.41, 0.21, 0.24 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 181.79074096679688; valid loss: 141.94573974609375
+Epoch 200 => train loss: 3.0062828063964844; valid loss: 6.382853031158447
+Epoch 400 => train loss: 1.7337926626205444; valid loss: 2.8318965435028076
+Epoch 600 => train loss: 1.270106315612793; valid loss: 2.643495559692383
+Epoch 800 => train loss: 1.055249571800232; valid loss: 2.8119494915008545
+Running time in seconds: 50.428494930267334
+Scaled valid loss values are 1.28, 0.20, 0.45, 0.96, 0.17, 0.17 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 48
 ...
 
 Full training.
 
-Epoch 0 => train loss: 190.28121948242188; valid loss: 146.70388793945312
-Epoch 200 => train loss: 3.0569210052490234; valid loss: 6.106743812561035
-Epoch 400 => train loss: 1.5671066045761108; valid loss: 3.2285311222076416
-Epoch 600 => train loss: 1.327229619026184; valid loss: 3.0120060443878174
-Epoch 800 => train loss: 1.0675184726715088; valid loss: 2.278733253479004
-Epoch 1000 => train loss: 1.038953185081482; valid loss: 2.437307596206665
-Epoch 1200 => train loss: 0.9118333458900452; valid loss: 2.46579909324646
-Running time in seconds: 66.25210618972778
-Scaled valid loss values are 1.07, 0.20, 0.42, 0.94, 0.16, 0.14 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 166.57760620117188; valid loss: 127.24253845214844
+Epoch 200 => train loss: 2.795712471008301; valid loss: 7.559133529663086
+Epoch 400 => train loss: 1.5903128385543823; valid loss: 3.1724982261657715
+Epoch 600 => train loss: 1.2669404745101929; valid loss: 2.9538631439208984
+Epoch 800 => train loss: 1.0338133573532104; valid loss: 2.8311967849731445
+Epoch 1000 => train loss: 0.9142147302627563; valid loss: 2.798102855682373
+Running time in seconds: 62.97168850898743
+Scaled valid loss values are 1.23, 0.18, 0.49, 1.07, 0.21, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 49
 ...
 
 Full training.
 
-Epoch 0 => train loss: 200.2574005126953; valid loss: 155.12681579589844
-Epoch 200 => train loss: 3.3593366146087646; valid loss: 7.098962306976318
-Epoch 400 => train loss: 1.696298599243164; valid loss: 3.2743327617645264
-Epoch 600 => train loss: 1.3611432313919067; valid loss: 2.1945128440856934
-Epoch 800 => train loss: 1.0861716270446777; valid loss: 2.55297589302063
-Running time in seconds: 51.666762351989746
-Scaled valid loss values are 1.06, 0.18, 0.47, 0.83, 0.18, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 203.3744354248047; valid loss: 162.09515380859375
+Epoch 200 => train loss: 3.5417606830596924; valid loss: 7.277432918548584
+Epoch 400 => train loss: 1.9230504035949707; valid loss: 2.7845842838287354
+Epoch 600 => train loss: 1.4041142463684082; valid loss: 2.5640735626220703
+Epoch 800 => train loss: 1.2250887155532837; valid loss: 2.7590503692626953
+Running time in seconds: 49.78068161010742
+Scaled valid loss values are 1.48, 0.20, 0.37, 1.01, 0.13, 0.26 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 50
 ...
 
 Full training.
 
-Epoch 0 => train loss: 186.6417236328125; valid loss: 150.1689910888672
-Epoch 200 => train loss: 3.122654914855957; valid loss: 6.852518558502197
-Epoch 400 => train loss: 1.8128372430801392; valid loss: 3.170569658279419
-Epoch 600 => train loss: 1.3800525665283203; valid loss: 2.174391508102417
-Epoch 800 => train loss: 1.0105469226837158; valid loss: 2.2328310012817383
-Epoch 1000 => train loss: 0.9294116497039795; valid loss: 2.7475712299346924
-Running time in seconds: 52.993987798690796
-Scaled valid loss values are 1.03, 0.20, 0.53, 1.01, 0.20, 0.15 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 184.51780700683594; valid loss: 139.6574249267578
+Epoch 200 => train loss: 3.3076822757720947; valid loss: 6.934826850891113
+Epoch 400 => train loss: 1.9533435106277466; valid loss: 4.051366806030273
+Epoch 600 => train loss: 1.36767578125; valid loss: 2.669896125793457
+Epoch 800 => train loss: 1.136342167854309; valid loss: 2.7149221897125244
+Epoch 1000 => train loss: 0.9891223907470703; valid loss: 3.0991787910461426
+Running time in seconds: 60.72255277633667
+Scaled valid loss values are 0.95, 0.21, 0.51, 0.98, 0.15, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 51
 ...
 
 Full training.
 
-Epoch 0 => train loss: 197.3755340576172; valid loss: 146.5489501953125
-Epoch 200 => train loss: 3.235083818435669; valid loss: 6.969135761260986
-Epoch 400 => train loss: 1.8998059034347534; valid loss: 3.075232744216919
-Epoch 600 => train loss: 1.3733279705047607; valid loss: 2.3460047245025635
-Epoch 800 => train loss: 1.1178117990493774; valid loss: 2.645144462585449
-Epoch 1000 => train loss: 1.0871894359588623; valid loss: 2.6253268718719482
-Running time in seconds: 57.9717173576355
-Scaled valid loss values are 1.46, 0.19, 0.50, 1.42, 0.17, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 182.84303283691406; valid loss: 151.87155151367188
+Epoch 200 => train loss: 3.3572418689727783; valid loss: 6.898939609527588
+Epoch 400 => train loss: 1.8423986434936523; valid loss: 2.892457962036133
+Epoch 600 => train loss: 1.5208921432495117; valid loss: 2.5584397315979004
+Epoch 800 => train loss: 1.1760989427566528; valid loss: 2.5982396602630615
+Epoch 1000 => train loss: 1.0560451745986938; valid loss: 2.142482042312622
+Epoch 1200 => train loss: 1.0561964511871338; valid loss: 2.064347505569458
+Running time in seconds: 64.75364184379578
+Scaled valid loss values are 1.02, 0.22, 0.40, 0.69, 0.18, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 52
 ...
 
 Full training.
 
-Epoch 0 => train loss: 183.87466430664062; valid loss: 150.85800170898438
-Epoch 200 => train loss: 3.252305030822754; valid loss: 5.10344934463501
-Epoch 400 => train loss: 1.9370993375778198; valid loss: 2.482815742492676
-Epoch 600 => train loss: 1.397668719291687; valid loss: 2.6395251750946045
-Epoch 800 => train loss: 1.1694464683532715; valid loss: 2.4749889373779297
-Epoch 1000 => train loss: 1.014194369316101; valid loss: 3.0986857414245605
-Running time in seconds: 55.0796103477478
-Scaled valid loss values are 1.56, 0.23, 0.53, 1.30, 0.15, 0.27 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 186.84410095214844; valid loss: 150.63014221191406
+Epoch 200 => train loss: 3.256046772003174; valid loss: 7.125078201293945
+Epoch 400 => train loss: 2.0039446353912354; valid loss: 3.008056640625
+Epoch 600 => train loss: 1.4047160148620605; valid loss: 2.609034538269043
+Epoch 800 => train loss: 1.1323165893554688; valid loss: 2.8069276809692383
+Running time in seconds: 49.46564769744873
+Scaled valid loss values are 1.58, 0.21, 0.36, 1.26, 0.16, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 53
 ...
 
 Full training.
 
-Epoch 0 => train loss: 190.22825622558594; valid loss: 148.40228271484375
-Epoch 200 => train loss: 3.065566062927246; valid loss: 5.815945625305176
-Epoch 400 => train loss: 1.7443739175796509; valid loss: 2.8199636936187744
-Epoch 600 => train loss: 1.2934924364089966; valid loss: 2.098989248275757
-Epoch 800 => train loss: 1.1475409269332886; valid loss: 2.356067419052124
-Running time in seconds: 49.03745245933533
-Scaled valid loss values are 1.33, 0.21, 0.49, 0.65, 0.22, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 187.5401611328125; valid loss: 142.92784118652344
+Epoch 200 => train loss: 3.2696502208709717; valid loss: 6.558743000030518
+Epoch 400 => train loss: 1.754387378692627; valid loss: 3.2282986640930176
+Epoch 600 => train loss: 1.4392805099487305; valid loss: 2.350419282913208
+Epoch 800 => train loss: 1.1088522672653198; valid loss: 2.411754846572876
+Epoch 1000 => train loss: 0.9768657088279724; valid loss: 2.4325695037841797
+Running time in seconds: 60.911011934280396
+Scaled valid loss values are 1.48, 0.16, 0.38, 1.01, 0.19, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 54
 ...
 
 Full training.
 
-Epoch 0 => train loss: 189.48016357421875; valid loss: 150.15586853027344
-Epoch 200 => train loss: 3.1999130249023438; valid loss: 6.7440185546875
-Epoch 400 => train loss: 1.8162643909454346; valid loss: 3.4567484855651855
-Epoch 600 => train loss: 1.2850759029388428; valid loss: 2.7137346267700195
-Epoch 800 => train loss: 1.0923157930374146; valid loss: 2.4430854320526123
-Epoch 1000 => train loss: 0.9525312781333923; valid loss: 2.4857869148254395
-Running time in seconds: 53.67476677894592
-Scaled valid loss values are 1.32, 0.18, 0.74, 0.84, 0.15, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 180.5242462158203; valid loss: 134.98245239257812
+Epoch 200 => train loss: 2.995100259780884; valid loss: 6.919595718383789
+Epoch 400 => train loss: 1.7732971906661987; valid loss: 3.3399696350097656
+Epoch 600 => train loss: 1.3119276762008667; valid loss: 2.668203353881836
+Epoch 800 => train loss: 1.1891156435012817; valid loss: 2.5432651042938232
+Running time in seconds: 52.97245526313782
+Scaled valid loss values are 1.14, 0.21, 0.48, 0.70, 0.23, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 55
 ...
 
 Full training.
 
-Epoch 0 => train loss: 168.3665313720703; valid loss: 140.14556884765625
-Epoch 200 => train loss: 3.1343605518341064; valid loss: 7.344031810760498
-Epoch 400 => train loss: 1.8710458278656006; valid loss: 3.557664632797241
-Epoch 600 => train loss: 1.3958053588867188; valid loss: 2.5899620056152344
-Epoch 800 => train loss: 1.1278150081634521; valid loss: 2.5707874298095703
-Running time in seconds: 50.45122408866882
-Scaled valid loss values are 1.29, 0.19, 0.35, 0.83, 0.19, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 176.98873901367188; valid loss: 135.56773376464844
+Epoch 200 => train loss: 2.9972007274627686; valid loss: 6.037840366363525
+Epoch 400 => train loss: 1.7383110523223877; valid loss: 2.9347636699676514
+Epoch 600 => train loss: 1.3432989120483398; valid loss: 2.6324245929718018
+Epoch 800 => train loss: 1.0610069036483765; valid loss: 2.389873743057251
+Epoch 1000 => train loss: 0.9884496331214905; valid loss: 2.3141496181488037
+Running time in seconds: 58.13409233093262
+Scaled valid loss values are 1.08, 0.22, 0.27, 0.71, 0.17, 0.16 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 56
 ...
 
 Full training.
 
-Epoch 0 => train loss: 173.10537719726562; valid loss: 133.4334716796875
-Epoch 200 => train loss: 2.9960427284240723; valid loss: 5.783355236053467
-Epoch 400 => train loss: 1.6683086156845093; valid loss: 2.899876356124878
-Epoch 600 => train loss: 1.2444640398025513; valid loss: 2.273465633392334
-Epoch 800 => train loss: 1.0797494649887085; valid loss: 2.5281169414520264
-Running time in seconds: 47.64564061164856
-Scaled valid loss values are 1.05, 0.20, 0.43, 0.87, 0.24, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 175.98390197753906; valid loss: 148.28195190429688
+Epoch 200 => train loss: 3.2685375213623047; valid loss: 7.257671356201172
+Epoch 400 => train loss: 1.8690088987350464; valid loss: 2.7228333950042725
+Epoch 600 => train loss: 1.3289705514907837; valid loss: 2.9000561237335205
+Epoch 800 => train loss: 1.0851281881332397; valid loss: 2.7225735187530518
+Epoch 1000 => train loss: 0.9382495880126953; valid loss: 2.8199563026428223
+Running time in seconds: 54.90482234954834
+Scaled valid loss values are 1.06, 0.17, 0.47, 0.85, 0.18, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 57
 ...
 
 Full training.
 
-Epoch 0 => train loss: 188.654541015625; valid loss: 137.36619567871094
-Epoch 200 => train loss: 3.1452369689941406; valid loss: 7.831687927246094
-Epoch 400 => train loss: 1.9071307182312012; valid loss: 3.5008742809295654
-Epoch 600 => train loss: 1.333848476409912; valid loss: 3.0169851779937744
-Epoch 800 => train loss: 1.1522966623306274; valid loss: 2.7438385486602783
-Epoch 1000 => train loss: 0.9512673616409302; valid loss: 2.873109817504883
-Running time in seconds: 53.392980098724365
-Scaled valid loss values are 1.22, 0.18, 0.63, 1.69, 0.20, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 185.63916015625; valid loss: 143.5770263671875
+Epoch 200 => train loss: 3.075639247894287; valid loss: 6.623386859893799
+Epoch 400 => train loss: 1.6447510719299316; valid loss: 3.1084096431732178
+Epoch 600 => train loss: 1.260196328163147; valid loss: 2.5701889991760254
+Epoch 800 => train loss: 1.1181111335754395; valid loss: 2.9608986377716064
+Epoch 1000 => train loss: 0.9765061736106873; valid loss: 2.7388575077056885
+Epoch 1200 => train loss: 0.8407517075538635; valid loss: 2.790855884552002
+Running time in seconds: 67.05334258079529
+Scaled valid loss values are 1.38, 0.20, 0.46, 1.38, 0.21, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 58
 ...
 
 Full training.
 
-Epoch 0 => train loss: 169.7998504638672; valid loss: 131.33290100097656
-Epoch 200 => train loss: 3.0007667541503906; valid loss: 6.33465576171875
-Epoch 400 => train loss: 1.746828556060791; valid loss: 3.1098570823669434
-Epoch 600 => train loss: 1.2788439989089966; valid loss: 2.5266361236572266
-Epoch 800 => train loss: 1.0864168405532837; valid loss: 2.3231523036956787
-Epoch 1000 => train loss: 0.9941344857215881; valid loss: 2.858818531036377
-Epoch 1200 => train loss: 0.8371907472610474; valid loss: 2.5867538452148438
-Running time in seconds: 65.34452319145203
-Scaled valid loss values are 0.96, 0.19, 0.29, 0.86, 0.18, 0.16 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 177.9283905029297; valid loss: 139.7919921875
+Epoch 200 => train loss: 3.4488983154296875; valid loss: 7.230395317077637
+Epoch 400 => train loss: 2.330540418624878; valid loss: 3.6634716987609863
+Epoch 600 => train loss: 1.4838225841522217; valid loss: 2.3135194778442383
+Epoch 800 => train loss: 1.237957239151001; valid loss: 2.5224428176879883
+Epoch 1000 => train loss: 1.0437304973602295; valid loss: 2.5285720825195312
+Running time in seconds: 60.07452201843262
+Scaled valid loss values are 1.35, 0.21, 0.31, 0.94, 0.22, 0.23 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 59
 ...
 
 Full training.
 
-Epoch 0 => train loss: 183.8027801513672; valid loss: 150.69448852539062
-Epoch 200 => train loss: 3.078038215637207; valid loss: 6.861513137817383
-Epoch 400 => train loss: 1.7453694343566895; valid loss: 2.888897180557251
-Epoch 600 => train loss: 1.2678251266479492; valid loss: 2.542771577835083
-Epoch 800 => train loss: 1.040520191192627; valid loss: 2.340017080307007
-Epoch 1000 => train loss: 0.985218346118927; valid loss: 2.656540632247925
-Running time in seconds: 53.94032573699951
-Scaled valid loss values are 1.37, 0.20, 0.51, 1.35, 0.18, 0.23 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 177.1382598876953; valid loss: 141.0006103515625
+Epoch 200 => train loss: 3.071200132369995; valid loss: 6.727954864501953
+Epoch 400 => train loss: 1.7226518392562866; valid loss: 3.2142140865325928
+Epoch 600 => train loss: 1.3028209209442139; valid loss: 2.8097479343414307
+Epoch 800 => train loss: 1.1060926914215088; valid loss: 2.8457143306732178
+Epoch 1000 => train loss: 0.9089089035987854; valid loss: 2.5888259410858154
+Running time in seconds: 55.441909313201904
+Scaled valid loss values are 1.48, 0.18, 0.30, 0.69, 0.20, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 60
 ...
 
 Full training.
 
-Epoch 0 => train loss: 173.49220275878906; valid loss: 131.49888610839844
-Epoch 200 => train loss: 2.9165353775024414; valid loss: 6.474203586578369
-Epoch 400 => train loss: 1.6852784156799316; valid loss: 2.5839643478393555
-Epoch 600 => train loss: 1.2280511856079102; valid loss: 2.4207842350006104
-Epoch 800 => train loss: 1.090488314628601; valid loss: 2.387282609939575
-Running time in seconds: 46.384944915771484
-Scaled valid loss values are 1.22, 0.23, 0.33, 1.06, 0.24, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 186.52490234375; valid loss: 149.4119110107422
+Epoch 200 => train loss: 3.065209150314331; valid loss: 5.899013519287109
+Epoch 400 => train loss: 1.7764599323272705; valid loss: 3.014697790145874
+Epoch 600 => train loss: 1.2773022651672363; valid loss: 2.1195247173309326
+Epoch 800 => train loss: 1.0720900297164917; valid loss: 2.2570207118988037
+Running time in seconds: 52.25035095214844
+Scaled valid loss values are 1.13, 0.20, 0.44, 0.42, 0.15, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 61
 ...
 
 Full training.
 
-Epoch 0 => train loss: 196.21783447265625; valid loss: 155.032470703125
-Epoch 200 => train loss: 3.176313638687134; valid loss: 6.763230323791504
-Epoch 400 => train loss: 1.713976502418518; valid loss: 3.4796199798583984
-Epoch 600 => train loss: 1.4500550031661987; valid loss: 3.1072158813476562
-Epoch 800 => train loss: 1.0360066890716553; valid loss: 2.8138952255249023
-Running time in seconds: 51.24522113800049
-Scaled valid loss values are 1.04, 0.21, 0.33, 1.56, 0.16, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 183.76840209960938; valid loss: 135.78839111328125
+Epoch 200 => train loss: 3.2584948539733887; valid loss: 6.680534362792969
+Epoch 400 => train loss: 1.7572102546691895; valid loss: 3.127955436706543
+Epoch 600 => train loss: 1.3487664461135864; valid loss: 2.434905529022217
+Epoch 800 => train loss: 1.2322070598602295; valid loss: 2.0678770542144775
+Running time in seconds: 50.03739285469055
+Scaled valid loss values are 1.04, 0.20, 0.54, 0.84, 0.16, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 62
 ...
 
 Full training.
 
-Epoch 0 => train loss: 177.23191833496094; valid loss: 141.128173828125
-Epoch 200 => train loss: 2.9825594425201416; valid loss: 6.525139808654785
-Epoch 400 => train loss: 1.7263307571411133; valid loss: 2.8280293941497803
-Epoch 600 => train loss: 1.2502620220184326; valid loss: 2.792020559310913
-Epoch 800 => train loss: 1.1300172805786133; valid loss: 3.2403194904327393
-Running time in seconds: 43.761796712875366
-Scaled valid loss values are 1.46, 0.20, 0.62, 1.02, 0.15, 0.25 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 161.550048828125; valid loss: 127.66797637939453
+Epoch 200 => train loss: 2.9984548091888428; valid loss: 6.316944122314453
+Epoch 400 => train loss: 1.5331761837005615; valid loss: 2.4516985416412354
+Epoch 600 => train loss: 1.267876386642456; valid loss: 2.49495267868042
+Epoch 800 => train loss: 1.0643061399459839; valid loss: 2.420182943344116
+Running time in seconds: 49.056396484375
+Scaled valid loss values are 1.07, 0.21, 0.41, 0.76, 0.17, 0.16 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 63
 ...
 
 Full training.
 
-Epoch 0 => train loss: 156.73019409179688; valid loss: 120.91885375976562
-Epoch 200 => train loss: 3.196136951446533; valid loss: 7.023113250732422
-Epoch 400 => train loss: 1.8458213806152344; valid loss: 2.857638359069824
-Epoch 600 => train loss: 1.4338780641555786; valid loss: 2.7859668731689453
-Epoch 800 => train loss: 1.1922893524169922; valid loss: 2.3940343856811523
-Epoch 1000 => train loss: 1.0319124460220337; valid loss: 2.688577651977539
-Epoch 1200 => train loss: 0.9551038146018982; valid loss: 2.5300631523132324
-Running time in seconds: 66.46004557609558
-Scaled valid loss values are 1.14, 0.17, 0.61, 1.11, 0.18, 0.12 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 173.1650390625; valid loss: 136.60125732421875
+Epoch 200 => train loss: 2.858703374862671; valid loss: 5.998202800750732
+Epoch 400 => train loss: 1.6151942014694214; valid loss: 2.619951009750366
+Epoch 600 => train loss: 1.183829665184021; valid loss: 2.4783637523651123
+Epoch 800 => train loss: 1.0541777610778809; valid loss: 2.4160265922546387
+Epoch 1000 => train loss: 0.9474524855613708; valid loss: 2.3177225589752197
+Running time in seconds: 57.32822799682617
+Scaled valid loss values are 1.32, 0.19, 0.47, 0.90, 0.17, 0.22 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 64
 ...
 
 Full training.
 
-Epoch 0 => train loss: 175.48190307617188; valid loss: 135.4179229736328
-Epoch 200 => train loss: 3.2168688774108887; valid loss: 7.386531829833984
-Epoch 400 => train loss: 2.0619754791259766; valid loss: 3.54788875579834
-Epoch 600 => train loss: 1.4270673990249634; valid loss: 2.790684223175049
-Epoch 800 => train loss: 1.2057929039001465; valid loss: 2.908674478530884
-Epoch 1000 => train loss: 0.9877833724021912; valid loss: 2.771038055419922
-Running time in seconds: 55.25576972961426
-Scaled valid loss values are 1.40, 0.15, 0.33, 0.96, 0.19, 0.23 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 193.17381286621094; valid loss: 151.6075439453125
+Epoch 200 => train loss: 3.02778697013855; valid loss: 8.10307788848877
+Epoch 400 => train loss: 1.7233307361602783; valid loss: 3.392110824584961
+Epoch 600 => train loss: 1.370901107788086; valid loss: 3.1824846267700195
+Epoch 800 => train loss: 1.2003200054168701; valid loss: 2.5868585109710693
+Running time in seconds: 53.57722020149231
+Scaled valid loss values are 1.17, 0.18, 0.48, 1.22, 0.19, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 65
 ...
 
 Full training.
 
-Epoch 0 => train loss: 233.74578857421875; valid loss: 189.6751251220703
-Epoch 200 => train loss: 3.350809335708618; valid loss: 7.2783522605896
-Epoch 400 => train loss: 2.025846481323242; valid loss: 3.7550582885742188
-Epoch 600 => train loss: 1.3820842504501343; valid loss: 3.4515280723571777
-Epoch 800 => train loss: 1.1769728660583496; valid loss: 2.8803911209106445
-Epoch 1000 => train loss: 0.9618088006973267; valid loss: 2.9813740253448486
-Running time in seconds: 55.70841097831726
-Scaled valid loss values are 1.62, 0.18, 0.48, 1.18, 0.21, 0.23 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 182.03128051757812; valid loss: 142.41773986816406
+Epoch 200 => train loss: 3.432317018508911; valid loss: 6.8109259605407715
+Epoch 400 => train loss: 1.831172227859497; valid loss: 3.437166690826416
+Epoch 600 => train loss: 1.4093116521835327; valid loss: 2.373444080352783
+Epoch 800 => train loss: 1.132434368133545; valid loss: 2.8982009887695312
+Running time in seconds: 48.193909883499146
+Scaled valid loss values are 1.21, 0.21, 0.42, 1.17, 0.20, 0.22 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 66
 ...
 
 Full training.
 
-Epoch 0 => train loss: 178.20469665527344; valid loss: 144.2210235595703
-Epoch 200 => train loss: 3.068526029586792; valid loss: 7.2670512199401855
-Epoch 400 => train loss: 1.6386091709136963; valid loss: 3.6706013679504395
-Epoch 600 => train loss: 1.2684013843536377; valid loss: 3.2912704944610596
-Epoch 800 => train loss: 1.0934162139892578; valid loss: 3.2989423274993896
-Epoch 1000 => train loss: 1.0932615995407104; valid loss: 3.302724599838257
-Running time in seconds: 53.013999462127686
-Scaled valid loss values are 1.01, 0.21, 0.53, 1.55, 0.21, 0.24 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 183.47088623046875; valid loss: 147.01577758789062
+Epoch 200 => train loss: 3.0905885696411133; valid loss: 7.041980743408203
+Epoch 400 => train loss: 1.9061657190322876; valid loss: 3.83359694480896
+Epoch 600 => train loss: 1.3152101039886475; valid loss: 2.421788215637207
+Epoch 800 => train loss: 1.2057124376296997; valid loss: 2.4210782051086426
+Epoch 1000 => train loss: 0.9792143106460571; valid loss: 2.3504297733306885
+Epoch 1200 => train loss: 0.9301949739456177; valid loss: 3.006925344467163
+Running time in seconds: 65.32379102706909
+Scaled valid loss values are 1.09, 0.16, 0.43, 1.24, 0.17, 0.13 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 67
 ...
 
 Full training.
 
-Epoch 0 => train loss: 201.23867797851562; valid loss: 167.28099060058594
-Epoch 200 => train loss: 3.135915994644165; valid loss: 7.081338405609131
-Epoch 400 => train loss: 1.7909051179885864; valid loss: 2.644420623779297
-Epoch 600 => train loss: 1.2699079513549805; valid loss: 2.660579204559326
-Epoch 800 => train loss: 1.1020230054855347; valid loss: 2.667023181915283
-Running time in seconds: 47.43272066116333
-Scaled valid loss values are 1.22, 0.18, 0.31, 1.36, 0.17, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 140.808349609375; valid loss: 114.08119201660156
+Epoch 200 => train loss: 2.9469876289367676; valid loss: 6.206563472747803
+Epoch 400 => train loss: 1.6081327199935913; valid loss: 2.8017048835754395
+Epoch 600 => train loss: 1.2328882217407227; valid loss: 3.1593494415283203
+Epoch 800 => train loss: 1.1116701364517212; valid loss: 2.919719934463501
+Running time in seconds: 46.70899415016174
+Scaled valid loss values are 1.09, 0.19, 0.59, 1.56, 0.16, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 68
 ...
 
 Full training.
 
-Epoch 0 => train loss: 174.68104553222656; valid loss: 128.4910125732422
-Epoch 200 => train loss: 3.0925910472869873; valid loss: 7.0324931144714355
-Epoch 400 => train loss: 1.7801449298858643; valid loss: 3.1626944541931152
-Epoch 600 => train loss: 1.2920262813568115; valid loss: 2.5739223957061768
-Epoch 800 => train loss: 1.1636888980865479; valid loss: 2.3027944564819336
-Epoch 1000 => train loss: 0.9972894787788391; valid loss: 2.7813477516174316
-Running time in seconds: 53.434189319610596
-Scaled valid loss values are 0.84, 0.17, 0.64, 1.00, 0.13, 0.15 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 187.53611755371094; valid loss: 151.39268493652344
+Epoch 200 => train loss: 2.883852243423462; valid loss: 6.7147674560546875
+Epoch 400 => train loss: 1.7309662103652954; valid loss: 2.609985589981079
+Epoch 600 => train loss: 1.2484021186828613; valid loss: 2.884699821472168
+Epoch 800 => train loss: 1.1307082176208496; valid loss: 2.2085776329040527
+Running time in seconds: 49.33336329460144
+Scaled valid loss values are 0.85, 0.22, 0.65, 0.85, 0.20, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 69
 ...
 
 Full training.
 
-Epoch 0 => train loss: 178.0011444091797; valid loss: 145.3515167236328
-Epoch 200 => train loss: 3.338552236557007; valid loss: 6.912786483764648
-Epoch 400 => train loss: 2.027801752090454; valid loss: 3.5915989875793457
-Epoch 600 => train loss: 1.329153060913086; valid loss: 3.06467604637146
-Epoch 800 => train loss: 1.2228795289993286; valid loss: 2.7603759765625
-Epoch 1000 => train loss: 0.9352037906646729; valid loss: 2.47996187210083
-Running time in seconds: 57.29469871520996
-Scaled valid loss values are 1.20, 0.18, 0.22, 0.88, 0.22, 0.23 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 185.43630981445312; valid loss: 141.4600372314453
+Epoch 200 => train loss: 3.1783885955810547; valid loss: 6.5864739418029785
+Epoch 400 => train loss: 1.6953845024108887; valid loss: 2.977149248123169
+Epoch 600 => train loss: 1.2845944166183472; valid loss: 2.622558355331421
+Epoch 800 => train loss: 1.1066621541976929; valid loss: 2.349066972732544
+Epoch 1000 => train loss: 0.951374351978302; valid loss: 2.4688313007354736
+Epoch 1200 => train loss: 0.8961582779884338; valid loss: 2.2126781940460205
+Running time in seconds: 65.58968925476074
+Scaled valid loss values are 0.88, 0.18, 0.46, 0.74, 0.21, 0.14 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 70
 ...
 
 Full training.
 
-Epoch 0 => train loss: 180.94451904296875; valid loss: 146.8367156982422
-Epoch 200 => train loss: 3.184741973876953; valid loss: 7.414209842681885
-Epoch 400 => train loss: 1.9318517446517944; valid loss: 3.1066057682037354
-Epoch 600 => train loss: 1.3854178190231323; valid loss: 2.800551176071167
-Epoch 800 => train loss: 1.1787110567092896; valid loss: 3.4507222175598145
-Running time in seconds: 49.10832118988037
-Scaled valid loss values are 1.59, 0.19, 0.40, 1.45, 0.16, 0.25 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 194.80517578125; valid loss: 156.45126342773438
+Epoch 200 => train loss: 2.9932451248168945; valid loss: 6.480037212371826
+Epoch 400 => train loss: 1.7104204893112183; valid loss: 3.000267505645752
+Epoch 600 => train loss: 1.244215726852417; valid loss: 2.815992832183838
+Epoch 800 => train loss: 1.055668592453003; valid loss: 2.787564754486084
+Epoch 1000 => train loss: 0.9163001775741577; valid loss: 2.909090995788574
+Running time in seconds: 58.91834998130798
+Scaled valid loss values are 0.84, 0.16, 0.41, 1.30, 0.21, 0.17 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 71
 ...
 
 Full training.
 
-Epoch 0 => train loss: 203.7833709716797; valid loss: 166.6947479248047
-Epoch 200 => train loss: 3.2267706394195557; valid loss: 7.173645973205566
-Epoch 400 => train loss: 1.8319168090820312; valid loss: 3.239842653274536
-Epoch 600 => train loss: 1.2867166996002197; valid loss: 2.712733030319214
-Epoch 800 => train loss: 1.0874006748199463; valid loss: 3.000263214111328
-Running time in seconds: 49.324974060058594
-Scaled valid loss values are 0.83, 0.18, 0.39, 1.43, 0.20, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 190.02590942382812; valid loss: 149.26914978027344
+Epoch 200 => train loss: 3.367393970489502; valid loss: 6.24556827545166
+Epoch 400 => train loss: 1.714005708694458; valid loss: 3.4690630435943604
+Epoch 600 => train loss: 1.2941042184829712; valid loss: 2.6745855808258057
+Epoch 800 => train loss: 1.138643741607666; valid loss: 2.7730653285980225
+Running time in seconds: 50.71795153617859
+Scaled valid loss values are 0.83, 0.18, 0.42, 1.17, 0.22, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 72
 ...
 
 Full training.
 
-Epoch 0 => train loss: 175.83303833007812; valid loss: 137.60533142089844
-Epoch 200 => train loss: 2.96773624420166; valid loss: 7.02662992477417
-Epoch 400 => train loss: 1.5262702703475952; valid loss: 2.8624837398529053
-Epoch 600 => train loss: 1.2534700632095337; valid loss: 2.7250356674194336
-Epoch 800 => train loss: 1.126877784729004; valid loss: 2.8843796253204346
-Epoch 1000 => train loss: 0.9818969964981079; valid loss: 2.8320250511169434
-Running time in seconds: 52.8200523853302
-Scaled valid loss values are 1.20, 0.21, 0.54, 1.21, 0.20, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 171.15472412109375; valid loss: 131.80381774902344
+Epoch 200 => train loss: 3.042512893676758; valid loss: 6.518758296966553
+Epoch 400 => train loss: 1.8222163915634155; valid loss: 3.028848648071289
+Epoch 600 => train loss: 1.297589659690857; valid loss: 2.8620901107788086
+Epoch 800 => train loss: 1.098188877105713; valid loss: 2.613420009613037
+Epoch 1000 => train loss: 0.98333740234375; valid loss: 2.78599214553833
+Epoch 1200 => train loss: 0.8891383409500122; valid loss: 3.0534238815307617
+Running time in seconds: 73.42743563652039
+Scaled valid loss values are 0.81, 0.17, 0.46, 1.18, 0.19, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 73
 ...
 
 Full training.
 
-Epoch 0 => train loss: 178.3744354248047; valid loss: 143.58840942382812
-Epoch 200 => train loss: 3.501081705093384; valid loss: 7.005638122558594
-Epoch 400 => train loss: 1.9736833572387695; valid loss: 2.9565980434417725
-Epoch 600 => train loss: 1.4095898866653442; valid loss: 2.7130963802337646
-Epoch 800 => train loss: 1.1559773683547974; valid loss: 2.6743860244750977
-Running time in seconds: 49.97928833961487
-Scaled valid loss values are 1.34, 0.21, 0.32, 0.85, 0.20, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 165.41029357910156; valid loss: 125.82777404785156
+Epoch 200 => train loss: 2.897473096847534; valid loss: 6.440606117248535
+Epoch 400 => train loss: 1.6365760564804077; valid loss: 2.5877957344055176
+Epoch 600 => train loss: 1.2555222511291504; valid loss: 2.4505791664123535
+Epoch 800 => train loss: 1.1023738384246826; valid loss: 2.5671184062957764
+Running time in seconds: 51.66094994544983
+Scaled valid loss values are 1.26, 0.19, 0.40, 1.06, 0.15, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 74
 ...
 
 Full training.
 
-Epoch 0 => train loss: 172.5849609375; valid loss: 130.85401916503906
-Epoch 200 => train loss: 3.101855754852295; valid loss: 7.034333229064941
-Epoch 400 => train loss: 1.7242634296417236; valid loss: 3.3262462615966797
-Epoch 600 => train loss: 1.279768705368042; valid loss: 3.080432891845703
-Epoch 800 => train loss: 1.0968023538589478; valid loss: 3.039067268371582
-Epoch 1000 => train loss: 0.9648021459579468; valid loss: 3.304143190383911
-Epoch 1200 => train loss: 0.8503454327583313; valid loss: 3.062671184539795
-Running time in seconds: 63.891053915023804
-Scaled valid loss values are 0.91, 0.17, 0.35, 1.57, 0.16, 0.15 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 199.4093780517578; valid loss: 159.5825958251953
+Epoch 200 => train loss: 3.0823073387145996; valid loss: 6.51118278503418
+Epoch 400 => train loss: 1.7535332441329956; valid loss: 2.6774392127990723
+Epoch 600 => train loss: 1.3515135049819946; valid loss: 2.700348377227783
+Epoch 800 => train loss: 1.1231074333190918; valid loss: 2.838806629180908
+Running time in seconds: 48.19027853012085
+Scaled valid loss values are 1.42, 0.20, 0.59, 1.13, 0.17, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 75
 ...
 
 Full training.
 
-Epoch 0 => train loss: 163.78330993652344; valid loss: 128.70663452148438
-Epoch 200 => train loss: 3.1825060844421387; valid loss: 7.816448211669922
-Epoch 400 => train loss: 1.7957838773727417; valid loss: 2.692011594772339
-Epoch 600 => train loss: 1.3707563877105713; valid loss: 2.8769774436950684
-Epoch 800 => train loss: 1.182031512260437; valid loss: 2.7405202388763428
-Epoch 1000 => train loss: 0.9890296459197998; valid loss: 2.927915334701538
-Running time in seconds: 59.43516445159912
-Scaled valid loss values are 1.72, 0.18, 0.48, 0.98, 0.19, 0.25 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 178.7470245361328; valid loss: 145.39537048339844
+Epoch 200 => train loss: 3.1369853019714355; valid loss: 5.881704807281494
+Epoch 400 => train loss: 2.0848028659820557; valid loss: 3.3740386962890625
+Epoch 600 => train loss: 1.3792279958724976; valid loss: 2.570935010910034
+Epoch 800 => train loss: 1.0652062892913818; valid loss: 2.9044008255004883
+Epoch 1000 => train loss: 0.9750425219535828; valid loss: 2.735755205154419
+Running time in seconds: 54.65622162818909
+Scaled valid loss values are 1.66, 0.20, 0.54, 1.31, 0.18, 0.24 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 76
 ...
 
 Full training.
 
-Epoch 0 => train loss: 212.6983642578125; valid loss: 161.58229064941406
-Epoch 200 => train loss: 3.1624629497528076; valid loss: 5.960058689117432
-Epoch 400 => train loss: 1.7583171129226685; valid loss: 2.7196176052093506
-Epoch 600 => train loss: 1.3652606010437012; valid loss: 2.480315923690796
-Epoch 800 => train loss: 1.1186891794204712; valid loss: 2.7639451026916504
-Running time in seconds: 51.81147074699402
-Scaled valid loss values are 0.97, 0.18, 0.41, 0.75, 0.19, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 176.74441528320312; valid loss: 136.6827392578125
+Epoch 200 => train loss: 3.2353107929229736; valid loss: 6.360551834106445
+Epoch 400 => train loss: 1.8482098579406738; valid loss: 2.863595724105835
+Epoch 600 => train loss: 1.3972376585006714; valid loss: 2.3026092052459717
+Epoch 800 => train loss: 1.1672931909561157; valid loss: 2.11391282081604
+Running time in seconds: 50.80661201477051
+Scaled valid loss values are 1.30, 0.19, 0.45, 0.68, 0.18, 0.23 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 77
 ...
 
 Full training.
 
-Epoch 0 => train loss: 187.95962524414062; valid loss: 143.03245544433594
-Epoch 200 => train loss: 3.02242374420166; valid loss: 6.021231174468994
-Epoch 400 => train loss: 1.6468545198440552; valid loss: 3.388932466506958
-Epoch 600 => train loss: 1.266969919204712; valid loss: 2.4210379123687744
-Epoch 800 => train loss: 1.0151721239089966; valid loss: 2.2895865440368652
-Epoch 1000 => train loss: 0.9473897814750671; valid loss: 2.3123257160186768
-Running time in seconds: 59.74383544921875
-Scaled valid loss values are 1.09, 0.22, 0.35, 0.94, 0.16, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 176.63819885253906; valid loss: 141.3423309326172
+Epoch 200 => train loss: 3.13140869140625; valid loss: 7.132549285888672
+Epoch 400 => train loss: 1.7950578927993774; valid loss: 2.9814610481262207
+Epoch 600 => train loss: 1.2483941316604614; valid loss: 2.672424793243408
+Epoch 800 => train loss: 1.090189814567566; valid loss: 2.624319314956665
+Epoch 1000 => train loss: 0.8852881193161011; valid loss: 2.689495086669922
+Epoch 1200 => train loss: 0.8816201090812683; valid loss: 3.0855324268341064
+Running time in seconds: 64.51412034034729
+Scaled valid loss values are 1.31, 0.18, 0.54, 1.38, 0.21, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 78
 ...
 
 Full training.
 
-Epoch 0 => train loss: 196.32176208496094; valid loss: 162.39271545410156
-Epoch 200 => train loss: 2.898021936416626; valid loss: 5.318668365478516
-Epoch 400 => train loss: 1.6050857305526733; valid loss: 2.569157361984253
-Epoch 600 => train loss: 1.18869149684906; valid loss: 2.4551563262939453
-Epoch 800 => train loss: 1.075036883354187; valid loss: 2.250828504562378
-Running time in seconds: 43.7064049243927
-Scaled valid loss values are 1.36, 0.24, 0.56, 0.51, 0.17, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 192.0266876220703; valid loss: 139.7011260986328
+Epoch 200 => train loss: 3.249342918395996; valid loss: 6.164484024047852
+Epoch 400 => train loss: 1.8005462884902954; valid loss: 2.940326690673828
+Epoch 600 => train loss: 1.3379367589950562; valid loss: 2.384145736694336
+Epoch 800 => train loss: 1.177602767944336; valid loss: 2.5416600704193115
+Running time in seconds: 51.291006326675415
+Scaled valid loss values are 0.90, 0.22, 0.27, 0.62, 0.19, 0.15 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 79
 ...
 
 Full training.
 
-Epoch 0 => train loss: 203.5624237060547; valid loss: 167.3079376220703
-Epoch 200 => train loss: 3.3750200271606445; valid loss: 7.08087158203125
-Epoch 400 => train loss: 1.8114588260650635; valid loss: 3.8649415969848633
-Epoch 600 => train loss: 1.3267155885696411; valid loss: 2.869138240814209
-Epoch 800 => train loss: 1.149720549583435; valid loss: 2.870396614074707
-Running time in seconds: 48.01551675796509
-Scaled valid loss values are 1.45, 0.21, 0.30, 1.00, 0.18, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 164.81353759765625; valid loss: 126.830078125
+Epoch 200 => train loss: 3.1600747108459473; valid loss: 5.938140869140625
+Epoch 400 => train loss: 1.944107174873352; valid loss: 3.2382795810699463
+Epoch 600 => train loss: 1.3752174377441406; valid loss: 2.4746971130371094
+Epoch 800 => train loss: 1.1346908807754517; valid loss: 2.7367937564849854
+Epoch 1000 => train loss: 0.9699102640151978; valid loss: 2.4826910495758057
+Running time in seconds: 56.791943073272705
+Scaled valid loss values are 1.38, 0.18, 0.32, 1.23, 0.16, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 80
 ...
 
 Full training.
 
-Epoch 0 => train loss: 201.35293579101562; valid loss: 161.5163116455078
-Epoch 200 => train loss: 3.263578176498413; valid loss: 7.587716102600098
-Epoch 400 => train loss: 1.88550865650177; valid loss: 3.1144890785217285
-Epoch 600 => train loss: 1.299479603767395; valid loss: 2.6280524730682373
-Epoch 800 => train loss: 1.0975688695907593; valid loss: 2.5572545528411865
-Epoch 1000 => train loss: 0.9392389059066772; valid loss: 2.7625041007995605
-Running time in seconds: 52.43297863006592
-Scaled valid loss values are 1.54, 0.17, 0.40, 1.10, 0.20, 0.17 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 173.29295349121094; valid loss: 140.13644409179688
+Epoch 200 => train loss: 3.210900068283081; valid loss: 6.795755386352539
+Epoch 400 => train loss: 1.691634178161621; valid loss: 3.1168696880340576
+Epoch 600 => train loss: 1.2746107578277588; valid loss: 2.328340768814087
+Epoch 800 => train loss: 1.1103261709213257; valid loss: 2.7346482276916504
+Running time in seconds: 48.04257369041443
+Scaled valid loss values are 1.14, 0.20, 0.42, 0.94, 0.21, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 81
 ...
 
 Full training.
 
-Epoch 0 => train loss: 197.37155151367188; valid loss: 152.57220458984375
-Epoch 200 => train loss: 3.287792205810547; valid loss: 6.459380626678467
-Epoch 400 => train loss: 2.0284857749938965; valid loss: 2.9570109844207764
-Epoch 600 => train loss: 1.4001779556274414; valid loss: 2.4718055725097656
-Epoch 800 => train loss: 1.1889426708221436; valid loss: 2.683645486831665
-Running time in seconds: 47.96198868751526
-Scaled valid loss values are 0.96, 0.21, 0.42, 1.04, 0.23, 0.17 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 194.5328826904297; valid loss: 143.9908447265625
+Epoch 200 => train loss: 3.336352825164795; valid loss: 7.053871154785156
+Epoch 400 => train loss: 2.0344486236572266; valid loss: 3.5243988037109375
+Epoch 600 => train loss: 1.485671043395996; valid loss: 2.489556312561035
+Epoch 800 => train loss: 1.209747076034546; valid loss: 2.796708583831787
+Running time in seconds: 52.04480695724487
+Scaled valid loss values are 1.40, 0.18, 0.41, 1.05, 0.15, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 82
 ...
 
 Full training.
 
-Epoch 0 => train loss: 201.34152221679688; valid loss: 151.20205688476562
-Epoch 200 => train loss: 3.2808101177215576; valid loss: 6.565767288208008
-Epoch 400 => train loss: 1.8054873943328857; valid loss: 3.0781965255737305
-Epoch 600 => train loss: 1.2900199890136719; valid loss: 2.7999343872070312
-Epoch 800 => train loss: 1.126715898513794; valid loss: 2.584498167037964
-Running time in seconds: 48.527777671813965
-Scaled valid loss values are 1.40, 0.20, 0.34, 0.78, 0.19, 0.22 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 201.041015625; valid loss: 164.16822814941406
+Epoch 200 => train loss: 3.2818703651428223; valid loss: 6.503716945648193
+Epoch 400 => train loss: 1.8068692684173584; valid loss: 2.9397048950195312
+Epoch 600 => train loss: 1.2660133838653564; valid loss: 2.353414297103882
+Epoch 800 => train loss: 1.1589211225509644; valid loss: 2.7035794258117676
+Epoch 1000 => train loss: 0.9759827852249146; valid loss: 2.941458225250244
+Running time in seconds: 60.62370300292969
+Scaled valid loss values are 1.16, 0.20, 0.71, 1.30, 0.17, 0.14 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 83
 ...
 
 Full training.
 
-Epoch 0 => train loss: 157.79652404785156; valid loss: 132.981201171875
-Epoch 200 => train loss: 3.171473264694214; valid loss: 6.962865352630615
-Epoch 400 => train loss: 1.7495590448379517; valid loss: 3.1263844966888428
-Epoch 600 => train loss: 1.3021461963653564; valid loss: 2.8722827434539795
-Epoch 800 => train loss: 1.1730057001113892; valid loss: 2.422997236251831
-Epoch 1000 => train loss: 0.9240734577178955; valid loss: 2.5711848735809326
-Running time in seconds: 53.41141605377197
-Scaled valid loss values are 1.48, 0.20, 0.47, 0.66, 0.13, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 197.63392639160156; valid loss: 155.2530975341797
+Epoch 200 => train loss: 3.151765823364258; valid loss: 7.477054595947266
+Epoch 400 => train loss: 1.8112074136734009; valid loss: 3.136849880218506
+Epoch 600 => train loss: 1.2974721193313599; valid loss: 2.4758787155151367
+Epoch 800 => train loss: 1.1156963109970093; valid loss: 2.399657964706421
+Epoch 1000 => train loss: 1.0612671375274658; valid loss: 2.1180579662323
+Running time in seconds: 56.919002294540405
+Scaled valid loss values are 1.59, 0.19, 0.50, 0.66, 0.19, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 84
 ...
 
 Full training.
 
-Epoch 0 => train loss: 197.72378540039062; valid loss: 140.1915740966797
-Epoch 200 => train loss: 3.092726945877075; valid loss: 6.568861961364746
-Epoch 400 => train loss: 1.7518864870071411; valid loss: 3.088663339614868
-Epoch 600 => train loss: 1.299525499343872; valid loss: 2.5228734016418457
-Epoch 800 => train loss: 1.0810811519622803; valid loss: 2.0157175064086914
-Epoch 1000 => train loss: 1.041408896446228; valid loss: 2.460789442062378
-Epoch 1200 => train loss: 0.887597918510437; valid loss: 2.2977609634399414
-Running time in seconds: 62.546332359313965
-Scaled valid loss values are 1.23, 0.18, 0.47, 0.81, 0.19, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 201.69032287597656; valid loss: 162.49777221679688
+Epoch 200 => train loss: 3.4535813331604004; valid loss: 6.792722702026367
+Epoch 400 => train loss: 2.0250003337860107; valid loss: 2.704127788543701
+Epoch 600 => train loss: 1.4863637685775757; valid loss: 2.650653600692749
+Epoch 800 => train loss: 1.1795463562011719; valid loss: 2.39493989944458
+Epoch 1000 => train loss: 1.0587315559387207; valid loss: 2.6527161598205566
+Epoch 1200 => train loss: 1.001874327659607; valid loss: 3.0300076007843018
+Running time in seconds: 62.95161962509155
+Scaled valid loss values are 1.17, 0.22, 0.49, 1.28, 0.18, 0.22 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 85
 ...
 
 Full training.
 
-Epoch 0 => train loss: 163.11666870117188; valid loss: 132.255859375
-Epoch 200 => train loss: 2.9912049770355225; valid loss: 6.3939313888549805
-Epoch 400 => train loss: 1.6876775026321411; valid loss: 3.240748167037964
-Epoch 600 => train loss: 1.2747540473937988; valid loss: 2.0940897464752197
-Epoch 800 => train loss: 1.0889426469802856; valid loss: 2.2851712703704834
-Running time in seconds: 51.571351766586304
-Scaled valid loss values are 0.77, 0.22, 0.39, 0.93, 0.20, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 159.75640869140625; valid loss: 126.59101104736328
+Epoch 200 => train loss: 3.033578872680664; valid loss: 7.387791156768799
+Epoch 400 => train loss: 1.5431262254714966; valid loss: 2.9960336685180664
+Epoch 600 => train loss: 1.2366902828216553; valid loss: 2.522434711456299
+Epoch 800 => train loss: 1.0804475545883179; valid loss: 2.892606258392334
+Epoch 1000 => train loss: 0.9372187256813049; valid loss: 2.705289125442505
+Running time in seconds: 54.81767416000366
+Scaled valid loss values are 1.22, 0.19, 0.46, 1.30, 0.14, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 86
 ...
 
 Full training.
 
-Epoch 0 => train loss: 171.2886505126953; valid loss: 122.81844329833984
-Epoch 200 => train loss: 3.1155829429626465; valid loss: 7.25439453125
-Epoch 400 => train loss: 1.6740120649337769; valid loss: 3.2094361782073975
-Epoch 600 => train loss: 1.3591601848602295; valid loss: 2.5308964252471924
-Epoch 800 => train loss: 1.1418834924697876; valid loss: 2.9075231552124023
-Epoch 1000 => train loss: 1.0611118078231812; valid loss: 2.507388114929199
-Epoch 1200 => train loss: 0.9661526679992676; valid loss: 2.4608986377716064
-Running time in seconds: 64.16585040092468
-Scaled valid loss values are 1.45, 0.22, 0.55, 0.98, 0.19, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 190.8931121826172; valid loss: 151.0659637451172
+Epoch 200 => train loss: 3.1056606769561768; valid loss: 6.64939022064209
+Epoch 400 => train loss: 1.7348352670669556; valid loss: 3.2520883083343506
+Epoch 600 => train loss: 1.3005515336990356; valid loss: 2.5675082206726074
+Epoch 800 => train loss: 1.059096097946167; valid loss: 2.1948065757751465
+Epoch 1000 => train loss: 0.9398833513259888; valid loss: 2.579706907272339
+Running time in seconds: 59.78945851325989
+Scaled valid loss values are 0.95, 0.21, 0.38, 1.00, 0.15, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 87
 ...
 
 Full training.
 
-Epoch 0 => train loss: 191.38087463378906; valid loss: 146.31419372558594
-Epoch 200 => train loss: 3.3413138389587402; valid loss: 7.8871283531188965
-Epoch 400 => train loss: 1.798219919204712; valid loss: 3.0506556034088135
-Epoch 600 => train loss: 1.3382694721221924; valid loss: 2.850543975830078
-Epoch 800 => train loss: 1.1114202737808228; valid loss: 2.80696177482605
-Epoch 1000 => train loss: 0.9498611092567444; valid loss: 3.069214105606079
-Running time in seconds: 55.295608043670654
-Scaled valid loss values are 1.37, 0.20, 0.32, 1.19, 0.24, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 191.53439331054688; valid loss: 156.62489318847656
+Epoch 200 => train loss: 3.033818483352661; valid loss: 6.377584934234619
+Epoch 400 => train loss: 1.7943426370620728; valid loss: 2.581803321838379
+Epoch 600 => train loss: 1.3752317428588867; valid loss: 2.548907518386841
+Epoch 800 => train loss: 1.0705475807189941; valid loss: 2.254552125930786
+Epoch 1000 => train loss: 0.9939379096031189; valid loss: 2.7467334270477295
+Running time in seconds: 54.90732192993164
+Scaled valid loss values are 1.38, 0.19, 0.41, 0.98, 0.15, 0.23 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 88
 ...
 
 Full training.
 
-Epoch 0 => train loss: 208.6952667236328; valid loss: 155.42466735839844
-Epoch 200 => train loss: 3.378971576690674; valid loss: 7.509512901306152
-Epoch 400 => train loss: 1.9357802867889404; valid loss: 3.298184871673584
-Epoch 600 => train loss: 1.373423457145691; valid loss: 2.3027572631835938
-Epoch 800 => train loss: 1.2212499380111694; valid loss: 2.402944564819336
-Epoch 1000 => train loss: 1.0365594625473022; valid loss: 2.51008677482605
-Running time in seconds: 53.544116735458374
-Scaled valid loss values are 1.55, 0.20, 0.38, 0.59, 0.22, 0.17 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 206.74539184570312; valid loss: 161.525390625
+Epoch 200 => train loss: 3.195641279220581; valid loss: 6.852898597717285
+Epoch 400 => train loss: 1.7646352052688599; valid loss: 3.3665175437927246
+Epoch 600 => train loss: 1.308564305305481; valid loss: 2.6781115531921387
+Epoch 800 => train loss: 1.042979121208191; valid loss: 2.7675278186798096
+Epoch 1000 => train loss: 0.9711915254592896; valid loss: 2.5716185569763184
+Running time in seconds: 52.251251220703125
+Scaled valid loss values are 0.96, 0.22, 0.46, 1.03, 0.20, 0.15 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 89
 ...
 
 Full training.
 
-Epoch 0 => train loss: 190.6125946044922; valid loss: 143.809814453125
-Epoch 200 => train loss: 2.934896945953369; valid loss: 6.731140613555908
-Epoch 400 => train loss: 1.5746650695800781; valid loss: 2.751962900161743
-Epoch 600 => train loss: 1.2171019315719604; valid loss: 2.7150824069976807
-Epoch 800 => train loss: 1.0619549751281738; valid loss: 2.5574822425842285
-Running time in seconds: 42.71268010139465
-Scaled valid loss values are 0.98, 0.24, 0.36, 0.94, 0.18, 0.14 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 201.12423706054688; valid loss: 152.56695556640625
+Epoch 200 => train loss: 2.984548807144165; valid loss: 7.204732894897461
+Epoch 400 => train loss: 1.6222167015075684; valid loss: 3.442272663116455
+Epoch 600 => train loss: 1.290303349494934; valid loss: 2.8245840072631836
+Epoch 800 => train loss: 1.0716795921325684; valid loss: 2.850555181503296
+Epoch 1000 => train loss: 0.9427215456962585; valid loss: 3.140146255493164
+Running time in seconds: 59.41141080856323
+Scaled valid loss values are 1.00, 0.15, 0.52, 1.21, 0.20, 0.17 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 90
 ...
 
 Full training.
 
-Epoch 0 => train loss: 182.2772674560547; valid loss: 149.94305419921875
-Epoch 200 => train loss: 2.8692052364349365; valid loss: 5.572002410888672
-Epoch 400 => train loss: 1.7800472974777222; valid loss: 2.61033296585083
-Epoch 600 => train loss: 1.279189944267273; valid loss: 3.0537073612213135
-Epoch 800 => train loss: 1.0875977277755737; valid loss: 2.5279781818389893
-Running time in seconds: 44.44244885444641
-Scaled valid loss values are 1.24, 0.22, 0.39, 0.80, 0.15, 0.16 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 251.3546600341797; valid loss: 207.83203125
+Epoch 200 => train loss: 2.9635415077209473; valid loss: 6.162556171417236
+Epoch 400 => train loss: 1.7709286212921143; valid loss: 3.2042877674102783
+Epoch 600 => train loss: 1.3404486179351807; valid loss: 2.7129814624786377
+Epoch 800 => train loss: 1.1845974922180176; valid loss: 2.8824310302734375
+Epoch 1000 => train loss: 1.0043491125106812; valid loss: 2.486691951751709
+Epoch 1200 => train loss: 0.9115540981292725; valid loss: 2.4456748962402344
+Running time in seconds: 63.83321237564087
+Scaled valid loss values are 1.21, 0.18, 0.45, 0.64, 0.16, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 91
 ...
 
 Full training.
 
-Epoch 0 => train loss: 221.76451110839844; valid loss: 170.87811279296875
-Epoch 200 => train loss: 2.9904706478118896; valid loss: 5.673299789428711
-Epoch 400 => train loss: 1.6764484643936157; valid loss: 2.2719621658325195
-Epoch 600 => train loss: 1.3988064527511597; valid loss: 2.0778162479400635
-Epoch 800 => train loss: 1.125525951385498; valid loss: 2.313934803009033
-Epoch 1000 => train loss: 1.0444536209106445; valid loss: 2.5171706676483154
-Running time in seconds: 61.35464811325073
-Scaled valid loss values are 1.14, 0.18, 0.58, 0.73, 0.18, 0.15 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 192.8323211669922; valid loss: 153.3914337158203
+Epoch 200 => train loss: 3.169532299041748; valid loss: 7.056124687194824
+Epoch 400 => train loss: 1.6801128387451172; valid loss: 3.450023651123047
+Epoch 600 => train loss: 1.3346449136734009; valid loss: 2.8924081325531006
+Epoch 800 => train loss: 1.1019600629806519; valid loss: 2.627209424972534
+Epoch 1000 => train loss: 0.99393630027771; valid loss: 2.7000577449798584
+Running time in seconds: 53.09974765777588
+Scaled valid loss values are 1.33, 0.21, 0.29, 0.96, 0.17, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 92
 ...
 
 Full training.
 
-Epoch 0 => train loss: 161.69326782226562; valid loss: 126.45408630371094
-Epoch 200 => train loss: 3.342097520828247; valid loss: 6.4184722900390625
-Epoch 400 => train loss: 1.8813707828521729; valid loss: 3.4127347469329834
-Epoch 600 => train loss: 1.2543771266937256; valid loss: 2.8892123699188232
-Epoch 800 => train loss: 1.07188880443573; valid loss: 3.1292173862457275
-Running time in seconds: 46.39812445640564
-Scaled valid loss values are 1.09, 0.19, 0.50, 1.28, 0.19, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 169.60415649414062; valid loss: 136.97618103027344
+Epoch 200 => train loss: 3.148813247680664; valid loss: 7.182447910308838
+Epoch 400 => train loss: 1.7488657236099243; valid loss: 2.981123447418213
+Epoch 600 => train loss: 1.3220762014389038; valid loss: 2.8393025398254395
+Epoch 800 => train loss: 1.0890202522277832; valid loss: 2.267873525619507
+Epoch 1000 => train loss: 0.963683009147644; valid loss: 2.245738983154297
+Running time in seconds: 60.398239850997925
+Scaled valid loss values are 1.20, 0.22, 0.38, 0.90, 0.19, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 93
 ...
 
 Full training.
 
-Epoch 0 => train loss: 195.11691284179688; valid loss: 152.91571044921875
-Epoch 200 => train loss: 3.016613721847534; valid loss: 6.009924411773682
-Epoch 400 => train loss: 1.6290879249572754; valid loss: 2.652461051940918
-Epoch 600 => train loss: 1.246586799621582; valid loss: 2.188573122024536
-Epoch 800 => train loss: 1.1214144229888916; valid loss: 2.5093932151794434
-Running time in seconds: 48.70832681655884
-Scaled valid loss values are 0.86, 0.21, 0.76, 0.67, 0.17, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 150.069091796875; valid loss: 119.76406860351562
+Epoch 200 => train loss: 2.8448410034179688; valid loss: 5.788269519805908
+Epoch 400 => train loss: 1.6025965213775635; valid loss: 3.147895336151123
+Epoch 600 => train loss: 1.1785959005355835; valid loss: 2.45803165435791
+Epoch 800 => train loss: 1.0999737977981567; valid loss: 3.078160285949707
+Epoch 1000 => train loss: 0.9560760259628296; valid loss: 2.6604504585266113
+Running time in seconds: 57.39163374900818
+Scaled valid loss values are 1.19, 0.18, 0.60, 1.03, 0.19, 0.19 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 94
 ...
 
 Full training.
 
-Epoch 0 => train loss: 167.75296020507812; valid loss: 129.5043487548828
-Epoch 200 => train loss: 3.1292450428009033; valid loss: 5.852430820465088
-Epoch 400 => train loss: 1.7459453344345093; valid loss: 3.3421597480773926
-Epoch 600 => train loss: 1.2596079111099243; valid loss: 2.969151735305786
-Epoch 800 => train loss: 1.099015712738037; valid loss: 3.0603456497192383
-Running time in seconds: 47.76371717453003
-Scaled valid loss values are 1.21, 0.22, 0.33, 1.12, 0.20, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 209.57911682128906; valid loss: 163.92190551757812
+Epoch 200 => train loss: 3.11541748046875; valid loss: 6.275954723358154
+Epoch 400 => train loss: 1.7108725309371948; valid loss: 3.3925070762634277
+Epoch 600 => train loss: 1.349899172782898; valid loss: 2.7786977291107178
+Epoch 800 => train loss: 1.1020258665084839; valid loss: 2.7007906436920166
+Running time in seconds: 50.98621225357056
+Scaled valid loss values are 1.29, 0.18, 0.59, 0.83, 0.25, 0.22 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 95
 ...
 
 Full training.
 
-Epoch 0 => train loss: 208.0290069580078; valid loss: 159.42971801757812
-Epoch 200 => train loss: 3.050773859024048; valid loss: 6.377072334289551
-Epoch 400 => train loss: 1.6699960231781006; valid loss: 3.178443670272827
-Epoch 600 => train loss: 1.3044359683990479; valid loss: 2.620795488357544
-Epoch 800 => train loss: 1.1723791360855103; valid loss: 2.5235233306884766
-Epoch 1000 => train loss: 0.9587903022766113; valid loss: 2.5037591457366943
-Epoch 1200 => train loss: 0.8289844393730164; valid loss: 2.5869126319885254
-Running time in seconds: 63.84650754928589
-Scaled valid loss values are 1.42, 0.18, 0.67, 1.09, 0.19, 0.15 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 187.25546264648438; valid loss: 138.79954528808594
+Epoch 200 => train loss: 3.3024747371673584; valid loss: 6.68502140045166
+Epoch 400 => train loss: 1.7896056175231934; valid loss: 3.473418951034546
+Epoch 600 => train loss: 1.360040545463562; valid loss: 2.4417922496795654
+Epoch 800 => train loss: 1.1325162649154663; valid loss: 2.4000656604766846
+Epoch 1000 => train loss: 1.0020620822906494; valid loss: 2.6085519790649414
+Running time in seconds: 54.21157670021057
+Scaled valid loss values are 1.25, 0.19, 0.54, 1.01, 0.22, 0.23 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 96
 ...
 
 Full training.
 
-Epoch 0 => train loss: 185.16111755371094; valid loss: 145.01022338867188
-Epoch 200 => train loss: 2.839446783065796; valid loss: 6.285338878631592
-Epoch 400 => train loss: 1.7117472887039185; valid loss: 2.913421630859375
-Epoch 600 => train loss: 1.2170888185501099; valid loss: 2.818828582763672
-Epoch 800 => train loss: 1.057396411895752; valid loss: 2.3150036334991455
-Epoch 1000 => train loss: 0.9800783395767212; valid loss: 2.874600648880005
-Running time in seconds: 57.289438009262085
-Scaled valid loss values are 1.46, 0.20, 0.60, 0.56, 0.20, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 166.6925048828125; valid loss: 133.4999542236328
+Epoch 200 => train loss: 2.800638437271118; valid loss: 5.983201026916504
+Epoch 400 => train loss: 1.6362212896347046; valid loss: 2.542804479598999
+Epoch 600 => train loss: 1.2525631189346313; valid loss: 2.5334362983703613
+Epoch 800 => train loss: 1.1207956075668335; valid loss: 2.830172538757324
+Epoch 1000 => train loss: 0.9498944282531738; valid loss: 2.9619903564453125
+Running time in seconds: 59.681400299072266
+Scaled valid loss values are 1.18, 0.20, 0.63, 1.03, 0.17, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 97
 ...
 
 Full training.
 
-Epoch 0 => train loss: 183.89260864257812; valid loss: 141.35546875
-Epoch 200 => train loss: 2.949535369873047; valid loss: 5.409999370574951
-Epoch 400 => train loss: 1.6789923906326294; valid loss: 3.0142030715942383
-Epoch 600 => train loss: 1.1722602844238281; valid loss: 2.859741687774658
-Epoch 800 => train loss: 1.1159265041351318; valid loss: 3.272757053375244
-Running time in seconds: 42.19167757034302
-Scaled valid loss values are 1.63, 0.20, 0.49, 1.42, 0.14, 0.20 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 192.95274353027344; valid loss: 145.40748596191406
+Epoch 200 => train loss: 3.1829233169555664; valid loss: 6.716352462768555
+Epoch 400 => train loss: 1.7518800497055054; valid loss: 2.9999399185180664
+Epoch 600 => train loss: 1.3121192455291748; valid loss: 2.574111223220825
+Epoch 800 => train loss: 1.1230907440185547; valid loss: 2.8444864749908447
+Epoch 1000 => train loss: 0.933525025844574; valid loss: 2.9309637546539307
+Running time in seconds: 56.15745973587036
+Scaled valid loss values are 1.51, 0.20, 0.34, 0.99, 0.17, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 98
 ...
 
 Full training.
 
-Epoch 0 => train loss: 167.4013671875; valid loss: 138.0456085205078
-Epoch 200 => train loss: 3.1343846321105957; valid loss: 6.263136863708496
-Epoch 400 => train loss: 1.590160846710205; valid loss: 3.1079368591308594
-Epoch 600 => train loss: 1.2211837768554688; valid loss: 2.342820882797241
-Epoch 800 => train loss: 1.1346430778503418; valid loss: 2.4843909740448
-Epoch 1000 => train loss: 0.9703943729400635; valid loss: 2.567810535430908
-Epoch 1200 => train loss: 0.8570353388786316; valid loss: 2.944439649581909
-Running time in seconds: 62.46815061569214
-Scaled valid loss values are 1.63, 0.18, 0.52, 0.94, 0.15, 0.21 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 177.6619415283203; valid loss: 140.6759796142578
+Epoch 200 => train loss: 3.1377062797546387; valid loss: 6.4929351806640625
+Epoch 400 => train loss: 1.8503570556640625; valid loss: 2.753458261489868
+Epoch 600 => train loss: 1.3236801624298096; valid loss: 2.3620951175689697
+Epoch 800 => train loss: 1.0453099012374878; valid loss: 2.767758369445801
+Epoch 1000 => train loss: 1.0228123664855957; valid loss: 2.940856695175171
+Running time in seconds: 54.88050174713135
+Scaled valid loss values are 1.41, 0.21, 0.51, 1.07, 0.21, 0.23 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
 Training model 99
 ...
 
 Full training.
 
-Epoch 0 => train loss: 211.34722900390625; valid loss: 155.255615234375
-Epoch 200 => train loss: 2.9538068771362305; valid loss: 6.178441524505615
-Epoch 400 => train loss: 1.6393523216247559; valid loss: 2.927637815475464
-Epoch 600 => train loss: 1.213653564453125; valid loss: 2.73018479347229
-Epoch 800 => train loss: 1.0587751865386963; valid loss: 2.976613759994507
-Epoch 1000 => train loss: 0.9489216804504395; valid loss: 3.3117988109588623
-Running time in seconds: 56.4570472240448
-Scaled valid loss values are 1.33, 0.19, 0.43, 1.16, 0.15, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
+Epoch 0 => train loss: 162.02943420410156; valid loss: 122.33082580566406
+Epoch 200 => train loss: 3.0698163509368896; valid loss: 6.701351165771484
+Epoch 400 => train loss: 1.8393809795379639; valid loss: 3.075261354446411
+Epoch 600 => train loss: 1.2603118419647217; valid loss: 3.020477771759033
+Epoch 800 => train loss: 1.083733320236206; valid loss: 2.7262325286865234
+Running time in seconds: 47.55361342430115
+Scaled valid loss values are 0.72, 0.18, 0.40, 1.48, 0.17, 0.18 for Tg, Raman, density, entropy, ri, viscosity (AG)
 
