@@ -6,8 +6,6 @@ model/exp_multitask
 model/exp_trainsize
 manuscript/dev/
 data/dev/
-dev/TF_src/model/
-dev2/
-manuscript/
+dev/
 figures/dev/
 *.job
