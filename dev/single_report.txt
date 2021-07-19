@@ -1,6 +1,0 @@
-
-Model name is ./model/candidates/l4_n200_p0.01_test.pth
-Experiment 2 took 52.3 seconds
-Viscosity RMSE on training and validation subsets are:
-0.43434516
-0.41530427
