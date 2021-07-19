@@ -14,6 +14,12 @@ see requirements.txt file
 
 The model and useful functions are contained in the imelt.py file.
 
+### Installation of requirements
+
+Starting from a barebone Python 3 environment with pip installed, simply open a terminal pointing to the working folder and type
+
+`$ pip install --user -r requirements.txt`
+
 ## Data
 
 All data are given in a Database_IPGP.xlsx file in the data folder. Raman spectra are contained in a ./data/raman/ folder.
@@ -34,15 +40,15 @@ The **Dataset_visualization.ipynb** notebook shows the distribution of data in t
 
 ### Training candidates
 
-The code **Training_Candidates.py** allows training 50 networks with the selected architecture and selects the 10 best ones, which are saved in ./model/best/ and used for future predictions.
+The code **Training_Candidates.py** allows training 100 networks with the reference architecture and selects the 10 best ones, which are saved in ./model/best/ and used for future predictions.
 
 ## Repeating the result analysis of Le Losq et al. GCA 2021
 
 Analysis of results and predictions from the 10 best trained networks is done in several steps:
 
-- The **Results_experiments.py** code allows observing the results of the random search and dataset size experiments in Supplementary Figure 1 (see ./figures folder). 
+- The **Results_experiments.ipynb** code allows observing the results of the random search and dataset size experiments in Supplementary Figure 1 (see ./figures folder). 
 
-- The **Results_model_performance.ipynb** makes a statistical analysis fo the performance fo the bagged 10 best models.
+- The **Results_model_performance.ipynb** makes a statistical analysis of the performance of the bagged 10 best models.
 
 - The **Results_predictions.ipynb** allows generating all the other figures and the analysis presented in the paper.
 
@@ -52,4 +58,6 @@ All figures are saved in ./figures
 
 The code Training_single.ipynb allows training only one network and playing with it.
 
+### Getting predictions from the 10 best networks from Le Losq et al. 2021
 
+The notebook Prediction_simple.ipynb allows to get predictions for a given melt composition. Open a Jupyter notebook server, open the notebook and follow the instructions!

@@ -4,8 +4,10 @@ __pycache__
 model/exp_arch
 model/exp_multitask
 model/exp_trainsize
+manuscript/dev/
 data/dev/
 dev/TF_src/model/
 dev/
 manuscript/
 figures/dev/
+*.job
