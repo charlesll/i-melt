@@ -7,8 +7,11 @@ h5py
 torch
 sklearn
 pandas
-ax
+ax-platform
 seaborn
 mpltern
 uncertainties
 jupyter
+openpyxl
+corner
+heatmapz
