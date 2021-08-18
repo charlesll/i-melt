@@ -15,3 +15,4 @@ jupyter
 openpyxl
 corner
 heatmapz
+torchvision
