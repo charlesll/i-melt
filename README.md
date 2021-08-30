@@ -2,6 +2,10 @@
 
 (c) 2021 Charles Le Losq, lelosq@ipgp.fr
 
+i-Melt is a physics-guided neural network model, that combines deep neural networks with physical equations to predict the structural, thermodynamic and dynamic properties of aluminosilicate melts and glasses.
+
+Please see the original publication Le Losq et al. (2021) for details: https://www.sciencedirect.com/science/article/abs/pii/S0016703721005007
+
 ## LICENSE
 
 Any material in this repository is under the MIT licence
@@ -48,7 +52,7 @@ The code **Training_Candidates.py** allows training 100 networks with the refere
 
 Analysis of results and predictions from the 10 best trained networks is done in several steps:
 
-- The **Results_experiments.ipynb** code allows observing the results of the random search and dataset size experiments in Supplementary Figure 1 (see ./figures folder). **Please note that the originally trained networks for experiments 1 and 2 take too much size and are thus not provided via this repository. Running this notebook thus requires to first run the codes Experiment_1_architecture.py AND Experiment_2_dataset_size.py (see above)**
+- The **Results_experiments.ipynb** code allows observing the results of the random search and dataset size experiments in Supplementary Figure 1 (see ./figures folder). **Please note that the originally trained networks for experiments 1 and 2 take too much size and are thus not provided via this repository. Running this notebook thus requires to first run the codes Experiment_1_architecture.py AND Experiment_2_dataset_size.py (see above) **
 
 - The **Results_model_performance.ipynb** makes a statistical analysis of the performance of the bagged 10 best models.
 
@@ -62,4 +66,9 @@ The code Training_single.ipynb allows training only one network and playing with
 
 ### Getting predictions from the 10 best networks from Le Losq et al. 2021
 
-The notebook Prediction_simple.ipynb allows to get predictions for a given melt composition. Open a Jupyter notebook server, open the notebook and follow the instructions!
+The notebook Prediction_simple.ipynb allows to get predictions for a given melt composition. Open a Jupyter notebook server, open the notebook and follow the instructions!**
+
+## References
+
+Le Losq C., Valentine A., Mysen B. O., Neuville D. R., 2021. Structure and properties of alkali aluminosilicate glasses and melts: insights from deep learning. Geochimica and Cosmochimica Acta, https://doi.org/10.1016/j.gca.2021.08.023
+
