@@ -1,43 +1,89 @@
-
 <!DOCTYPE html>
-
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Training the networks &#8212; i-Melt 1.2.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Training the networks &mdash; i-Melt 1.2.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Welcome to i-Melt’s documentation!" href="predictions.html" />
-    <link rel="prev" title="Database" href="data.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+    <link rel="next" title="Result analysis" href="result_analysis.html" />
+    <link rel="prev" title="Database" href="data.html" /> 
+</head>
 
-  </head><body>
-  
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> i-Melt
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Database</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Training the networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#training-one-network">Training one network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hyperparameter-tuning">Hyperparameter tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#random-search">Random search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bayesian-optimization">Bayesian optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#training-candidates">Training candidates</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="result_analysis.html">Result analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="predictions.html">Predictions</a></li>
+</ul>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          
+        </div>
+      </div>
+    </nav>
 
-          <div class="body" role="main">
-            
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">i-Melt</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Training the networks</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/training.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <div class="section" id="training-the-networks">
-<h1>Training the networks<a class="headerlink" href="#training-the-networks" title="Permalink to this headline">¶</a></h1>
+<h1>Training the networks<a class="headerlink" href="#training-the-networks" title="Permalink to this headline"></a></h1>
 <div class="section" id="training-one-network">
-<h2>Training one network<a class="headerlink" href="#training-one-network" title="Permalink to this headline">¶</a></h2>
-<p>The code Training_single.ipynb allows training only one network and playing with it. The following steps are performed.</p>
-<p>After importing the libraries (see ntoebook), we load the data:</p>
+<h2>Training one network<a class="headerlink" href="#training-one-network" title="Permalink to this headline"></a></h2>
+<p>The code <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/Training_single.ipynb">Training_single.ipynb</a> allows training only one network and playing with it. The following steps are performed.</p>
+<p>After importing the libraries (see notebook), we load the data:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span> <span class="c1"># training on the GPU</span>
 
 <span class="c1"># custom data loader, automatically sent to the GPU</span>
@@ -81,23 +127,20 @@
 </pre></div>
 </div>
 <p>We select a criterion for training (the MSE criterion from PyTorch) and send it to the GPU device</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">criterion</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="n">criterion</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1"># sending criterion on device</span>
 </pre></div>
 </div>
-<p>criterion = torch.nn.MSELoss(reduction=’mean’)
-criterion.to(device) # sending criterion on device</p>
 <p>Before training, we need to initilize the bias layer using the imelt function, and we send the network parameters to the GPU:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">neuralmodel</span><span class="o">.</span><span class="n">output_bias_init</span><span class="p">()</span>
+<span class="n">neuralmodel</span> <span class="o">=</span> <span class="n">neuralmodel</span><span class="o">.</span><span class="n">float</span><span class="p">()</span> <span class="c1"># this is just to make sure we are using always float() numbers</span>
+<span class="n">neuralmodel</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>neuralmodel.output_bias_init()
-neuralmodel = neuralmodel.float() # this is just to make sure we are using always float() numbers
-neuralmodel.to(device)</p>
 <p>Training will be done with the <a class="reference external" href="https://arxiv.org/abs/1412.6980">ADAM</a> optimizer with a tuned learning rate of 0.0006:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">neuralmodel</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span> <span class="o">=</span> <span class="mf">0.0006</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>optimizer = torch.optim.Adam(neuralmodel.parameters(), lr = 0.0006)</p>
 <p>We have build a function for training in the imelt library that performs early stopping. You have to select:</p>
 <ul class="simple">
 <li><p>the patience (how much epoch do you wait once you notice the validation error stop improving)</p></li>
@@ -105,110 +148,60 @@ neuralmodel.to(device)</p>
 </ul>
 <p>The <cite>imelt.training()</cite> function outputs the trained model, and records of the training and validation losses during the epochs.</p>
 <p>Training can thus be done with this code:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">neuralmodel</span><span class="p">,</span> <span class="n">record_train_loss</span><span class="p">,</span> <span class="n">record_valid_loss</span> <span class="o">=</span> <span class="n">imelt</span><span class="o">.</span><span class="n">training</span><span class="p">(</span><span class="n">neuralmodel</span><span class="p">,</span><span class="n">ds</span><span class="p">,</span>
+                                                                     <span class="n">criterion</span><span class="p">,</span><span class="n">optimizer</span><span class="p">,</span><span class="n">save_switch</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">save_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                                                                     <span class="n">train_patience</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span><span class="n">min_delta</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+                                                                     <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<dl class="simple">
-<dt>neuralmodel, record_train_loss, record_valid_loss = imelt.training(neuralmodel,ds,</dt><dd><p>criterion,optimizer,save_switch=True,save_name=name,
-train_patience=400,min_delta=0.05,
-verbose=True)</p>
-</dd>
-</dl>
 </div>
 <div class="section" id="hyperparameter-tuning">
-<h2>Hyperparameter tuning<a class="headerlink" href="#hyperparameter-tuning" title="Permalink to this headline">¶</a></h2>
+<h2>Hyperparameter tuning<a class="headerlink" href="#hyperparameter-tuning" title="Permalink to this headline"></a></h2>
 <div class="section" id="random-search">
-<h3>Random search<a class="headerlink" href="#random-search" title="Permalink to this headline">¶</a></h3>
-<p>A Random search experiment as well as the experiment about the dataset size are done in the <strong>Experiment_1_architecture.py</strong> and <strong>Experiment_2_dataset_size.py</strong> codes. Due to the large amount of calculations, training is best done on GPU. <em>Training takes ~72 hours or more on a Dell Precision 5251 equipped with a RTX 4000 NVIDIA GPU.</em></p>
+<h3>Random search<a class="headerlink" href="#random-search" title="Permalink to this headline"></a></h3>
+<p>A Random search experiment as well as the experiment about the dataset size are done in the <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/Experiment_1_architecture.py">Experiment_1_architecture.py</a> and <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/Experiment_2_dataset_size.py">Experiment_2_dataset_size.py</a> codes. Due to the large amount of calculations, training is best done on GPU. <em>Training takes ~72 hours or more on a Dell Precision 5251 equipped with a RTX 4000 NVIDIA GPU.</em></p>
 </div>
 <div class="section" id="bayesian-optimization">
-<h3>Bayesian optimization<a class="headerlink" href="#bayesian-optimization" title="Permalink to this headline">¶</a></h3>
-<p>The <strong>Training_BO.ipynb</strong> notebook allows to perform Bayesian Optimization for hyperparameter selection using AX plateform.</p>
+<h3>Bayesian optimization<a class="headerlink" href="#bayesian-optimization" title="Permalink to this headline"></a></h3>
+<p>The <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/Training_BO.ipynb">Training_BO.ipynb</a> notebook allows to perform Bayesian Optimization for hyperparameter selection using AX plateform.</p>
 </div>
 </div>
 <div class="section" id="training-candidates">
-<h2>Training candidates<a class="headerlink" href="#training-candidates" title="Permalink to this headline">¶</a></h2>
-<p>The code <strong>Training_Candidates.py</strong> allows training 100 networks with the reference architecture and selects the 10 best ones, which are saved in ./model/best/ and used for future predictions.</p>
-<p><strong>The 10 best models at the time of publication are already provided in ./model/best/. Please beware that running this notebook will update them and can affect slightly the results because each neural network training begins from a different, randomly generated starting point.</strong></p>
+<h2>Training candidates<a class="headerlink" href="#training-candidates" title="Permalink to this headline"></a></h2>
+<p>The code <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/Training_candidates.py">Training_Candidates.py</a> allows training 100 networks with the reference architecture and selects the 10 best ones, which are saved in ./model/best/ and used for future predictions.</p>
+<p><em>The 10 best models at the time of publication are already provided in ./model/best/. Please beware that running this notebook will update them and can affect slightly the results because each neural network training begins from a different, randomly generated starting point.</em></p>
 </div>
 </div>
 
 
+           </div>
           </div>
-          
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="data.html" class="btn btn-neutral float-left" title="Database" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="result_analysis.html" class="btn btn-neutral float-right" title="Result analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Charles Le Losq, Andrew P. Valentine.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">i-Melt</a></h1>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
 
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data.html">Database</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Training the networks</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#training-one-network">Training one network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#hyperparameter-tuning">Hyperparameter tuning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#training-candidates">Training candidates</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="predictions.html">Welcome to i-Melt’s documentation!</a></li>
-<li class="toctree-l1"><a class="reference internal" href="predictions.html#indices-and-tables">Indices and tables</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="data.html" title="previous chapter">Database</a></li>
-      <li>Next: <a href="predictions.html" title="next chapter">Welcome to i-Melt’s documentation!</a></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2021, Charles Le Losq, Andrew P. Valentine.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="_sources/training.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>

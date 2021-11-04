@@ -14,22 +14,23 @@ lelosq@ipgp.fr
 Andrew P. Valentine, University of Durham
 andrew.valentine@durham.ac.uk
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-   
-   installation
-   data
-   training
-   predictions
-
 The i-Melt project
 ------------------
 
 i-Melt is a physics-guided neural network model, that combines deep neural networks with physical equations to predict the structural, thermodynamic and dynamic properties of aluminosilicate melts and glasses.
 
-The project is hosted on Github (`here! <https://github.com/charlesll/imelt>`_)
+The project is hosted on `Github <https://github.com/charlesll/i-melt>`_, a `Streamlit web calculator <https://share.streamlit.io/charlesll/i-melt/imelt_streamlit.py>`_ is available and you can read the paper explaining the model `here <https://doi.org/10.1016/j.gca.2021.08.023>`_!
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   installation
+   data
+   training
+   result_analysis
+   predictions
+   references
 
 Indices and tables
 ==================
@@ -37,5 +38,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
-
