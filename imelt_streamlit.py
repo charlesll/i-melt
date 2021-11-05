@@ -19,7 +19,7 @@ st.markdown("""
             glasses and melts. Select a composition using the sliders on
             the sidebar (left) and see predictions below. For full details
             [read the paper](https://www.sciencedirect.com/science/article/pii/S0016703721005007)
-            and [download the code]((https://github.com/charlesll/i-melt))!
+            and [download the code](https://github.com/charlesll/i-melt)!
             """)
 
 
