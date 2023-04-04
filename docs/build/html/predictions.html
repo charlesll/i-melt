@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Predictions &mdash; i-Melt 2.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="References" href="references.html" />
+    <link rel="prev" title="Result analysis" href="result_analysis.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            i-Melt
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training.html">Training the networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="result_analysis.html">Result analysis</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Predictions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#web-calculator">Web calculator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jupyter-notebooks">Jupyter notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">i-Melt</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Predictions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/predictions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="predictions">
+<h1>Predictions<a class="headerlink" href="#predictions" title="Permalink to this heading"></a></h1>
+<section id="web-calculator">
+<h2>Web calculator<a class="headerlink" href="#web-calculator" title="Permalink to this heading"></a></h2>
+<p>The easiest way to try i-Melt is to use the <a class="reference external" href="https://share.streamlit.io/charlesll/i-melt/imelt_streamlit.py">web calculator</a>.</p>
+</section>
+<section id="jupyter-notebooks">
+<h2>Jupyter notebooks<a class="headerlink" href="#jupyter-notebooks" title="Permalink to this heading"></a></h2>
+<p>More control can be achieved using directly the i-melt library.</p>
+<p>Several example notebooks are provided in the main repository. We invite you to have a look at them directly.</p>
+<p>If you want to have an example of use for making predictions for a given composition, have a
+look at the <a class="reference external" href="https://share.streamlit.io/charlesll/i-melt/Example_Prediction_oneComposition.ipynb">Example_Prediction_oneComposition.ipynb</a> notebook.</p>
+<p>The steps are simple. First, import the necessary libraries and imelt:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span> <span class="c1">#matplotlib magic</span>
+
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> <span class="c1"># for arrays</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> <span class="c1"># for dataframes</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> <span class="c1"># for plotting</span>
+<span class="kn">import</span> <span class="nn">src.imelt</span> <span class="k">as</span> <span class="nn">imelt</span> <span class="c1"># imelt core functions</span>
+<span class="kn">import</span> <span class="nn">src.utils</span> <span class="k">as</span> <span class="nn">utils</span> <span class="c1"># utility functions</span>
+</pre></div>
+</div>
+<p>Then, we can load the pre-trained i-melt models as one Python object:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">imelt_model</span> <span class="o">=</span> <span class="n">imelt</span><span class="o">.</span><span class="n">load_pretrained_bagged</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Now we can define a composition of interest in a Panda dataframe.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">composition</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+<span class="n">composition</span><span class="p">[</span><span class="s2">&quot;sio2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.75</span>
+<span class="n">composition</span><span class="p">[</span><span class="s2">&quot;al2o3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.125</span>
+<span class="n">composition</span><span class="p">[</span><span class="s2">&quot;na2o&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.125</span>
+<span class="n">composition</span><span class="p">[</span><span class="s2">&quot;k2o&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">composition</span><span class="p">[</span><span class="s2">&quot;mgo&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">composition</span><span class="p">[</span><span class="s2">&quot;cao&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+</pre></div>
+</div>
+<p>We now need to add some descriptors. A utility function is provided to do so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">composition</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">descriptors</span><span class="p">(</span><span class="n">composition</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+</pre></div>
+</div>
+<p>Predictions can be obtained for Tg with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tg</span> <span class="o">=</span> <span class="n">imelt_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="s2">&quot;tg&quot;</span><span class="p">,</span> <span class="n">composition</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can predict the viscosity with the Vogel-Tammann-Fulscher equation. First, we create a array containing the temperatures of interest, then we calculate the viscosity:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">T_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">600</span><span class="p">,</span> <span class="mi">1500</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c1"># from 600 to 1500 K with 1 K steps</span>
+<span class="n">viscosity</span> <span class="o">=</span> <span class="n">imelt_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="s2">&quot;tvf&quot;</span><span class="p">,</span><span class="n">composition</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">T_range</span><span class="p">),</span><span class="mi">39</span><span class="p">)),</span><span class="n">T_range</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Many other predictions are possible, look at the Jupyter notebooks for more details and examples.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="result_analysis.html" class="btn btn-neutral float-left" title="Result analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="references.html" class="btn btn-neutral float-right" title="References" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-2023, Charles Le Losq, Barbara Baldoni, Andrew P. Valentine.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

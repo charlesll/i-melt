@@ -1,0 +1,114 @@
+Training the networks
+=====================
+
+The easiest way of training one or multiple neural networks is to use the scripts that are provided in /src.
+
+Training one network
+--------------------
+
+The code `Training_single.py <https://github.com/charlesll/i-melt/blob/master/src/Training_single.py>`_ allows training only one network and playing with it. The following steps are performed.
+
+After importing the libraries (see notebook), we load the data:
+
+.. code-block:: python
+
+	device = torch.device('cuda') # training on the GPU
+
+	# custom data loader, automatically sent to the GPU
+	ds = imelt.data_loader(device=device)
+
+We select an architecture. For this example, we have selected the reference architecture from Le Losq et al. 2021:
+
+.. code-block:: python
+
+	nb_layers = 4
+	nb_neurons = 200
+	p_drop = 0.10 # we increased dropout here as this now works well with GELU units
+
+If we want to save the model and figures in the directories `./model/candidates/` and `./figures/single/`, we can use this code to check if the folders exist, and create them if not:
+
+.. code-block:: python
+
+	utils.create_dir('./model/candidates/')
+	utils.create_dir('./figures/single/')
+	
+Now we need a name for our model, we can generate it with the hyperparameters actually, this will help us having automatic names in case we try different architectures:
+
+.. code-block:: python
+
+	name = "./model/candidates/l"+str(nb_layers)+"_n"+str(nb_neurons)+"_p"+str(p_drop)+"_test"+".pth"
+
+and we declare the model using `imelt.model()`:
+
+.. code-block:: python
+
+	neuralmodel = imelt.model(ds.x_visco_train.shape[1],
+							hidden_size=nb_neurons,
+							num_layers=nb_layers,
+							nb_channels_raman=ds.nb_channels_raman,
+							activation_function = torch.nn.GELU(), 
+							p_drop=p_drop)
+
+We select a criterion for training (the MSE criterion from PyTorch) and send it to the GPU device
+
+.. code-block:: python
+
+	criterion = torch.nn.MSELoss(reduction='mean')
+	criterion.to(device) # sending criterion on device
+
+Before training, we need to initilize the bias layer using the imelt function, and we send the network parameters to the GPU:
+
+.. code-block:: python
+
+	neuralmodel.output_bias_init()
+	neuralmodel = neuralmodel.float() # this is just to make sure we are using always float() numbers
+	neuralmodel.to(device)
+
+Training will be done with the `ADAM <https://arxiv.org/abs/1412.6980>`_ optimizer with a tuned learning rate of 0.0003:
+
+.. code-block:: python
+
+	optimizer = torch.optim.Adam(neuralmodel.parameters(), lr = 0.0003)
+
+We have build a function for training in the imelt library that performs early stopping. You have to select:
+
+* the patience (how much epoch do you wait once you notice the validation error stop improving)
+* the min_delta variable, that represents the sensitivity to determine if the RMSE on the validation dataset really improved or not
+
+The `imelt.training()` function outputs the trained model, and records of the training and validation losses during the epochs.
+
+Training can thus be done with this code:
+
+.. code-block:: python
+
+	neuralmodel, record_train_loss, record_valid_loss = imelt.training(neuralmodel,ds,
+			criterion,optimizer,save_switch=True,save_name=name,
+			train_patience=250,min_delta=0.05,
+			verbose=True)
+
+Hyperparameter tuning
+---------------------
+
+RAY TUNE + OPTUNA
+^^^^^^^^^^^^^^^^^
+
+In the version 2.0, we rely on `Ray Tune <https://docs.ray.io/en/latest/tune/index.html>`_ and `Optuna <https://optuna.org/>`_ to search for the best models.
+
+The script `ray_opt.py <https://github.com/charlesll/i-melt/blob/master/src/ray_opt.py>`_ allows running a Ray Tune experiment.
+
+The script `ray_select.py <https://github.com/charlesll/i-melt/blob/master/src/ray_select.py>`_ allows selecting the best models 
+based on posterior analysis of the Ray Tune experiment (all metrics recorded in an Excel spreadsheet that must be provided for model selection).
+
+Bayesian optimization
+^^^^^^^^^^^^^^^^^^^^^
+
+CURRENTLY NOT WORKING
+
+The `bayesian_optim.py <https://github.com/charlesll/i-melt/blob/master/src/bayesian_optim.py>`_ script allows performing Bayesian Optimization for hyperparameter selection using AX plateform.
+
+Training candidates
+-------------------
+
+**Note : this was used in v1.2 for model selection, but now we rely on the Ray Tune + Optuna run to select models.**
+
+In any case, this still works. The code `Training_Candidates.py <https://github.com/charlesll/i-melt/blob/master/Training_candidates.py>`_ allows training 100 networks with a given architecture and selects the 10 best ones, which are saved in ./model/best/ and used for future predictions.

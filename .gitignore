@@ -1,0 +1,14 @@
+__pycache__
+.DS_Store
+.ipynb_checkpoints
+model/dev
+model/exp_multitask
+model/exp_trainsize
+manuscript/dev/
+data/dev/
+dev/
+figures/dev/
+*.job
+dev_*
+compressed_files.tar.gz
+src/bkg
