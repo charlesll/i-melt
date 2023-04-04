@@ -6,6 +6,7 @@ model/exp_multitask
 model/exp_trainsize
 manuscript/dev/
 data/dev/
+data/Database_IPGP.xlsx
 dev/
 figures/dev/
 *.job
