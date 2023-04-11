@@ -9,7 +9,7 @@ sklearn
 pandas
 ax-platform
 seaborn
-mpltern
+mpltern >= 0.4
 uncertainties
 jupyter
 openpyxl
