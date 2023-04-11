@@ -949,7 +949,7 @@ class model(torch.nn.Module):
 
         # grab constants
         d_cts = constants()
-        w = molarweights()
+        w = utils.molarweights()
 
         # mass for one mole of oxides
         XMW_SiO2 	= x[:,0] * w["sio2"]
