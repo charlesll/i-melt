@@ -1075,28 +1075,119 @@ class model(torch.nn.Module):
 
     def ag(self,x,T):
         """viscosity from the Adam-Gibbs equation, given chemistry X and temperature T
+
+        need for speed = we decompose the calculation as much as reasonable for a minimum amount of forward pass
         """
-        return self.ae(x) + self.be(x) / (T* (self.sctg(x) + self.dCp(x, T)))
+        # one forward pass to get thermodynamic output
+        thermo_out = self.out_thermo(self.forward(x))
+
+        # get Ae
+        ae =  torch.reshape(thermo_out[:,2], (thermo_out[:,2].shape[0], 1))
+
+        # get ScTg
+        sctg = torch.exp(thermo_out[:,1])
+        sctg = torch.reshape(sctg, (sctg.shape[0], 1))
+
+        # get Tg
+        tg = torch.exp(thermo_out[:,0])
+        tg = torch.reshape(tg, (tg.shape[0], 1))
+
+        # get Be
+        be = (12.0-ae)*(tg*sctg)
+    
+        return ae + be / (T* (sctg + self.dCp(x, T)))
 
     def myega(self,x, T):
         """viscosity from the MYEGA equation, given entries X and temperature T
+
+        need for speed = we decompose the calculation for making only one forward pass
         """
-        return self.ae(x) + (12.0 - self.ae(x))*(self.tg(x)/T)*torch.exp((self.fragility(x)/(12.0-self.ae(x))-1.0)*(self.tg(x)/T-1.0))
+        # one forward pass to get thermodynamic output
+        thermo_out = self.out_thermo(self.forward(x))
+
+        # get Ae
+        ae =  torch.reshape(thermo_out[:,2], (thermo_out[:,2].shape[0], 1))
+
+        # get Tg
+        tg = torch.exp(thermo_out[:,0])
+        tg = torch.reshape(tg, (tg.shape[0], 1))
+
+        # get fragility
+        frag = torch.exp(thermo_out[:,15])
+        frag = torch.reshape(frag, (frag.shape[0], 1))
+    
+        return ae + (12.0 - ae)*(tg/T)*torch.exp((frag/(12.0-ae)-1.0)*(tg/T-1.0))
 
     def am(self,x, T):
         """viscosity from the Avramov-Mitchell equation, given entries X and temperature T
+
+        need for speed = we decompose the calculation for making only one forward pass
         """
-        return self.a_am(x) + (12.0 - self.a_am(x))*(self.tg(x)/T)**(self.fragility(x)/(12.0 - self.a_am(x)))
+
+        # one forward pass to get thermodynamic output
+        thermo_out = self.out_thermo(self.forward(x))
+
+        # get the A_am parameter
+        a_am = torch.reshape(thermo_out[:,3], (thermo_out[:,3].shape[0], 1))
+    
+        # Get TG
+        tg = torch.exp(thermo_out[:,0])
+        tg = torch.reshape(tg, (tg.shape[0], 1))
+
+        # get fragility
+        frag = torch.exp(thermo_out[:,15])
+        frag = torch.reshape(frag, (frag.shape[0], 1))
+
+        return a_am + (12.0 - a_am)*(tg/T)**(frag/(12.0 - a_am))
 
     def cg(self,x, T):
         """free volume theory viscosity equation, given entries X and temperature T
+
+        need for speed = we decompose the calculation for making only one forward pass
         """
-        return self.a_cg(x) + 2.0*self.b_cg(x)/(T - self.to_cg(x) + torch.sqrt( (T-self.to_cg(x))**2 + self.c_cg(x)*T))
+
+        # one forward pass to get thermodynamic output
+        thermo_out = self.out_thermo(self.forward(x))
+
+        # get A CG
+        a_cg = torch.reshape(thermo_out[:,4], (thermo_out[:,4].shape[0], 1))
+
+        # Get TG
+        tg = torch.exp(thermo_out[:,0])
+        tg = torch.reshape(tg, (tg.shape[0], 1))
+
+        # get To
+        to_cg = torch.exp(thermo_out[:,6])
+        to_cg = torch.reshape(to_cg, (to_cg.shape[0], 1))
+
+        # get C CG
+        c_cg = torch.exp(thermo_out[:,7])
+        c_cg = torch.reshape(c_cg, (c_cg.shape[0], 1))
+
+        b_cg = 0.5*(12.0 - a_cg) * (tg - to_cg + torch.sqrt( (tg - to_cg)**2 + c_cg*tg))
+        return a_cg + 2.0*b_cg/(T - to_cg + torch.sqrt( (T-to_cg)**2 + c_cg*T))
 
     def tvf(self,x, T):
         """Tamman-Vogel-Fulscher empirical viscosity, given entries X and temperature T
+
+        need for speed = we decompose the calculation for making only one forward pass
         """
-        return self.a_tvf(x) + self.b_tvf(x)/(T - self.c_tvf(x))
+
+        # one forward pass to get thermodynamic output
+        thermo_out = self.out_thermo(self.forward(x))
+
+        # get the A_tvf parameter
+        a_tvf = torch.reshape(thermo_out[:,5], (thermo_out[:,5].shape[0], 1))
+
+        # Get TG
+        tg = torch.exp(thermo_out[:,0])
+        tg = torch.reshape(tg, (tg.shape[0], 1))
+
+        # Get C_tvf
+        c_tvf = torch.exp(thermo_out[:,8])
+        c_tvf = torch.reshape(c_tvf, (c_tvf.shape[0], 1))
+        
+        return a_tvf + ((12.0-a_tvf)*(tg-c_tvf))/(T - c_tvf)
 
     def sellmeier(self, x, lbd):
         """Sellmeier equation for refractive index calculation, with lbd in microns
@@ -1701,82 +1792,6 @@ def training_lbfgs(neuralmodel, ds,
 
     return neuralmodel, record_train_loss, record_valid_loss
 
-
-def RMSE_viscosity_bydomain(bagged_model, ds, method="ag", boundary=7.0):
-    """return the RMSE between predicted and measured viscosities
-
-    Parameters
-    ----------
-    bagged_model : bagged model object
-        generated using the bagging_models class
-    ds : ds dataset
-        contains all the training, validation and test viscosity datasets
-    method : str
-        method to provide to the bagged model
-    boundary : float
-        boundary between the high and low viscosity domains (log Pa s value)
-
-    Returns
-    -------
-    total_RMSE : list
-        RMSE between predictions and observations, three values (train-valid-test)
-    high_RMSE : list
-        RMSE between predictions and observations, above the boundary, three values (train-valid-test)
-    low_RMSE : list
-        RMSE between predictions and observations, below the boundary, three values (train-valid-test)
-
-    """
-    y_pred_train = bagged_model.predict(method,ds.x_visco_train,ds.T_visco_train).mean(axis=1).reshape(-1,1)
-    y_pred_valid = bagged_model.predict(method,ds.x_visco_valid,ds.T_visco_valid).mean(axis=1).reshape(-1,1)
-    y_pred_test = bagged_model.predict(method,ds.x_visco_test,ds.T_visco_test).mean(axis=1).reshape(-1,1)
-
-    y_train = ds.y_visco_train
-    y_valid = ds.y_visco_valid
-    y_test = ds.y_visco_test
-
-    total_RMSE_train = mean_squared_error(y_pred_train,y_train,squared=False)
-    total_RMSE_valid = mean_squared_error(y_pred_valid,y_valid,squared=False)
-    total_RMSE_test = mean_squared_error(y_pred_test,y_test,squared=False)
-
-    high_RMSE_train = mean_squared_error(y_pred_train[y_train>boundary],y_train[y_train>boundary],squared=False)
-    high_RMSE_valid = mean_squared_error(y_pred_valid[y_valid>boundary],y_valid[y_valid>boundary],squared=False)
-    high_RMSE_test = mean_squared_error(y_pred_test[y_test>boundary],y_test[y_test>boundary],squared=False)
-
-    low_RMSE_train = mean_squared_error(y_pred_train[y_train<boundary],y_train[y_train<boundary],squared=False)
-    low_RMSE_valid = mean_squared_error(y_pred_valid[y_valid<boundary],y_valid[y_valid<boundary],squared=False)
-    low_RMSE_test = mean_squared_error(y_pred_test[y_test<boundary],y_test[y_test<boundary],squared=False)
-
-    out1 = [total_RMSE_train, total_RMSE_valid, total_RMSE_test]
-    out2 = [high_RMSE_train, high_RMSE_valid, high_RMSE_test]
-    out3 = [low_RMSE_train, low_RMSE_valid, low_RMSE_test]
-
-    if method =="ag":
-        name_method = "Adam-Gibbs"
-    elif method == "cg":
-        name_method = "Free Volume"
-    elif method == "tvf":
-        name_method = "Vogel Fulcher Tamman"
-    elif method == "myega":
-        name_method = "MYEGA"
-    elif method == "am":
-        name_method = "Avramov Milchev"
-
-
-    print("Using the equation from {}:".format(name_method))
-    print("    RMSE on the full range (0-15 log Pa s): train {0:.2f}, valid {1:.2f}, test {2:.2f}".format(total_RMSE_train,
-                                                                                        total_RMSE_valid,
-                                                                                        total_RMSE_test))
-    print("    RMSE on the -inf - {:.1f} log Pa s range: train {:.2f}, valid {:.2f}, test {:.2f}".format(boundary,
-                                                                                      low_RMSE_train,
-                                                                                        low_RMSE_valid,
-                                                                                        low_RMSE_test))
-    print("    RMSE on the {:.1f} - +inf log Pa s range: train {:.2f}, valid {:.2f}, test {:.2f}".format(boundary,
-                                                                                      high_RMSE_train,
-                                                                                        high_RMSE_valid,
-                                                                                        high_RMSE_test))
-    print("")
-    return out1, out2, out3
-
 def record_loss_build(path, list_models, ds, shape='rectangle'):
     """build a Pandas dataframe with the losses for a list of models at path
 
@@ -1982,6 +1997,7 @@ class bagging_models:
             This allows performing MC Dropout on the ensemble of models.
         """
 
+        # sending data to device
         X = torch.Tensor(X).to(self.device)
         T = torch.Tensor(T).to(self.device)
         lbd = torch.Tensor(lbd).to(self.device)

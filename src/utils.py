@@ -517,12 +517,86 @@ def residual_error_calc(y, y_pred, mode="BOTH"):
         
     # now perform the relevant calculation
     if mode == "RMSE": # root mean square error
-        return np.sqrt(mean_squared_error(y, y_pred))
+        return mean_squared_error(y, y_pred, squared=False)
     elif mode == "MAE": # median absolute deviation
         return median_absolute_error(y, y_pred)
     elif mode == "BOTH":
-        rmse = np.sqrt(mean_squared_error(y, y_pred))
+        rmse = mean_squared_error(y, y_pred, squared=False)
         mae = median_absolute_error(y, y_pred)
         return rmse, mae
         
-    
+def error_viscosity_bydomain(bagged_model, ds, method="ag", boundary=7.0, mode="RMSE"):
+    """return the root mean squared error or the median absolute error between predicted and measured viscosities
+
+    Parameters
+    ----------
+    bagged_model : bagged model object
+        generated using the bagging_models class
+    ds : ds dataset
+        contains all the training, validation and test viscosity datasets
+    method : str
+        method to provide to the bagged model
+    boundary : float
+        boundary between the high and low viscosity domains (log Pa s value)
+    method : str
+        method to use for the error calculation, either "mean_squared_error" or "median_absolute_error"
+
+    Returns
+    -------
+    total_RMSE : list
+        RMSE between predictions and observations, three values (train-valid-test)
+    high_RMSE : list
+        RMSE between predictions and observations, above the boundary, three values (train-valid-test)
+    low_RMSE : list
+        RMSE between predictions and observations, below the boundary, three values (train-valid-test)
+
+    """
+    y_pred_train = bagged_model.predict(method,ds.x_visco_train,ds.T_visco_train).mean(axis=1).reshape(-1,1)
+    y_pred_valid = bagged_model.predict(method,ds.x_visco_valid,ds.T_visco_valid).mean(axis=1).reshape(-1,1)
+    y_pred_test = bagged_model.predict(method,ds.x_visco_test,ds.T_visco_test).mean(axis=1).reshape(-1,1)
+
+    y_train = ds.y_visco_train
+    y_valid = ds.y_visco_valid
+    y_test = ds.y_visco_test
+
+    total_RMSE_train = residual_error_calc(y_pred_train,y_train,mode=mode)
+    total_RMSE_valid = residual_error_calc(y_pred_valid,y_valid,mode=mode)
+    total_RMSE_test = residual_error_calc(y_pred_test,y_test,mode=mode)
+
+    high_RMSE_train = residual_error_calc(y_pred_train[y_train>boundary],y_train[y_train>boundary],mode=mode)
+    high_RMSE_valid = residual_error_calc(y_pred_valid[y_valid>boundary],y_valid[y_valid>boundary],mode=mode)
+    high_RMSE_test = residual_error_calc(y_pred_test[y_test>boundary],y_test[y_test>boundary],mode=mode)
+
+    low_RMSE_train = residual_error_calc(y_pred_train[y_train<boundary],y_train[y_train<boundary],mode=mode)
+    low_RMSE_valid = residual_error_calc(y_pred_valid[y_valid<boundary],y_valid[y_valid<boundary],mode=mode)
+    low_RMSE_test = residual_error_calc(y_pred_test[y_test<boundary],y_test[y_test<boundary],mode=mode)
+
+    out1 = [total_RMSE_train, total_RMSE_valid, total_RMSE_test]
+    out2 = [high_RMSE_train, high_RMSE_valid, high_RMSE_test]
+    out3 = [low_RMSE_train, low_RMSE_valid, low_RMSE_test]
+
+    if method =="ag":
+        name_method = "Adam-Gibbs"
+    elif method == "cg":
+        name_method = "Free Volume"
+    elif method == "tvf":
+        name_method = "Vogel Fulcher Tamman"
+    elif method == "myega":
+        name_method = "MYEGA"
+    elif method == "am":
+        name_method = "Avramov Milchev"
+
+    print("{} using the equation from {}:".format(mode,name_method))
+    print("     on the full range (0-15 log Pa s): train {0:.2f}, valid {1:.2f}, test {2:.2f}".format(total_RMSE_train,
+                                                                                        total_RMSE_valid,
+                                                                                        total_RMSE_test))
+    print("     on the -inf - {:.1f} log Pa s range: train {:.2f}, valid {:.2f}, test {:.2f}".format(boundary,
+                                                                                      low_RMSE_train,
+                                                                                        low_RMSE_valid,
+                                                                                        low_RMSE_test))
+    print("     on the {:.1f} - +inf log Pa s range: train {:.2f}, valid {:.2f}, test {:.2f}".format(boundary,
+                                                                                      high_RMSE_train,
+                                                                                        high_RMSE_valid,
+                                                                                        high_RMSE_test))
+    print("")
+    return out1, out2, out3
