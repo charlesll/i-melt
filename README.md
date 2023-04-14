@@ -8,10 +8,9 @@ i-Melt is a physics-guided neural network model, that combines deep neural netwo
 - **Documentation (in progress)** https://i-melt.readthedocs.io/en/latest/
 - **Source code:** https://github.com/charlesll/i-melt/tree/master/i-melt/src/
 - **License:** https://github.com/charlesll/i-melt/LICENSE
+- **References:** https://i-melt.readthedocs.io/en/latest/references.html
 - **Bug reports:** https://github.com/charlesll/i-melt/issues
 - **Contact** lelosq@ipgp.fr
-
-Please see the original publication Le Losq et al. (2021) for details: https://www.sciencedirect.com/science/article/abs/pii/S0016703721005007
 
 ## Software Contributors
 
