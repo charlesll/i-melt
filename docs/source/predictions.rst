@@ -57,12 +57,6 @@ Predictions can be obtained for Tg with:
 
   tg = imelt_model.predict("tg", composition)
 
-`tg` will contain ten predicted Tg for the given composition from the ten neural networks in the bagged model. To get only one value, you can take the mean:
-
-.. code-block:: python
-
-  tg = np.mean(imelt_model.predict("tg", composition))
-
 If you want error bars, you need to ask for samples:
 
 .. code-block:: python
@@ -80,7 +74,6 @@ Another way, better, may be to ask for the 95% confidence intervals and the medi
 
 .. code-block:: python
 
-  tg = imelt_model.predict("tg", composition, sampling=True, n_sample=20)
   tg_95CI = np.percentile(tg, [2.5, 97.5])
   tg_median = np.median(tg)
 

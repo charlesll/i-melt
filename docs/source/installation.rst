@@ -4,7 +4,7 @@ Installation
 General preparation
 -------------------
 
-Rampy runs with a traditional Python stack.
+i-Melt runs with a traditional Python stack.
 
 If you are not familiar with Python, you can first have a look at the `scipy lecture notes <https://scipy-lectures.org/>`_,
 a set of tutorials for the beginner.

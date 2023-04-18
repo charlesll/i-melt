@@ -91,7 +91,7 @@
 <p>More control can be achieved using directly the i-melt library.</p>
 <p>Several example notebooks are provided in the main repository. We invite you to have a look at them directly.</p>
 <p>If you want to have an example of use for making predictions for a given composition, have a
-look at the <a class="reference external" href="https://share.streamlit.io/charlesll/i-melt/Example_Prediction_oneComposition.ipynb">Example_Prediction_oneComposition.ipynb</a> notebook.</p>
+look at the <a class="reference external" href="https://share.streamlit.io/charlesll/i-melt/Example_Prediction_OneComposition.ipynb">Example_Prediction_OneComposition.ipynb</a> notebook.</p>
 <p>The steps are simple. First, import the necessary libraries and imelt:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span> <span class="c1">#matplotlib magic</span>
 
@@ -107,22 +107,36 @@ look at the <a class="reference external" href="https://share.streamlit.io/charl
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">imelt_model</span> <span class="o">=</span> <span class="n">imelt</span><span class="o">.</span><span class="n">load_pretrained_bagged</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Now we can define a composition of interest in a Panda dataframe.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">composition</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-<span class="n">composition</span><span class="p">[</span><span class="s2">&quot;sio2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.75</span>
-<span class="n">composition</span><span class="p">[</span><span class="s2">&quot;al2o3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.125</span>
-<span class="n">composition</span><span class="p">[</span><span class="s2">&quot;na2o&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.125</span>
-<span class="n">composition</span><span class="p">[</span><span class="s2">&quot;k2o&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
-<span class="n">composition</span><span class="p">[</span><span class="s2">&quot;mgo&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
-<span class="n">composition</span><span class="p">[</span><span class="s2">&quot;cao&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
-</pre></div>
-</div>
-<p>We now need to add some descriptors. A utility function is provided to do so:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">composition</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">descriptors</span><span class="p">(</span><span class="n">composition</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+<p>Now we can define a composition of interest in a Panda dataframe.
+We also automatically add descriptors to the composition.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">composition</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.75</span><span class="p">,</span> <span class="c1"># SiO2</span>
+              <span class="mf">0.125</span><span class="p">,</span> <span class="c1"># Al2O3</span>
+              <span class="mf">0.125</span><span class="p">,</span> <span class="c1"># Na2O</span>
+              <span class="mf">0.0</span><span class="p">,</span> <span class="c1"># K2O</span>
+              <span class="mf">0.0</span><span class="p">,</span> <span class="c1"># MgO</span>
+              <span class="mf">0.0</span><span class="p">]</span> <span class="c1"># CaO</span>
+
+<span class="c1"># we transform composition in a dataframe and add descriptors</span>
+<span class="n">composition</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">composition</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sio2&quot;</span><span class="p">,</span><span class="s2">&quot;al2o3&quot;</span><span class="p">,</span><span class="s2">&quot;na2o&quot;</span><span class="p">,</span><span class="s2">&quot;k2o&quot;</span><span class="p">,</span><span class="s2">&quot;mgo&quot;</span><span class="p">,</span><span class="s2">&quot;cao&quot;</span><span class="p">])</span>
+<span class="n">composition</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">descriptors</span><span class="p">(</span><span class="n">composition</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s2">&quot;sio2&quot;</span><span class="p">,</span><span class="s2">&quot;al2o3&quot;</span><span class="p">,</span><span class="s2">&quot;na2o&quot;</span><span class="p">,</span><span class="s2">&quot;k2o&quot;</span><span class="p">,</span><span class="s2">&quot;mgo&quot;</span><span class="p">,</span><span class="s2">&quot;cao&quot;</span><span class="p">]])</span><span class="o">.</span><span class="n">values</span>
 </pre></div>
 </div>
 <p>Predictions can be obtained for Tg with:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tg</span> <span class="o">=</span> <span class="n">imelt_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="s2">&quot;tg&quot;</span><span class="p">,</span> <span class="n">composition</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you want error bars, you need to ask for samples:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tg</span> <span class="o">=</span> <span class="n">imelt_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="s2">&quot;tg&quot;</span><span class="p">,</span> <span class="n">composition</span><span class="p">,</span> <span class="n">sampling</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_sample</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here tg contains 20 samples from the 10 different models, so a total of 200 predictions. You can now calculate the standard deviation and mean values of tg as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tg_standard_deviation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">tg</span><span class="p">)</span>
+<span class="n">tg_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">tg</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Another way, better, may be to ask for the 95% confidence intervals and the median:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tg_95CI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">tg</span><span class="p">,</span> <span class="p">[</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">97.5</span><span class="p">])</span>
+<span class="n">tg_median</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">tg</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We can predict the viscosity with the Vogel-Tammann-Fulscher equation. First, we create a array containing the temperatures of interest, then we calculate the viscosity:</p>
@@ -130,6 +144,7 @@ look at the <a class="reference external" href="https://share.streamlit.io/charl
 <span class="n">viscosity</span> <span class="o">=</span> <span class="n">imelt_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="s2">&quot;tvf&quot;</span><span class="p">,</span><span class="n">composition</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">T_range</span><span class="p">),</span><span class="mi">39</span><span class="p">)),</span><span class="n">T_range</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
 </pre></div>
 </div>
+<p>In the above code note that the composition array has to be modified so that you have as many lines as you have temperatures to predict.</p>
 <p>Many other predictions are possible, look at the Jupyter notebooks for more details and examples.</p>
 </section>
 </section>
