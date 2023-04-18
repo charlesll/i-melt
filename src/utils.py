@@ -440,24 +440,26 @@ def preprocess_raman(my_liste, path_spectra = "./data/raman/", generate_figures 
 ###
 # ERROR CALCULATIONS
 ###
-def evaluate_accuracy(y, ci_lower=0, ci_upper=0, samples = np.array([]), std_multiplier=2., verbose=False):
+def evaluate_accuracy(y, ci_lower=0, ci_upper=0, samples = np.array([]), ci_level=0.95, verbose=False):
     """Evaluate the accuracy of the error bars.
 
     Provide either the ci_lower and ci_upper values, or an array of samples.
 
+    If you provide an array, the quantiles will be calculated from the array.
+    This will be done with taking into account of the ci_level parameter.
+
     Parameters
     ----------
     y : array
-        the true values.
+        the observed Y values.
     ci_lower : array
         the lower confidence interval.
     ci_upper : array
         the upper confidence interval.
     samples : array
         the samples from the MC Dropout.
-    std_multiplier : float
-        the multipler for the standard deviation to use for the error bars. 
-        Default is 2.
+    ci_level : float
+        the level of confidence interval. Default is 0.95.
     verbose : bool
         whether to print the accuracy of the error bars. Default is False.
 
@@ -471,10 +473,8 @@ def evaluate_accuracy(y, ci_lower=0, ci_upper=0, samples = np.array([]), std_mul
         the percentage of samples below the upper error bar.
     """
     if samples.shape[0] != 0:
-        means = samples.mean(axis=1)
-        stds = samples.std(axis=1)
-        ci_upper = means + (std_multiplier * stds)
-        ci_lower = means - (std_multiplier * stds)
+        ci_upper = np.quantile(samples, (1-ci_level)/2, axis=samples.ndim-1)
+        ci_lower = np.quantile(samples, ci_level+(1-ci_level)/2, axis=samples.ndim-1)
     else:
         if (ci_upper.all() == 0) or (ci_lower.all()==0):
             raise ValueError("Provide the ci values")
@@ -486,8 +486,8 @@ def evaluate_accuracy(y, ci_lower=0, ci_upper=0, samples = np.array([]), std_mul
     
     if verbose == True:
         print("accuracy of MC Dropout error bars: {.3f}".format(ic_acc))
-        print("Percentage of samples above lower 2 sigma:".format((ci_lower <= y.ravel()).float().mean()))
-        print("Percentage of samples below upper 2 sigma:".format((ci_upper >= y.ravel()).float().mean()))
+        print("Percentage of samples above lower c.i.:".format((ci_lower <= y.ravel()).float().mean()))
+        print("Percentage of samples below upper c.i.:".format((ci_upper >= y.ravel()).float().mean()))
     return ic_acc, percent_above, percent_below
 
 def residual_error_calc(y, y_pred, mode="BOTH"):
@@ -551,9 +551,9 @@ def error_viscosity_bydomain(bagged_model, ds, method="ag", boundary=7.0, mode="
         RMSE between predictions and observations, below the boundary, three values (train-valid-test)
 
     """
-    y_pred_train = bagged_model.predict(method,ds.x_visco_train,ds.T_visco_train).mean(axis=1).reshape(-1,1)
-    y_pred_valid = bagged_model.predict(method,ds.x_visco_valid,ds.T_visco_valid).mean(axis=1).reshape(-1,1)
-    y_pred_test = bagged_model.predict(method,ds.x_visco_test,ds.T_visco_test).mean(axis=1).reshape(-1,1)
+    y_pred_train = bagged_model.predict(method,ds.x_visco_train,ds.T_visco_train).reshape(-1,1)
+    y_pred_valid = bagged_model.predict(method,ds.x_visco_valid,ds.T_visco_valid).reshape(-1,1)
+    y_pred_test = bagged_model.predict(method,ds.x_visco_test,ds.T_visco_test).reshape(-1,1)
 
     y_train = ds.y_visco_train
     y_valid = ds.y_visco_valid

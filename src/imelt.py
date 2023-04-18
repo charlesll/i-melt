@@ -2092,10 +2092,13 @@ class bagging_models:
             
         # Before leaving this function, we make sure we freeze again the dropout
         for i in range(self.n_models):
-                self.models[i].eval() # we make sure we freeze dropout if user does not activate sampling
+            self.models[i].eval() # we make sure we freeze dropout if user does not activate sampling
         
         # returning our sample
-        return out
+        if sampling == False:
+            return np.median(out, axis= out.ndim-1)
+        else:
+            return out
 
 def load_pretrained_bagged(path_viscosity = "./data/NKCMAS_viscosity.hdf5", 
                             path_raman = "./data/NKCMAS_Raman.hdf5", 
