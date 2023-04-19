@@ -32,7 +32,7 @@ def prepare_raman(my_liste, output_file, include_embargo=False, rand_state=67, g
     
     # same thing for embargoed files
     if include_embargo == True:
-        liste_eb = pd.read_excel("./data/Database_IPGP.xlsx", "RAMAN_EMBARGO")
+        liste_eb = pd.read_excel("./data/Database.xlsx", "RAMAN_EMBARGO")
         liste_eb = utils.chimie_control(liste_eb)
         spectra_embargo = utils.preprocess_raman(liste_eb, generate_figures=generate_figures)
         X2 = utils.descriptors(liste_eb.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
@@ -270,7 +270,7 @@ def prepare_viscosity(dataset,output_file, rand_state=67, include_embargo=False)
     train_, valid_, test_ = utils.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state)
     
     if include_embargo == True:
-        dataset_eb = utils.chimie_control(pd.read_excel("./data/Database_IPGP.xlsx", sheet_name="VISCO_EMBARGO"))
+        dataset_eb = utils.chimie_control(pd.read_excel("./data/Database.xlsx", sheet_name="VISCO_EMBARGO"))
         train_ = pd.concat([train_, dataset_eb], axis=0)
 
     # grab good X columns and add descriptors
@@ -462,47 +462,47 @@ if __name__=="__main__":
     if user_input == "v":
         # Viscosity preparation
         print("Preparing the viscosity datasets...")
-        dataset = pd.read_excel("./data/Database_IPGP.xlsx",sheet_name="VISCO")
+        dataset = pd.read_excel("./data/Database.xlsx",sheet_name="VISCO")
         prepare_viscosity(dataset,"./data/NKCMAS_viscosity.hdf5", rand_state=127, include_embargo=False)
 
     if user_input == "d":
         # Density preparation
         print("Preparing the density dataset...")
-        prepare_density(pd.read_excel("./data/Database_IPGP.xlsx",sheet_name="DENSITY"),"./data/NKCMAS_density.hdf5")
+        prepare_density(pd.read_excel("./data/Database.xlsx",sheet_name="DENSITY"),"./data/NKCMAS_density.hdf5")
 
     if user_input == "o":
         # Refractive Index preparation
         print("Preparing the optical refractive index dataset...")
-        prepare_ri(pd.read_excel("./data/Database_IPGP.xlsx",sheet_name="OPTICAL"),"./data/NKCMAS_optical.hdf5", rand_state=60)
+        prepare_ri(pd.read_excel("./data/Database.xlsx",sheet_name="OPTICAL"),"./data/NKCMAS_optical.hdf5", rand_state=60)
 
     if user_input == "r":
         # Raman spectra preparation
         print("Preparing the Raman spectra dataset...")
-        prepare_raman(pd.read_excel("./data/Database_IPGP.xlsx", "RAMAN"), 
+        prepare_raman(pd.read_excel("./data/Database.xlsx", "RAMAN"), 
                       './data/NKCMAS_Raman.hdf5', include_embargo=False,
                       generate_figures=True, rand_state=127)
 
     if user_input == "c":
         # Heat capacity preparation
         print("Preparing the heat capacity dataset...")
-        prepare_cp(pd.read_excel("./data/Database_IPGP.xlsx", "CP"), './data/NKCMAS_cp.hdf5')
+        prepare_cp(pd.read_excel("./data/Database.xlsx", "CP"), './data/NKCMAS_cp.hdf5')
 
     if user_input == "l":
         # liquidus preparation
         print("Preparing the liquidus dataset...")
-        prepare_liquidus(pd.read_excel("./data/Database_IPGP.xlsx", "Liquidus"), './data/NKCMAS_tl.hdf5')
+        prepare_liquidus(pd.read_excel("./data/Database.xlsx", "Liquidus"), './data/NKCMAS_tl.hdf5')
 
     if user_input == "a":
         # Abbe number preparation
         print("Preparing the Abbe number dataset...")
-        prepare_abbe(pd.read_excel("./data/Database_IPGP.xlsx", "AbbeNumber"), './data/NKCMAS_abbe.hdf5')
+        prepare_abbe(pd.read_excel("./data/Database.xlsx", "AbbeNumber"), './data/NKCMAS_abbe.hdf5')
     
     if user_input == "e":
         # Elastic modulus preparation
         print("Preparing the elastic modulus dataset...")
-        prepare_elastic(pd.read_excel("./data/Database_IPGP.xlsx", "ElasticModulus"), './data/NKCMAS_em.hdf5')
+        prepare_elastic(pd.read_excel("./data/Database.xlsx", "ElasticModulus"), './data/NKCMAS_em.hdf5')
     
     if user_input == "cte":
         # CTE preparation
         print("Preparing the CTE dataset...")
-        prepare_cte(pd.read_excel("./data/Database_IPGP.xlsx", "CTE"), './data/NKCMAS_cte.hdf5')
+        prepare_cte(pd.read_excel("./data/Database.xlsx", "CTE"), './data/NKCMAS_cte.hdf5')
