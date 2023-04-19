@@ -156,6 +156,9 @@ with st.expander("Notes on reported uncertainties (click to expand):"):
                 For better uncertainties estimates, a larger number of forward pass may be necessary, and 
                 scaling with conformal prediction may also be best (see article). A Jupyter notebook
                 is provided on Github to highlight how to perform such operations. 
+
+                Very high error bars may be observed if predictions are asked for compositions that are not in the training set.
+                In this case, the model is extrapolating and uncertainties are expected to be large.
                 """)
     
 
