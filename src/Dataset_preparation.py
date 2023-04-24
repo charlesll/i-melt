@@ -28,7 +28,8 @@ def prepare_raman(my_liste, output_file, include_embargo=False, rand_state=67, g
 
     # add descriptors, then train-valid-test split
     X = utils.descriptors(my_liste.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_train, X_test, y_train, y_test = model_selection.train_test_split(X,spectra_long.T,test_size=0.15, random_state=rand_state) # train-test split
+    X_train, X_vt, y_train, y_vt = model_selection.train_test_split(X,spectra_long.T,test_size=0.20, random_state=rand_state) # train-test split
+    X_valid, X_test, y_valid, y_test = model_selection.train_test_split(X_vt,y_vt,test_size=0.5, random_state=rand_state) # train-test split
     
     # same thing for embargoed files
     if include_embargo == True:
@@ -47,8 +48,10 @@ def prepare_raman(my_liste, output_file, include_embargo=False, rand_state=67, g
     # save spectra in HDF5
     with h5py.File(output_file, 'w') as f:
         f.create_dataset('X_raman_train', data=X_train)
+        f.create_dataset('X_raman_valid', data=X_valid)
         f.create_dataset('X_raman_test', data=X_test)
         f.create_dataset('y_raman_train', data=y_train)
+        f.create_dataset('y_raman_valid', data=y_valid)
         f.create_dataset('y_raman_test', data=y_test)
 
 def prepare_cp(dataset,output_file, rand_state=60):

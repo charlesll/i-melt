@@ -448,6 +448,8 @@ def evaluate_accuracy(y, ci_lower=0, ci_upper=0, samples = np.array([]), ci_leve
     If you provide an array, the quantiles will be calculated from the array.
     This will be done with taking into account of the ci_level parameter.
 
+    Note : does not work for 3D Raman arrays
+
     Parameters
     ----------
     y : array
@@ -473,8 +475,8 @@ def evaluate_accuracy(y, ci_lower=0, ci_upper=0, samples = np.array([]), ci_leve
         the percentage of samples below the upper error bar.
     """
     if samples.shape[0] != 0:
-        ci_upper = np.quantile(samples, (1-ci_level)/2, axis=samples.ndim-1)
-        ci_lower = np.quantile(samples, ci_level+(1-ci_level)/2, axis=samples.ndim-1)
+        ci_lower = np.quantile(samples, (1-ci_level)/2, axis=samples.ndim-1)
+        ci_upper = np.quantile(samples, ci_level+(1-ci_level)/2, axis=samples.ndim-1)
     else:
         if (ci_upper.all() == 0) or (ci_lower.all()==0):
             raise ValueError("Provide the ci values")

@@ -8,7 +8,6 @@ import h5py
 import pandas as pd
 from sklearn.metrics import mean_squared_error
 from scipy.constants import Avogadro, Planck
-from . import utils
 
 ###
 ### FUNCTIONS FOR HANDLNG DATA
@@ -99,8 +98,10 @@ class data_loader():
         f = h5py.File(path_raman, 'r')
         X_raman_train = f["X_raman_train"][()]
         y_raman_train = f["y_raman_train"][()]
-        X_raman_valid = f["X_raman_test"][()]
-        y_raman_valid = f["y_raman_test"][()]
+        X_raman_valid = f["X_raman_valid"][()]
+        y_raman_valid = f["y_raman_valid"][()]
+        X_raman_test = f["X_raman_test"][()]
+        y_raman_test = f["y_raman_test"][()]
         f.close()
 
         # Raman axis is
@@ -302,6 +303,9 @@ class data_loader():
         self.x_raman_valid = torch.FloatTensor(self.scaling(X_raman_valid,X_scaler_mean,X_scaler_std))
         self.y_raman_valid = torch.FloatTensor(y_raman_valid)
 
+        self.x_raman_test = torch.FloatTensor(self.scaling(X_raman_test,X_scaler_mean,X_scaler_std))
+        self.y_raman_test = torch.FloatTensor(y_raman_test)
+
         # Liquid heat capacity
         self.x_cpl_train = torch.FloatTensor(self.scaling(X_cpl_train,X_scaler_mean,X_scaler_std))
         self.T_cpl_train = torch.FloatTensor(T_cpl_train.reshape(-1,1))
@@ -466,7 +470,8 @@ class data_loader():
         # RAMAN
         size_train = self.x_raman_train.unique(dim=0).shape[0]
         size_valid = self.x_raman_valid.unique(dim=0).shape[0]
-        size_total = size_train+size_valid
+        size_test = self.x_raman_test.unique(dim=0).shape[0]
+        size_total = size_train+size_valid+size_test
         self.size_total_raman = size_total
 
         print("")
@@ -923,7 +928,7 @@ class model(torch.nn.Module):
         assumes X first columns are sio2 al2o3 na2o k2o mgo cao
         """
         vm_ = self.vm_glass(x) # partial molar volumes
-        w = utils.molarweights() # weights
+        w = molarweights() # weights
 
         # calculation of glass molar volume
         v_g = (vm_[:,0]*x[:,0] + vm_[:,1]*x[:,1] + # sio2 + al2o3
@@ -949,7 +954,7 @@ class model(torch.nn.Module):
 
         # grab constants
         d_cts = constants()
-        w = utils.molarweights()
+        w = molarweights()
 
         # mass for one mole of oxides
         XMW_SiO2 	= x[:,0] * w["sio2"]
@@ -2434,3 +2439,59 @@ def plot_loss(ax, loss, legends, scale="linear"):
     ax.legend()
     ax.set_yscale(scale)
     ax.set_xlabel("Epoch")
+
+###
+### Molecular weights (duplicate of utils function to avoid path issues)
+###
+def molarweights():
+	"""returns a partial table of molecular weights for elements and oxides that can be used in other functions
+
+    Returns
+    =======
+    w : dictionary
+        containing the molar weights of elements and oxides:
+
+        - si, ti, al, fe, li, na, k, mg, ca, ba, o (no upper case, symbol calling)
+
+        - sio2, tio2, al2o3, fe2o3, feo, li2o, na2o, k2o, mgo, cao, sro, bao (no upper case, symbol calling)
+
+    """
+	w = {"si": 28.085}
+
+    # From IUPAC Periodic Table 2016, in g/mol
+	w["ti"] = 47.867
+	w["al"] = 26.982
+	w["fe"] = 55.845
+	w["h"] = 1.00794
+	w["li"] = 6.94
+	w["na"] = 22.990
+	w["k"] = 39.098
+	w["mg"] = 24.305
+	w["ca"] = 40.078
+	w["ba"] = 137.327
+	w["sr"] = 87.62
+	w["o"] = 15.9994
+
+	w["ni"] = 58.6934
+	w["mn"] = 54.938045
+	w["p"] = 30.973762
+
+	# oxides
+	w["sio2"] = w["si"] + 2* w["o"]
+	w["tio2"] = w["ti"] + 2* w["o"]
+	w["al2o3"] = 2*w["al"] + 3* w["o"]
+	w["fe2o3"] = 2*w["fe"] + 3* w["o"]
+	w["feo"] = w["fe"] + w["o"]
+	w["h2o"] = 2*w["h"] + w["o"]
+	w["li2o"] = 2*w["li"] +w["o"]
+	w["na2o"] = 2*w["na"] + w["o"]
+	w["k2o"] = 2*w["k"] + w["o"]
+	w["mgo"] = w["mg"] + w["o"]
+	w["cao"] = w["ca"] + w["o"]
+	w["sro"] = w["sr"] + w["o"]
+	w["bao"] = w["ba"] + w["o"]
+
+	w["nio"] = w["ni"] + w["o"]
+	w["mno"] = w["mn"] + w["o"]
+	w["p2o5"] = w["p"]*2 + w["o"]*5
+	return w # explicit return

@@ -20,7 +20,7 @@ select:
 	python3 ./src/ray_select.py
 
 transfer:
-	tar czvf compressed_files.tar.gz ./data/NKCMAS* ./model/Analyse_Ray_log3.xlsx ./src/* ./makefile
+	tar czvf compressed_files.tar.gz ./data/NKCMAS* ./src/* ./makefile
 	scp compressed_files.tar.gz lelosq@stellagpu01:/gpfs/users/lelosq/neuravi/
 
 transfer_back:

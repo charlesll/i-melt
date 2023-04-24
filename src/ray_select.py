@@ -3,9 +3,9 @@ import glob
 import shutil
 
 filename = "./model/Analyse_Ray_log3.xlsx"
-sheetname = "ray10"
+sheetname = "ray11"
 exp_path = "../ray_results/"
-exp_name = "objective_2023-03-16_09-41-13/"
+exp_name = "objective_2023-04-21_17-36-40"
 path_out = "./model/best/"
 
 db = pd.read_excel(filename, sheet_name=sheetname)

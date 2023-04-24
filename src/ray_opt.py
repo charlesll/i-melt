@@ -282,34 +282,34 @@ def objective(config):
 # 2. Define a search space and initialize the search algorithm.
 search_space = {"lr": tune.loguniform(5e-5, 1e-3), 
                 "nb_neurons": tune.randint(300, 600),
-                "nb_layers": tune.randint(3, 8),
+                "nb_layers": tune.randint(3, 11),
                 "dropout": tune.uniform(0.1, 0.4)}
                 #"wd": tune.loguniform(1e-5, 1e-2),}
  
 # Using OptunaSearch
 # we set initial parameters
 initial_params = [
-    {"lr": 0.0004, "nb_neurons": 400, "nb_layers": 4, "dropout": 0.15},
-    {"lr": 0.0003, "nb_neurons": 400, "nb_layers": 5, "dropout": 0.15},
-    {"lr": 0.0003, "nb_neurons": 400, "nb_layers": 6, "dropout": 0.15},
-    {"lr": 0.0003, "nb_neurons": 400, "nb_layers": 4, "dropout": 0.2},
-    {"lr": 0.0003, "nb_neurons": 400, "nb_layers": 5, "dropout": 0.2},
-    {"lr": 0.0003, "nb_neurons": 400, "nb_layers": 6, "dropout": 0.2},
+    {"lr": 0.0003, "nb_neurons": 450, "nb_layers": 4, "dropout": 0.2},
+    {"lr": 0.0003, "nb_neurons": 450, "nb_layers": 4, "dropout": 0.3},
+    {"lr": 0.0003, "nb_neurons": 450, "nb_layers": 6, "dropout": 0.2},
+    {"lr": 0.0003, "nb_neurons": 450, "nb_layers": 6, "dropout": 0.3},
+    {"lr": 0.0002, "nb_neurons": 450, "nb_layers": 10, "dropout": 0.2},
+    {"lr": 0.0002, "nb_neurons": 450, "nb_layers": 10, "dropout": 0.3},
 ]
 
 algo = OptunaSearch(points_to_evaluate=initial_params)
 
 # AsyncHyperBand enables aggressive early stopping of bad trials.
-scheduler = ASHAScheduler(time_attr="epoch", metric="valid_loss", mode="min", grace_period=100, max_t=6000)
+scheduler = ASHAScheduler(time_attr="epoch", grace_period=100, max_t=6000)
 
 tuner = tune.Tuner(
-   tune.with_resources(objective, {"gpu": 1}),
+   tune.with_resources(objective, {"gpu": 4}),
    tune_config=tune.TuneConfig(
-       num_samples=30,
+       num_samples=100,
        metric="valid_loss",
        mode="min",
        search_alg=algo,
-       scheduler=scheduler
+       #scheduler=scheduler
    ),
 #   run_config=air.RunConfig(
 #       stop={"training_iteration": 5},
