@@ -7,3 +7,5 @@ References
 https://medium.com/pytorch/from-windows-to-volcanoes-how-pytorch-is-helping-us-understand-glass-8720d480f4f2 <https://medium.com/pytorch/from-windows-to-volcanoes-how-pytorch-is-helping-us-understand-glass-8720d480f4f2>`_
 
 `Le Losq C., Valentine A. P., 2021. charlesll/i-melt: i-Melt v1.2.1 (v1.2.1). Zenodo. https://doi.org/10.5281/zenodo.5342178 <https://doi.org/10.5281/zenodo.5342178>`_
+
+`Le Losq C., Baldoni B., Valentine A. P., 2023. charlesll/i-melt: i-Melt v2.0.0 (v2.0.0). Zenodo. https://doi.org/10.5281/zenodo.7858297 <https://doi.org/10.5281/zenodo.7858297>`_

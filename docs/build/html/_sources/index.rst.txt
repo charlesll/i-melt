@@ -12,6 +12,7 @@ Charles Le Losq, Institut de physique du globe de Paris, University Paris Cité
 lelosq@ipgp.fr
 
 Barbara Baldoni, Institut de physique du globe de Paris, University Paris Cité
+baldoni@ipgp.fr
 
 Andrew P. Valentine, University of Durham
 andrew.valentine@durham.ac.uk

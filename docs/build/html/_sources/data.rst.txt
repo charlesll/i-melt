@@ -4,7 +4,9 @@ Database
 Database localisation
 ---------------------
 
-All data are given in a `Database.xlsx <https://github.com/charlesll/i-melt/blob/master/data/Database.xlsx>`_ file in the `data folder <https://github.com/charlesll/i-melt/tree/master/data>`_. Raman spectra are contained in the `i-melt/data/raman/ <https://github.com/charlesll/i-melt/tree/master/data/raman>`_ folder.
+All data are given in a `Database.xlsx <https://github.com/charlesll/i-melt/blob/master/data/Database.xlsx>`_ file in the `data folder <https://github.com/charlesll/i-melt/tree/master/data>`_.
+
+The data used for training the currently provided mdels are in HDF5 format in the data folder.
 
 Data preparation
 ----------------
