@@ -1,6 +1,6 @@
 # i-Melt
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5342178.svg)](https://doi.org/10.5281/zenodo.5342178)![GitHub](https://img.shields.io/github/license/charlesll/i-melt)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5342177.svg)](https://doi.org/10.5281/zenodo.5342177)![GitHub](https://img.shields.io/github/license/charlesll/i-melt)
 
 i-Melt is a physics-guided neural network model, that combines deep neural networks with physical equations to predict the structural, thermodynamic and dynamic properties of aluminosilicate melts and glasses.
 
