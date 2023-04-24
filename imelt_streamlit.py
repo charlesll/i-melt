@@ -17,17 +17,17 @@ neuralmodel = imelt.load_pretrained_bagged()
 # streamlit preparation
 st.title('i-Melt: Prediction of melt and glass properties')
 st.markdown("""
+            (c) Le Losq C. and co. 2021-2023
+            
             i-Melt is a greybox model that uses physical equations and machine 
             learning to predict the properties of
-            glasses and melts. 
-            At present it is restricted to compositions in the Na$_2$O-K$_2$O-MgO-CaO-Al$_2$O$_3$-SiO$_2$ system.
-            For full details
+            glasses and melts in the Na$_2$O-K$_2$O-MgO-CaO-Al$_2$O$_3$-SiO$_2$ system.
+            
+            For details
             [see the references](https://www.sciencedirect.com/science/article/pii/S0016703721005007)
             and [download the code](https://github.com/charlesll/i-melt)!
 
             Select a composition using the sliders on the sidebar (left) and see predictions below. 
-             
-            (c) Charles Le Losq and co. 2021-2023
             """)
 
 
@@ -63,35 +63,43 @@ def form_callback():
 
 with st.sidebar.form(key='my_form'):
     st.subheader('Glass composition')
-
-    st.slider("SiO\u2082 concentration, mol%",
-                    min_value = 50.0,
+    st.write("Enter your composition below (will be rescaled to ensure it sums to 100%.) " 
+             "\nWarning : there is no safeguard, "
+             "you can enter any value you want, and ask for model extrapolation. " 
+             "Closely monitor predictive error bars to detect it.")
+    st.number_input("SiO\u2082 concentration, mol%",
+                    min_value = 0.0,
                     max_value = 100.0,
+                    step = 0.5,
                     key='x1')
 
-    st.slider("Al\u2082O\u2083 concentration, mol%",
+    st.number_input("Al\u2082O\u2083 concentration, mol%",
                     min_value = 0.0,
-                    max_value = 50.0,
+                    max_value = 100.0,
+                    step = 0.5,
                     key='x2')
 
-    st.slider("Na\u2082O concentration, mol%",
+    st.number_input("Na\u2082O concentration, mol%",
                     min_value = 0.0,
-                    max_value = 50.0,
+                    max_value = 100.0,
+                    step = 0.5,
                     key='x3')
 
-    st.slider("K\u2082O concentration, mol%",
+    st.number_input("K\u2082O concentration, mol%",
                     min_value = 0.0,
-                    max_value = 50.0,
+                    max_value = 100.0,
+                    step = 0.5,
                     key='x4')
                     
-    st.slider("MgO concentration, mol%",
+    st.number_input("MgO concentration, mol%",
                     min_value = 0.0,
-                    max_value = 50.0,
+                    max_value = 100.0,
                     key='x5')
                     
-    st.slider("CaO concentration, mol%",
+    st.number_input("CaO concentration, mol%",
                     min_value = 0.0,
-                    max_value = 50.0,
+                    max_value = 100.0,
+                    step = 0.5,
                     key='x6')
     
     option = st.selectbox(
@@ -99,40 +107,40 @@ with st.sidebar.form(key='my_form'):
     ('Adam-Gibbs', 'TVF', 'MYEGA', 'Avramov-Milchev', 'Free Volume'))
 
     submit_button = st.form_submit_button(label='Calculate!', on_click=form_callback)
-    st.write("When you run the model, compositions will be rescaled to ensure they sum to 100%.")
 composition =  np.array([st.session_state.x1/100, st.session_state.x2/100, st.session_state.x3/100, st.session_state.x4/100, st.session_state.x5/100, st.session_state.x6/100]).reshape(1,-1)
 
 composition = utils.descriptors(pd.DataFrame(composition, columns=['sio2', 'al2o3', 'na2o', 'k2o', 'mgo', 'cao'])).values
 
 # PROPERTIES
-tg = neuralmodel.predict("tg", composition, sampling=True, n_sample=20)
-density = neuralmodel.predict("density_glass", composition, sampling=True, n_sample=20)
-ri = neuralmodel.predict("sellmeier", composition, [589.0], sampling=True, n_sample=20)
-sctg = neuralmodel.predict("sctg", composition, sampling=True, n_sample=20)
-fragility = neuralmodel.predict("fragility", composition, sampling=True, n_sample=20)
-liquidus = neuralmodel.predict("liquidus", composition, sampling=True, n_sample=20)
-elastic = neuralmodel.predict("elastic_modulus", composition, sampling=True, n_sample=20)
-cte = neuralmodel.predict("cte", composition, sampling=True, n_sample=20)
+n_sample = 25
+tg = neuralmodel.predict("tg", composition, sampling=True, n_sample=n_sample)
+density = neuralmodel.predict("density_glass", composition, sampling=True, n_sample=n_sample)
+ri = neuralmodel.predict("sellmeier", composition, [589.0], sampling=True, n_sample=n_sample)
+sctg = neuralmodel.predict("sctg", composition, sampling=True, n_sample=n_sample)
+fragility = neuralmodel.predict("fragility", composition, sampling=True, n_sample=n_sample)
+liquidus = neuralmodel.predict("liquidus", composition, sampling=True, n_sample=n_sample)
+elastic = neuralmodel.predict("elastic_modulus", composition, sampling=True, n_sample=n_sample)
+cte = neuralmodel.predict("cte", composition, sampling=True, n_sample=n_sample)
 
-aCpl = neuralmodel.predict("aCpl", composition, sampling=True, n_sample=20)
-ap = neuralmodel.predict("ap_calc", composition, sampling=True, n_sample=20)
-bCpl = neuralmodel.predict("bCpl", composition, sampling=True, n_sample=20)
+aCpl = neuralmodel.predict("aCpl", composition, sampling=True, n_sample=n_sample)
+ap = neuralmodel.predict("ap_calc", composition, sampling=True, n_sample=n_sample)
+bCpl = neuralmodel.predict("bCpl", composition, sampling=True, n_sample=n_sample)
 
 # TVF parameters
-A_VFT = neuralmodel.predict("a_tvf", composition, sampling=True, n_sample=20)
-B_VFT = neuralmodel.predict("b_tvf", composition, sampling=True, n_sample=20)
-C_VFT = neuralmodel.predict("c_tvf", composition, sampling=True, n_sample=20)
+A_VFT = neuralmodel.predict("a_tvf", composition, sampling=True, n_sample=n_sample)
+B_VFT = neuralmodel.predict("b_tvf", composition, sampling=True, n_sample=n_sample)
+C_VFT = neuralmodel.predict("c_tvf", composition, sampling=True, n_sample=n_sample)
 
 # parameters for other viscosity models
-A_AG = neuralmodel.predict("ae", composition, sampling=True, n_sample=20)
-A_AM = neuralmodel.predict("a_am", composition, sampling=True, n_sample=20)
-A_CG = neuralmodel.predict("a_cg", composition, sampling=True, n_sample=20)
+A_AG = neuralmodel.predict("ae", composition, sampling=True, n_sample=n_sample)
+A_AM = neuralmodel.predict("a_am", composition, sampling=True, n_sample=n_sample)
+A_CG = neuralmodel.predict("a_cg", composition, sampling=True, n_sample=n_sample)
 
-B_AG = neuralmodel.predict("be", composition, sampling=True, n_sample=20)
-B_CG = neuralmodel.predict("b_cg", composition, sampling=True, n_sample=20)
+B_AG = neuralmodel.predict("be", composition, sampling=True, n_sample=n_sample)
+B_CG = neuralmodel.predict("b_cg", composition, sampling=True, n_sample=n_sample)
 
-TO_CG = neuralmodel.predict("to_cg", composition, sampling=True, n_sample=20)
-C_CG = neuralmodel.predict("c_cg", composition, sampling=True, n_sample=20)
+TO_CG = neuralmodel.predict("to_cg", composition, sampling=True, n_sample=n_sample)
+C_CG = neuralmodel.predict("c_cg", composition, sampling=True, n_sample=n_sample)
 
 # WORKING POINTS
 WP_T = B_VFT/(3.-A_VFT) + C_VFT # working temperature
@@ -151,7 +159,7 @@ with st.expander("Notes on reported uncertainties (click to expand):"):
     st.markdown("""
                 1-sigma uncertainties calculated using MC Dropout are provided either in parenthesis 
                 for printed numbers or as shaded areas in figures. Due to speed and frugality considerations for this online calculator,
-                here uncertainties are evaluated using a limited number of model forward pass (n=200). 
+                here uncertainties are evaluated using a limited number of model forward pass (n=500). 
                 
                 For better uncertainties estimates, a larger number of forward pass may be necessary, and 
                 scaling with conformal prediction may also be best (see article). A Jupyter notebook
@@ -202,10 +210,10 @@ labels_ = ["Temperature, K", correspondance[option]]
 # Viscosity prediction with the choosen equation
 viscosity = neuralmodel.predict(correspondance[option],
                                 composition*np.ones((len(T_range),39)),
-                                T_range.reshape(-1,1), sampling=True, n_sample=20)
+                                T_range.reshape(-1,1), sampling=True, n_sample=n_sample)
 visco_mean = neuralmodel.predict(correspondance[option],
                                 composition*np.ones((len(T_range),39)),
-                                T_range.reshape(-1,1), sampling=False).mean(axis=1)
+                                T_range.reshape(-1,1), sampling=False)
 visco_lb = visco_mean - viscosity.std(axis=1)
 visco_ub = visco_mean + viscosity.std(axis=1)
 
@@ -218,12 +226,12 @@ raman_shift=np.arange(400.,1250.,1.0)
 raman = neuralmodel.predict("raman_pred", composition, sampling=True, n_sample=50)
 
 # calculate mean values and boundaries
-raman_mean = neuralmodel.predict("raman_pred", composition, sampling=False).mean(axis=2).ravel()
+raman_mean = neuralmodel.predict("raman_pred", composition, sampling=False).ravel()
 raman_lb = raman_mean - raman.std(axis=2).ravel()
 raman_ub = raman_mean + raman.std(axis=2).ravel()
 
 # record in dataframe for output
-raman_spectra = pd.DataFrame(np.vstack((raman_shift.ravel(), raman.mean(axis=2).ravel())).T, 
+raman_spectra = pd.DataFrame(np.vstack((raman_shift.ravel(), raman_mean)).T, 
                              columns=["Raman shift, cm-1","Intensity"])
 
 #
