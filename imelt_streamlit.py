@@ -24,7 +24,7 @@ st.markdown("""
             glasses and melts in the Na$_2$O-K$_2$O-MgO-CaO-Al$_2$O$_3$-SiO$_2$ system.
             
             For details
-            [see the references](https://www.sciencedirect.com/science/article/pii/S0016703721005007)
+            [see the references](https://i-melt.readthedocs.io/en/latest/references.html)
             and [download the code](https://github.com/charlesll/i-melt)!
 
             Select a composition using the sliders on the sidebar (left) and see predictions below. 
