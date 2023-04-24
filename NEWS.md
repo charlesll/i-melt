@@ -8,6 +8,7 @@
 
 - addition of CaO and MgO
 - addition of new properties
+- error bar calculations
 - update of the streamlit online calculator
 - many model changes, cleaning the notebooks
 - all source code is now in ./src
