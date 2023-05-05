@@ -4,7 +4,7 @@
 
 i-Melt is a physics-guided neural network model, that combines deep neural networks with physical equations to predict the structural, thermodynamic and dynamic properties of aluminosilicate melts and glasses.
 
-- **Web app** https://share.streamlit.io/charlesll/i-melt/imelt_streamlit.py
+- **Web app** https://i-melt.streamlit.app/
 - **Documentation (in progress)** https://i-melt.readthedocs.io/en/latest/
 - **Source code:** https://github.com/charlesll/i-melt/tree/main/i-melt/src/
 - **License:** https://github.com/charlesll/i-melt/LICENSE
