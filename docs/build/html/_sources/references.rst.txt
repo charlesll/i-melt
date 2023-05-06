@@ -9,3 +9,5 @@ https://medium.com/pytorch/from-windows-to-volcanoes-how-pytorch-is-helping-us-u
 `Le Losq C., Valentine A. P., 2021. charlesll/i-melt: i-Melt v1.2.1 (v1.2.1). Zenodo. https://doi.org/10.5281/zenodo.5342178 <https://doi.org/10.5281/zenodo.5342178>`_
 
 `Le Losq C., Baldoni B., Valentine A. P., 2023. charlesll/i-melt: i-Melt v2.0.0 (v2.0.0). Zenodo. https://doi.org/10.5281/zenodo.7858297 <https://doi.org/10.5281/zenodo.7858297>`_
+
+`Le Losq C., Badoni B., 2023. Machine learning modeling of the atomic structure and physical properties of alkali and alkaline-earth aluminosilicate glasses and melts. arXiv:2304.12123  https://doi.org/10.48550/arXiv.2304.12123 <https://doi.org/10.48550/arXiv.2304.12123>`_
