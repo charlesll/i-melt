@@ -22,7 +22,7 @@ The i-Melt project
 
 i-Melt is a physics-guided neural network model, that combines deep neural networks with physical equations to predict the structural, thermodynamic and dynamic properties of aluminosilicate melts and glasses.
 
-The project is hosted on `Github <https://github.com/charlesll/i-melt>`_, a `Streamlit web calculator <https://i-melt.streamlit.app/>`_ is available and you can read the paper explaining the model `here <https://doi.org/10.1016/j.gca.2021.08.023>`_!
+The project is hosted on `Github <https://github.com/charlesll/i-melt>`_, a `Streamlit web calculator <https://i-melt.streamlit.app/>`_ is available and you can read the papers explaining the model `here <https://doi.org/10.1016/j.gca.2021.08.023>`_ and `here <https://doi.org/10.48550/arXiv.2304.12123>`_!
 
 .. toctree::
    :maxdepth: 2
