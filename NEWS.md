@@ -4,6 +4,10 @@
 
 ## NEWS
 
+### V2.0.1
+
+- update of the Results_paper.ipynb notebook following the reviews of the manuscript.
+
 ### V2.0
 
 - addition of CaO and MgO
