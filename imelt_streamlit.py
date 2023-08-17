@@ -199,7 +199,7 @@ with st.expander("Viscosity Equations (click to expand):"):
     st.markdown("Avramov-Milchev")
     st.markdown("$$\\log_{{10}} \eta = {:0.2f} + (12 - {:0.2f})\\frac{{{:0.0f}}}{{T}}^{{(\\frac{{{:0.1f}}}{{(12 - {:0.2f})}})}}$$".format(A_AM.mean(),A_AM.mean(),tg.mean(),fragility.mean(),A_AM.mean()))
     st.markdown("Free Volume")
-    st.markdown("$$\\log_{{10}} \eta = {:0.2f} + \\frac{{2\times{:0.1f}}}{{(T - {:0.1f} +\sqrt{{(T - {:0.1f})^2 + {:0.1f}*T}}}}$$".format(A_CG.mean(),B_CG.mean(),TO_CG.mean(),TO_CG.mean(),C_CG.mean()))
+    st.markdown("$$\\log_{{10}} \eta = {:0.2f} + \\frac{{2 \\times{:0.1f}}}{{(T - {:0.1f} +\sqrt{{(T - {:0.1f})^2 + {:0.1f}*T}}}}$$".format(A_CG.mean(),B_CG.mean(),TO_CG.mean(),TO_CG.mean(),C_CG.mean()))
 ###
 # FIGURES and Download
 ###
