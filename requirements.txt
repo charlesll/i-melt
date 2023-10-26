@@ -5,7 +5,7 @@ rampy
 tqdm
 h5py
 torch
-sklearn
+scikit-learn
 pandas
 ax-platform
 seaborn
