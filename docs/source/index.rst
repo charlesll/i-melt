@@ -6,13 +6,12 @@
 Welcome to i-Melt's documentation!
 ==================================
 
-Copyright (2021-2023) C. Le Losq and co.
+Copyright (2021-2024) C. Le Losq and co.
 
 Charles Le Losq, Institut de physique du globe de Paris, University Paris Cité
 lelosq@ipgp.fr
 
 Barbara Baldoni, Institut de physique du globe de Paris, University Paris Cité
-baldoni@ipgp.fr
 
 Andrew P. Valentine, University of Durham
 andrew.valentine@durham.ac.uk
