@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'i-Melt'
-copyright = '2021-2023, Charles Le Losq, Barbara Baldoni, Andrew P. Valentine'
+copyright = '2021-2024, Charles Le Losq, Barbara Baldoni, Andrew P. Valentine'
 author = 'Charles Le Losq, Barbara Baldoni, Andrew P. Valentine'
 
 # The full version, including alpha/beta/rc tags
