@@ -4,7 +4,7 @@ Predictions
 Web calculator
 --------------
 
-The easiest way to try i-Melt is to use the `web calculator <https://share.streamlit.io/charlesll/i-melt/imelt_streamlit.py>`_.
+The easiest way to try i-Melt is to use the `web calculator <https://i-melt.streamlit.app/>`_.
 
 Jupyter notebooks
 -----------------

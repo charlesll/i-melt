@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Training the networks &mdash; i-Melt 2.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=51b770b3"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -86,10 +88,10 @@
            <div itemprop="articleBody">
              
   <section id="training-the-networks">
-<h1>Training the networks<a class="headerlink" href="#training-the-networks" title="Permalink to this heading"></a></h1>
+<h1>Training the networks<a class="headerlink" href="#training-the-networks" title="Link to this heading"></a></h1>
 <p>The easiest way of training one or multiple neural networks is to use the scripts that are provided in /src.</p>
 <section id="training-one-network">
-<h2>Training one network<a class="headerlink" href="#training-one-network" title="Permalink to this heading"></a></h2>
+<h2>Training one network<a class="headerlink" href="#training-one-network" title="Link to this heading"></a></h2>
 <p>The code <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/src/Training_single.py">Training_single.py</a> allows training only one network and playing with it. The following steps are performed.</p>
 <p>After importing the libraries (see notebook), we load the data:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span> <span class="c1"># training on the GPU</span>
@@ -152,22 +154,22 @@
 </div>
 </section>
 <section id="hyperparameter-tuning">
-<h2>Hyperparameter tuning<a class="headerlink" href="#hyperparameter-tuning" title="Permalink to this heading"></a></h2>
+<h2>Hyperparameter tuning<a class="headerlink" href="#hyperparameter-tuning" title="Link to this heading"></a></h2>
 <section id="ray-tune-optuna">
-<h3>RAY TUNE + OPTUNA<a class="headerlink" href="#ray-tune-optuna" title="Permalink to this heading"></a></h3>
+<h3>RAY TUNE + OPTUNA<a class="headerlink" href="#ray-tune-optuna" title="Link to this heading"></a></h3>
 <p>In the version 2.0, we rely on <a class="reference external" href="https://docs.ray.io/en/latest/tune/index.html">Ray Tune</a> and <a class="reference external" href="https://optuna.org/">Optuna</a> to search for the best models.</p>
 <p>The script <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/src/ray_opt.py">ray_opt.py</a> allows running a Ray Tune experiment.</p>
 <p>The script <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/src/ray_select.py">ray_select.py</a> allows selecting the best models
 based on posterior analysis of the Ray Tune experiment (all metrics recorded in an Excel spreadsheet that must be provided for model selection).</p>
 </section>
 <section id="bayesian-optimization">
-<h3>Bayesian optimization<a class="headerlink" href="#bayesian-optimization" title="Permalink to this heading"></a></h3>
+<h3>Bayesian optimization<a class="headerlink" href="#bayesian-optimization" title="Link to this heading"></a></h3>
 <p>CURRENTLY NOT WORKING</p>
 <p>The <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/src/bayesian_optim.py">bayesian_optim.py</a> script allows performing Bayesian Optimization for hyperparameter selection using AX plateform.</p>
 </section>
 </section>
 <section id="training-candidates">
-<h2>Training candidates<a class="headerlink" href="#training-candidates" title="Permalink to this heading"></a></h2>
+<h2>Training candidates<a class="headerlink" href="#training-candidates" title="Link to this heading"></a></h2>
 <p><strong>Note : this was used in v1.2 for model selection, but now we rely on the Ray Tune + Optuna run to select models.</strong></p>
 <p>In any case, this still works. The code <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/Training_candidates.py">Training_Candidates.py</a> allows training 100 networks with a given architecture and selects the 10 best ones, which are saved in ./model/best/ and used for future predictions.</p>
 </section>
