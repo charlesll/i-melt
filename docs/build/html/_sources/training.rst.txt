@@ -1,7 +1,16 @@
-Training the networks
+Training
 =====================
 
-The easiest way of training one or multiple neural networks is to use the scripts that are provided in /src.
+The i-Melt 2.1 library is meant to provide trained models and use them for predictions. 
+
+However, if you want to play with the code and train new models, you can do so following the instructions listed below. Note that paths will probably have to be slightly modified, as the current library is intended to be used for predictions and the code for training has been written prior to the latest "production release".
+
+Gettign the scripts
+-------------------
+
+Scripts for building, training models and providing useful functions are provided `here <https://github.com/charlesll/i-melt/blob/master/src/>`_.
+
+The easiest way of training one or multiple neural networks is to use those scripts. I suggest getting a copy of the Github repository and working in it directly, it will simplify things.
 
 Training one network
 --------------------
@@ -29,8 +38,8 @@ If we want to save the model and figures in the directories `./model/candidates/
 
 .. code-block:: python
 
-	utils.create_dir('./model/candidates/')
-	utils.create_dir('./figures/single/')
+	imelt.create_dir('./model/candidates/')
+	imelt.create_dir('./figures/single/')
 	
 Now we need a name for our model, we can generate it with the hyperparameters actually, this will help us having automatic names in case we try different architectures:
 
@@ -92,19 +101,12 @@ Hyperparameter tuning
 RAY TUNE + OPTUNA
 ^^^^^^^^^^^^^^^^^
 
-In the version 2.0, we rely on `Ray Tune <https://docs.ray.io/en/latest/tune/index.html>`_ and `Optuna <https://optuna.org/>`_ to search for the best models.
+In the version 2.0 and above, we rely on `Ray Tune <https://docs.ray.io/en/latest/tune/index.html>`_ and `Optuna <https://optuna.org/>`_ to search for the best models.
 
 The script `ray_opt.py <https://github.com/charlesll/i-melt/blob/master/src/ray_opt.py>`_ allows running a Ray Tune experiment.
 
 The script `ray_select.py <https://github.com/charlesll/i-melt/blob/master/src/ray_select.py>`_ allows selecting the best models 
 based on posterior analysis of the Ray Tune experiment (all metrics recorded in an Excel spreadsheet that must be provided for model selection).
-
-Bayesian optimization
-^^^^^^^^^^^^^^^^^^^^^
-
-CURRENTLY NOT WORKING
-
-The `bayesian_optim.py <https://github.com/charlesll/i-melt/blob/master/src/bayesian_optim.py>`_ script allows performing Bayesian Optimization for hyperparameter selection using AX plateform.
 
 Training candidates
 -------------------

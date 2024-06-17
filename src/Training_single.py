@@ -15,7 +15,6 @@ np.random.seed = 167 # fix random seed for reproducibility
 import time, torch, os
 
 # local imports
-import utils as utils
 import imelt as imelt
 
 from sklearn.metrics import mean_squared_error
@@ -58,11 +57,11 @@ p_drop = 0.15
 print("Network architecture is: {} layers, {} neurons/layers, dropout {}".format(nb_layers,nb_neurons,p_drop))
 
 # Create directories if they do not exist
-utils.create_dir('./model/')
-utils.create_dir('./figures/')
-utils.create_dir('./outputs/')
-utils.create_dir('./figures/single/')
-utils.create_dir('./outputs/single/')
+imelt.create_dir('./model/')
+imelt.create_dir('./figures/')
+imelt.create_dir('./outputs/')
+imelt.create_dir('./figures/single/')
+imelt.create_dir('./outputs/single/')
 
 name = "./model/l"+str(nb_layers)+"_n"+str(nb_neurons)+"_p"+str(p_drop)+"_GELU_cpfree"+".pth"
 

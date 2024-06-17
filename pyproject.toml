@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "imelt"
+version = "2.1.0"
+dependencies = [
+  "aws-fortuna",
+  "matplotlib",
+  "numpy",
+    "scipy",
+    "rampy",
+    "tqdm",
+    "h5py",
+    "torch",
+    "scikit-learn",
+    "pandas",
+    "seaborn",
+    "mpltern>=0.4",
+    "uncertainties",
+    "jupyter",
+    "openpyxl",
+    "corner",
+    "heatmapz",
+    "torchvision",
+    ]
+authors = [
+  {name = "Charles Le Losq", email = "lelosq@ipgp.fr"},
+  {name = "Barbara Baldoni", email = "lelosq@ipgp.fr"},
+  {name = "Andrew Valentine", email = "lelosq@ipgp.fr"},
+]
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+description = "A physics-guided neural network model for the prediction of structural, thermodynamic and dynamic properties of aluminosilicate melts and glasses."
+readme = "README.md"
+keywords = ["properties", "raman", "liquid", "glass", "magma", "aluminosilicate"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Programming Language :: Python"
+]
+
+[project.optional-dependencies]
+
+[tool.setuptools.package-data]
+"imelt" = ["models/best_list.csv",  "models/*.pth", "data/*.hdf5"]
+
+[project.urls]
+Homepage = "https://github.com/charlesll/i-melt"
+Documentation = "https://i-melt.readthedocs.io/en/latest/"
+Repository = "https://github.com/charlesll/i-melt.git"
+"Bug Tracker" = "https://github.com/charlesll/i-melt/issues"
+Changelog = "https://github.com/charlesll/i-melt/NEWS.md"

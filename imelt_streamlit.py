@@ -6,18 +6,18 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 
 # imelt
-import src.imelt as imelt
-import src.utils as utils
+import imelt.model as model
+import imelt.utils as utils
 
 st.set_page_config(layout="wide")
 
 # load the pre-trained 10 best models
-neuralmodel = imelt.load_pretrained_bagged()
+neuralmodel = model.load_pretrained_bagged()
 
 # streamlit preparation
 st.title('i-Melt: Prediction of melt and glass properties')
 st.markdown("""
-            (c) Le Losq C. and co. 2021-2023
+            (c) Le Losq C. and co. 2021-2024
             
             i-Melt is a greybox model that uses physical equations and machine 
             learning to predict the properties of
@@ -66,7 +66,8 @@ with st.sidebar.form(key='my_form'):
     st.write("Enter your composition below (will be rescaled to ensure it sums to 100%.) " 
              "\nWarning : there is no safeguard, "
              "you can enter any value you want, and ask for model extrapolation. " 
-             "Closely monitor predictive error bars to detect it.")
+             "Closely monitor predictive error bars to detect it."
+             "Tip: Do not hit enter until you finish typing your composition.")
     st.number_input("SiO\u2082 concentration, mol%",
                     min_value = 0.0,
                     max_value = 100.0,

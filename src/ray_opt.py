@@ -210,15 +210,7 @@ def objective(config):
     dtype = torch.float
 
     # custom data loader
-    ds = imelt.data_loader(path_viscosity = path+"data/NKCMAS_viscosity.hdf5", 
-                            path_raman = path+"data/NKCMAS_Raman.hdf5", 
-                            path_density = path+"data/NKCMAS_density.hdf5", 
-                            path_ri = path+"data/NKCMAS_optical.hdf5", 
-                            path_cp = path+"data/NKCMAS_cp.hdf5",
-                            path_elastic = path+"data/NKCMAS_em.hdf5",
-                            path_cte = path+"data/NKCMAS_cte.hdf5",
-                            path_abbe = path+"data/NKCMAS_abbe.hdf5",
-                            path_liquidus = path+"data/NKCMAS_tl.hdf5")
+    ds = imelt.data_loader()
 
     # model declaration
     net = imelt.model(ds.x_visco_train.shape[1],

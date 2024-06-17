@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Training the networks &mdash; i-Melt 2.0.0 documentation</title>
+  <title>Training &mdash; i-Melt 2.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -21,7 +21,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Result analysis" href="result_analysis.html" />
+    <link rel="next" title="Predictions" href="predictions.html" />
     <link rel="prev" title="Database" href="data.html" /> 
 </head>
 
@@ -48,18 +48,19 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data.html">Database</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Training the networks</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Training</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#gettign-the-scripts">Gettign the scripts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#training-one-network">Training one network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hyperparameter-tuning">Hyperparameter tuning</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ray-tune-optuna">RAY TUNE + OPTUNA</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#bayesian-optimization">Bayesian optimization</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#training-candidates">Training candidates</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="result_analysis.html">Result analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="predictions.html">Predictions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">Errors and bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 
@@ -77,7 +78,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Training the networks</li>
+      <li class="breadcrumb-item active">Training</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/training.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -87,9 +88,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="training-the-networks">
-<h1>Training the networks<a class="headerlink" href="#training-the-networks" title="Link to this heading"></a></h1>
-<p>The easiest way of training one or multiple neural networks is to use the scripts that are provided in /src.</p>
+  <section id="training">
+<h1>Training<a class="headerlink" href="#training" title="Link to this heading"></a></h1>
+<p>The i-Melt 2.1 library is meant to provide trained models and use them for predictions.</p>
+<p>However, if you want to play with the code and train new models, you can do so following the instructions listed below. Note that paths will probably have to be slightly modified, as the current library is intended to be used for predictions and the code for training has been written prior to the latest “production release”.</p>
+<section id="gettign-the-scripts">
+<h2>Gettign the scripts<a class="headerlink" href="#gettign-the-scripts" title="Link to this heading"></a></h2>
+<p>Scripts for building, training models and providing useful functions are provided <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/src/">here</a>.</p>
+<p>The easiest way of training one or multiple neural networks is to use those scripts. I suggest getting a copy of the Github repository and working in it directly, it will simplify things.</p>
+</section>
 <section id="training-one-network">
 <h2>Training one network<a class="headerlink" href="#training-one-network" title="Link to this heading"></a></h2>
 <p>The code <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/src/Training_single.py">Training_single.py</a> allows training only one network and playing with it. The following steps are performed.</p>
@@ -107,8 +114,8 @@
 </pre></div>
 </div>
 <p>If we want to save the model and figures in the directories <cite>./model/candidates/</cite> and <cite>./figures/single/</cite>, we can use this code to check if the folders exist, and create them if not:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">utils</span><span class="o">.</span><span class="n">create_dir</span><span class="p">(</span><span class="s1">&#39;./model/candidates/&#39;</span><span class="p">)</span>
-<span class="n">utils</span><span class="o">.</span><span class="n">create_dir</span><span class="p">(</span><span class="s1">&#39;./figures/single/&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">imelt</span><span class="o">.</span><span class="n">create_dir</span><span class="p">(</span><span class="s1">&#39;./model/candidates/&#39;</span><span class="p">)</span>
+<span class="n">imelt</span><span class="o">.</span><span class="n">create_dir</span><span class="p">(</span><span class="s1">&#39;./figures/single/&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Now we need a name for our model, we can generate it with the hyperparameters actually, this will help us having automatic names in case we try different architectures:</p>
@@ -157,15 +164,10 @@
 <h2>Hyperparameter tuning<a class="headerlink" href="#hyperparameter-tuning" title="Link to this heading"></a></h2>
 <section id="ray-tune-optuna">
 <h3>RAY TUNE + OPTUNA<a class="headerlink" href="#ray-tune-optuna" title="Link to this heading"></a></h3>
-<p>In the version 2.0, we rely on <a class="reference external" href="https://docs.ray.io/en/latest/tune/index.html">Ray Tune</a> and <a class="reference external" href="https://optuna.org/">Optuna</a> to search for the best models.</p>
+<p>In the version 2.0 and above, we rely on <a class="reference external" href="https://docs.ray.io/en/latest/tune/index.html">Ray Tune</a> and <a class="reference external" href="https://optuna.org/">Optuna</a> to search for the best models.</p>
 <p>The script <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/src/ray_opt.py">ray_opt.py</a> allows running a Ray Tune experiment.</p>
 <p>The script <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/src/ray_select.py">ray_select.py</a> allows selecting the best models
 based on posterior analysis of the Ray Tune experiment (all metrics recorded in an Excel spreadsheet that must be provided for model selection).</p>
-</section>
-<section id="bayesian-optimization">
-<h3>Bayesian optimization<a class="headerlink" href="#bayesian-optimization" title="Link to this heading"></a></h3>
-<p>CURRENTLY NOT WORKING</p>
-<p>The <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/src/bayesian_optim.py">bayesian_optim.py</a> script allows performing Bayesian Optimization for hyperparameter selection using AX plateform.</p>
 </section>
 </section>
 <section id="training-candidates">
@@ -180,7 +182,7 @@ based on posterior analysis of the Ray Tune experiment (all metrics recorded in 
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="data.html" class="btn btn-neutral float-left" title="Database" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="result_analysis.html" class="btn btn-neutral float-right" title="Result analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="predictions.html" class="btn btn-neutral float-right" title="Predictions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

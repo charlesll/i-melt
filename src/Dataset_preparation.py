@@ -5,8 +5,7 @@
 import  h5py, os
 
 # local imports
-import imelt as imelt
-import utils as utils
+import imelt
 
 import numpy as np
 import pandas as pd
@@ -21,22 +20,22 @@ import sklearn.model_selection as model_selection
 def prepare_raman(my_liste, output_file, include_embargo=False, rand_state=67, generate_figures=False):
     """prepare the raman dataset for the ML model"""
     # preprocess the spectra
-    spectra_long = utils.preprocess_raman(my_liste, generate_figures=generate_figures)
+    spectra_long = imelt.preprocess_raman(my_liste, generate_figures=generate_figures)
 
     # control dataset
-    my_liste = utils.chimie_control(my_liste)
+    my_liste = imelt.chimie_control(my_liste)
 
     # add descriptors, then train-valid-test split
-    X = utils.descriptors(my_liste.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X = imelt.descriptors(my_liste.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
     X_train, X_vt, y_train, y_vt = model_selection.train_test_split(X,spectra_long.T,test_size=0.20, random_state=rand_state) # train-test split
     X_valid, X_test, y_valid, y_test = model_selection.train_test_split(X_vt,y_vt,test_size=0.5, random_state=rand_state) # train-test split
     
     # same thing for embargoed files
     if include_embargo == True:
         liste_eb = pd.read_excel("./data/Database.xlsx", "RAMAN_EMBARGO")
-        liste_eb = utils.chimie_control(liste_eb)
-        spectra_embargo = utils.preprocess_raman(liste_eb, generate_figures=generate_figures)
-        X2 = utils.descriptors(liste_eb.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+        liste_eb = imelt.chimie_control(liste_eb)
+        spectra_embargo = imelt.preprocess_raman(liste_eb, generate_figures=generate_figures)
+        X2 = imelt.descriptors(liste_eb.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
         X_train2, X_test2, y_train2, y_test2 = model_selection.train_test_split(X2,spectra_embargo.T,test_size=0.15, random_state=rand_state) # train-test split
         
         # concatenate the datasets
@@ -57,22 +56,22 @@ def prepare_raman(my_liste, output_file, include_embargo=False, rand_state=67, g
 def prepare_cp(dataset,output_file, rand_state=60):
     """prepare the dataset of liquid heat capacity for the ML model"""
     # control dataset
-    dataset = utils.chimie_control(dataset)
+    dataset = imelt.chimie_control(dataset)
     
     # train-valid-test group stratified split
     # 90-5-5
-    train_, valid_, test_ = utils.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state, n_splits=10)
+    train_, valid_, test_ = imelt.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state, n_splits=10)
     
     # grab what we are interested in
-    X_cpl_train = utils.descriptors(train_.loc[:, ["sio2","al2o3","na2o","k2o","mgo","cao"]])
+    X_cpl_train = imelt.descriptors(train_.loc[:, ["sio2","al2o3","na2o","k2o","mgo","cao"]])
     T_cpl_train = train_.loc[:, ["T"]]
     y_cpl_train = train_.loc[:, ["Cp_l"]]
 
-    X_cpl_valid = utils.descriptors(valid_.loc[:, ["sio2","al2o3","na2o","k2o","mgo","cao"]])
+    X_cpl_valid = imelt.descriptors(valid_.loc[:, ["sio2","al2o3","na2o","k2o","mgo","cao"]])
     T_cpl_valid = valid_.loc[:, ["T"]]
     y_cpl_valid = valid_.loc[:, ["Cp_l"]]
 
-    X_cpl_test = utils.descriptors(test_.loc[:, ["sio2","al2o3","na2o","k2o","mgo","cao"]])
+    X_cpl_test = imelt.descriptors(test_.loc[:, ["sio2","al2o3","na2o","k2o","mgo","cao"]])
     T_cpl_test = test_.loc[:, ["T"]]
     y_cpl_test = test_.loc[:, ["Cp_l"]]
     
@@ -101,16 +100,16 @@ def prepare_density(dataset, output_file, rand_state=60):
     """prepare the dataset of glass density for the ML model"""
     
     # control dataset
-    dataset = utils.chimie_control(dataset)
+    dataset = imelt.chimie_control(dataset)
 
     # train-valid-test split
     # 80-10-10
-    train_, valid_, test_ = utils.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state)
+    train_, valid_, test_ = imelt.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state)
     
     # grab good X columns and add descriptors
-    X_train = utils.descriptors(train_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_valid = utils.descriptors(valid_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_test = utils.descriptors(test_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_train = imelt.descriptors(train_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_valid = imelt.descriptors(valid_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_test = imelt.descriptors(test_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
 
     # grab the good y values
     y_train = train_.loc[:, ["d"]].values.reshape(-1,1)
@@ -133,16 +132,16 @@ def prepare_liquidus(dataset, output_file, rand_state=60):
     """prepare the dataset of glass density for the ML model"""
     
     # control dataset
-    dataset = utils.chimie_control(dataset)
+    dataset = imelt.chimie_control(dataset)
 
     # train-valid-test split
     # 80-10-10
-    train_, valid_, test_ = utils.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state)
+    train_, valid_, test_ = imelt.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state)
     
     # grab good X columns and add descriptors
-    X_train = utils.descriptors(train_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_valid = utils.descriptors(valid_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_test = utils.descriptors(test_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_train = imelt.descriptors(train_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_valid = imelt.descriptors(valid_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_test = imelt.descriptors(test_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
 
     # grab the good y values
     y_train = train_.loc[:, ["T_K"]].values.reshape(-1,1)
@@ -165,16 +164,16 @@ def prepare_abbe(dataset, output_file, rand_state=60):
     """prepare the dataset of glass Abbe Number for the ML model"""
     
     # control dataset
-    dataset = utils.chimie_control(dataset)
+    dataset = imelt.chimie_control(dataset)
 
     # train-valid-test split
     # 80-10-10
-    train_, valid_, test_ = utils.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state)
+    train_, valid_, test_ = imelt.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state)
     
     # grab good X columns and add descriptors
-    X_train = utils.descriptors(train_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_valid = utils.descriptors(valid_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_test = utils.descriptors(test_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_train = imelt.descriptors(train_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_valid = imelt.descriptors(valid_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_test = imelt.descriptors(test_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
 
     # grab the good y values
     y_train = train_.loc[:, ["AbbeNumber"]].values.reshape(-1,1)
@@ -197,16 +196,16 @@ def prepare_elastic(dataset, output_file, rand_state=60):
     """prepare the dataset of glass elastic modulus for the ML model"""
     
     # control dataset
-    dataset = utils.chimie_control(dataset)
+    dataset = imelt.chimie_control(dataset)
 
     # train-valid-test split
     # 80-10-10
-    train_, valid_, test_ = utils.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state)
+    train_, valid_, test_ = imelt.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state)
     
     # grab good X columns and add descriptors
-    X_train = utils.descriptors(train_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_valid = utils.descriptors(valid_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_test = utils.descriptors(test_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_train = imelt.descriptors(train_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_valid = imelt.descriptors(valid_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_test = imelt.descriptors(test_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
 
     # grab the good y values
     y_train = train_.loc[:, ["EM"]].values.reshape(-1,1)
@@ -231,16 +230,16 @@ def prepare_cte(dataset, output_file, rand_state=60):
     CTE are scaled with a 1e6 coefficient to avoid numerical issues"""
     
     # control dataset
-    dataset = utils.chimie_control(dataset)
+    dataset = imelt.chimie_control(dataset)
 
     # train-valid-test split
     # 80-10-10
-    train_, valid_, test_ = utils.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state)
+    train_, valid_, test_ = imelt.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state)
     
     # grab good X columns and add descriptors
-    X_train = utils.descriptors(train_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_valid = utils.descriptors(valid_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_test = utils.descriptors(test_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_train = imelt.descriptors(train_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_valid = imelt.descriptors(valid_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_test = imelt.descriptors(test_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
 
     # grab the good y values
     y_train = train_.loc[:, ["CTE_scaled"]].values.reshape(-1,1)
@@ -263,23 +262,23 @@ def prepare_viscosity(dataset,output_file, rand_state=67, include_embargo=False)
     """prepare the dataset of glass-forming melt viscosity for the ML model"""
     print('Reading data...')
     # reading the Pandas dataframe
-    dataset = utils.chimie_control(dataset)
+    dataset = imelt.chimie_control(dataset)
 
     ####
     # viscosity
     # train-valid-test group stratified split
     # 80-10-10
     ####
-    train_, valid_, test_ = utils.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state)
+    train_, valid_, test_ = imelt.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state)
     
     if include_embargo == True:
-        dataset_eb = utils.chimie_control(pd.read_excel("./data/Database.xlsx", sheet_name="VISCO_EMBARGO"))
+        dataset_eb = imelt.chimie_control(pd.read_excel("./data/Database.xlsx", sheet_name="VISCO_EMBARGO"))
         train_ = pd.concat([train_, dataset_eb], axis=0)
 
     # grab good X columns and add descriptors
-    X_train = utils.descriptors(train_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_valid = utils.descriptors(valid_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_test = utils.descriptors(test_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_train = imelt.descriptors(train_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_valid = imelt.descriptors(valid_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_test = imelt.descriptors(test_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
 
     # temperature values
     T_train = train_.loc[:,"T"].values.reshape(-1,1)
@@ -300,7 +299,7 @@ def prepare_viscosity(dataset,output_file, rand_state=67, include_embargo=False)
     # we drop all rows without entropy values and get only one value per composition
     dataset_entropy = dataset.dropna(subset=['Sc']).copy()
     dataset_entropy.drop_duplicates(subset ="Name",keep = "first", inplace = True)
-    dataset_entropy["class"] = utils.class_data(dataset_entropy)
+    dataset_entropy["class"] = imelt.class_data(dataset_entropy)
 
     # 80-10-10 split
     train_entropy, tv_entropy = model_selection.train_test_split(dataset_entropy,
@@ -316,9 +315,9 @@ def prepare_viscosity(dataset,output_file, rand_state=67, include_embargo=False)
 
     X_columns = ["sio2","al2o3","na2o","k2o","mgo","cao"] # for output
     # get good columns and add descriptors
-    X_entropy_train = utils.descriptors(train_entropy.loc[:,X_columns]).values
-    X_entropy_valid = utils.descriptors(valid_entropy.loc[:,X_columns]).values
-    X_entropy_test = utils.descriptors(test_entropy.loc[:,X_columns]).values
+    X_entropy_train = imelt.descriptors(train_entropy.loc[:,X_columns]).values
+    X_entropy_valid = imelt.descriptors(valid_entropy.loc[:,X_columns]).values
+    X_entropy_test = imelt.descriptors(test_entropy.loc[:,X_columns]).values
     
     y_entropy_train = train_entropy.loc[:,"Sc"].values
     y_entropy_valid = valid_entropy.loc[:,"Sc"].values
@@ -342,9 +341,9 @@ def prepare_viscosity(dataset,output_file, rand_state=67, include_embargo=False)
     test_tg.drop_duplicates(subset ="Name",keep = "first", inplace = True)
 
     # add descriptors and convert to numpy and continue
-    X_tg_train = utils.descriptors(train_tg.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_tg_valid = utils.descriptors(valid_tg.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_tg_test = utils.descriptors(test_tg.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_tg_train = imelt.descriptors(train_tg.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_tg_valid = imelt.descriptors(valid_tg.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_tg_test = imelt.descriptors(test_tg.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
 
     y_tg_train = train_tg.loc[:,"tg"].values
     y_tg_valid = valid_tg.loc[:,"tg"].values
@@ -405,16 +404,16 @@ def prepare_ri(dataset,output_file, rand_state=81):
     """prepare the optical refractive index data for the ML model"""
     
     # control dataset
-    dataset = utils.chimie_control(dataset)
+    dataset = imelt.chimie_control(dataset)
 
     # train-valid-test split
     # 80-10-10
-    train_, valid_, test_ = utils.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state)
+    train_, valid_, test_ = imelt.stratified_group_splitting(dataset, "Name", verbose = True, random_state = rand_state)
     
     # grab good X columns and add descriptors
-    X_train = utils.descriptors(train_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_valid = utils.descriptors(valid_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
-    X_test = utils.descriptors(test_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_train = imelt.descriptors(train_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_valid = imelt.descriptors(valid_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+    X_test = imelt.descriptors(test_.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
 
     # lambda values
     lbd_train = train_.loc[:,"lbd"].values.reshape(-1,1)*1e-3

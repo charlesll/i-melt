@@ -8,7 +8,7 @@ import scipy, h5py, matplotlib, torch
 import pandas as pd
 import matplotlib.pyplot as plt
 
-import imelt as imelt
+import imelt
 device = torch.device('cpu')
 
 import mpltern
@@ -17,7 +17,7 @@ from matplotlib.ticker import MultipleLocator, AutoMinorLocator
 ###
 # Make Figures Functions
 ###
-def figure1(ds, savepath="./figures/datasets/Figure_TernaryData.pdf"):
+def figure1(ds, savepath="../figures/datasets/Figure_TernaryData.pdf"):
     plt.figure(figsize=(10,10),dpi=150)
 
     colors = ['dodgerblue', 'tomato', 'limegreen']
@@ -152,7 +152,7 @@ def figure1(ds, savepath="./figures/datasets/Figure_TernaryData.pdf"):
     plt.savefig(savepath)
     plt.close()
 
-def figure2(ds, savepath="./figures/datasets/Figure_TernaryData_forpresentations.pdf"):
+def figure2(ds, savepath="../figures/datasets/Figure_TernaryData_forpresentations.pdf"):
     ###
     # For presentations
     ###
@@ -215,7 +215,7 @@ def figure2(ds, savepath="./figures/datasets/Figure_TernaryData_forpresentations
     plt.savefig(savepath,bbox_inches='tight')
     plt.close()
 
-def figure3(ds, savepath="./figures/datasets/Figure_repartition.pdf"):
+def figure3(ds, savepath="../figures/datasets/Figure_repartition.pdf"):
     
     ###
     # # Quantity of each chemical component in the dataset
