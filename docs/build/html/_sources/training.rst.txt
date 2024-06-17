@@ -1,4 +1,4 @@
-Training the networks
+Training
 =====================
 
 The i-Melt 2.1 library is meant to provide trained models and use them for predictions. 
