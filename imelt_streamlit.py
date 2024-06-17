@@ -115,7 +115,7 @@ composition = imelt.descriptors(pd.DataFrame(composition, columns=['sio2', 'al2o
 n_sample = 25
 tg = neuralmodel.predict("tg", composition, sampling=True, n_sample=n_sample)
 density = neuralmodel.predict("density_glass", composition, sampling=True, n_sample=n_sample)
-ri = neuralmodel.predict("sellmeier", composition, lbd=[589.0*1e-3], sampling=True, n_sample=n_sample)
+ri = neuralmodel.predict("sellmeier", composition, lbd=np.array([589.0*1e-3,]), sampling=True, n_sample=n_sample)
 sctg = neuralmodel.predict("sctg", composition, sampling=True, n_sample=n_sample)
 fragility = neuralmodel.predict("fragility", composition, sampling=True, n_sample=n_sample)
 liquidus = neuralmodel.predict("liquidus", composition, sampling=True, n_sample=n_sample)
