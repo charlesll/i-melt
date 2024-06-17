@@ -6,13 +6,12 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 
 # imelt
-import imelt.model as model
-import imelt.utils as utils
+import imelt
 
 st.set_page_config(layout="wide")
 
 # load the pre-trained 10 best models
-neuralmodel = model.load_pretrained_bagged()
+neuralmodel = imelt.load_pretrained_bagged()
 
 # streamlit preparation
 st.title('i-Melt: Prediction of melt and glass properties')
@@ -110,7 +109,7 @@ with st.sidebar.form(key='my_form'):
     submit_button = st.form_submit_button(label='Calculate!', on_click=form_callback)
 composition =  np.array([st.session_state.x1/100, st.session_state.x2/100, st.session_state.x3/100, st.session_state.x4/100, st.session_state.x5/100, st.session_state.x6/100]).reshape(1,-1)
 
-composition = utils.descriptors(pd.DataFrame(composition, columns=['sio2', 'al2o3', 'na2o', 'k2o', 'mgo', 'cao'])).values
+composition = imelt.descriptors(pd.DataFrame(composition, columns=['sio2', 'al2o3', 'na2o', 'k2o', 'mgo', 'cao'])).values
 
 # PROPERTIES
 n_sample = 25
