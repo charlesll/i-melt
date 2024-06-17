@@ -1,8 +1,15 @@
 # i-Melt
 
-(c) 2021-2023 Charles Le Losq and co., lelosq@ipgp.fr
+(c) 2021-2024 Charles Le Losq and co., lelosq@ipgp.fr
 
 ## NEWS
+
+### V2.1.0
+
+- i-Melt is now a Python package : install it using 'pip install imelt' !
+- new examples, see the new examples folder in the repository
+- the database has been moved in the folder ./src/imelt/data
+- functions to simplify queries are available: generate_query_single and generate_query_range
 
 ### V2.0.1
 

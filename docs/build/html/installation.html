@@ -48,13 +48,13 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#general-preparation">General preparation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installation-of-libraries-for-i-melt">Installation of libraries for i-Melt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-of-i-melt">Installation of i-Melt</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="data.html">Database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="training.html">Training the networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="result_analysis.html">Result analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="predictions.html">Predictions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 
@@ -91,14 +91,19 @@
 a set of tutorials for the beginner.</p>
 <p>You can install <a class="reference external" href="https://www.anaconda.com/products/individual">Anaconda Python</a> to get a running Python distribution. See the documentation of Anaconda for those steps.</p>
 </section>
-<section id="installation-of-libraries-for-i-melt">
-<h2>Installation of libraries for i-Melt<a class="headerlink" href="#installation-of-libraries-for-i-melt" title="Link to this heading"></a></h2>
-<p>The necessary libraries are listed in the requirements.txt file.</p>
-<p>Scripts for building, training models and providing useful functions are contained in the <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/src/">src</a> folder.</p>
-<p>Starting from a barebone Python 3 environment with pip installed, simply open a terminal pointing to the working folder and type:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install --user -r requirements.txt
-</pre></div>
-</div>
+<section id="installation-of-i-melt">
+<h2>Installation of i-Melt<a class="headerlink" href="#installation-of-i-melt" title="Link to this heading"></a></h2>
+<p>i-Melt is now a Python package. It supports Python 3.8 or higher. Install it using pip:</p>
+<blockquote>
+<div><p><cite>$ pip install imelt</cite></p>
+</div></blockquote>
+<p>There may be a problem with the installation of aws-fortuna.</p>
+<p>Apparently there is problems with the versions of jax and flax for this package. I reported it but this is still ongoing.
+For now, an easy fix is to install aws-fortuna, and then to upgrade jax and flax to the latest versions:</p>
+<blockquote>
+<div><p><cite>$ pip install –upgrade jax flax</cite></p>
+</div></blockquote>
+<p>There will be a version error message, but disregard it, aws-fortuna works and there is no problem anymore.</p>
 </section>
 </section>
 

@@ -21,8 +21,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="References" href="references.html" />
-    <link rel="prev" title="Result analysis" href="result_analysis.html" /> 
+    <link rel="next" title="Tutorials" href="tutorials.html" />
+    <link rel="prev" title="Training the networks" href="training.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -49,12 +49,12 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data.html">Database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="training.html">Training the networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="result_analysis.html">Result analysis</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Predictions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#web-calculator">Web calculator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#jupyter-notebooks">Jupyter notebooks</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 
@@ -90,10 +90,7 @@
 </section>
 <section id="jupyter-notebooks">
 <h2>Jupyter notebooks<a class="headerlink" href="#jupyter-notebooks" title="Link to this heading"></a></h2>
-<p>More control can be achieved using directly the i-melt library.</p>
-<p>Several example notebooks are provided in the main repository. We invite you to have a look at them directly.</p>
-<p>If you want to have an example of use for making predictions for a given composition, have a
-look at the <a class="reference external" href="https://share.streamlit.io/charlesll/i-melt/Example_Prediction_OneComposition.ipynb">Example_Prediction_OneComposition.ipynb</a> notebook.</p>
+<p>More control can be achieved using directly the i-melt Python library. Have a look at the <a class="reference internal" href="tutorials.html"><span class="doc">Tutorials</span></a> page.</p>
 <p>The steps are simple. First, import the necessary libraries and imelt:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span> <span class="c1">#matplotlib magic</span>
 
@@ -101,29 +98,64 @@ look at the <a class="reference external" href="https://share.streamlit.io/charl
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> <span class="c1"># for arrays</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> <span class="c1"># for dataframes</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> <span class="c1"># for plotting</span>
-<span class="kn">import</span> <span class="nn">src.imelt</span> <span class="k">as</span> <span class="nn">imelt</span> <span class="c1"># imelt core functions</span>
-<span class="kn">import</span> <span class="nn">src.utils</span> <span class="k">as</span> <span class="nn">utils</span> <span class="c1"># utility functions</span>
+<span class="kn">import</span> <span class="nn">imelt</span>
 </pre></div>
 </div>
 <p>Then, we can load the pre-trained i-melt models as one Python object:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">imelt_model</span> <span class="o">=</span> <span class="n">imelt</span><span class="o">.</span><span class="n">load_pretrained_bagged</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Now we can define a composition of interest in a Panda dataframe.
-We also automatically add descriptors to the composition.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">composition</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.75</span><span class="p">,</span> <span class="c1"># SiO2</span>
-              <span class="mf">0.125</span><span class="p">,</span> <span class="c1"># Al2O3</span>
-              <span class="mf">0.125</span><span class="p">,</span> <span class="c1"># Na2O</span>
-              <span class="mf">0.0</span><span class="p">,</span> <span class="c1"># K2O</span>
-              <span class="mf">0.0</span><span class="p">,</span> <span class="c1"># MgO</span>
-              <span class="mf">0.0</span><span class="p">]</span> <span class="c1"># CaO</span>
-
-<span class="c1"># we transform composition in a dataframe and add descriptors</span>
-<span class="n">composition</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">composition</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sio2&quot;</span><span class="p">,</span><span class="s2">&quot;al2o3&quot;</span><span class="p">,</span><span class="s2">&quot;na2o&quot;</span><span class="p">,</span><span class="s2">&quot;k2o&quot;</span><span class="p">,</span><span class="s2">&quot;mgo&quot;</span><span class="p">,</span><span class="s2">&quot;cao&quot;</span><span class="p">])</span>
-<span class="n">composition</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">descriptors</span><span class="p">(</span><span class="n">composition</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s2">&quot;sio2&quot;</span><span class="p">,</span><span class="s2">&quot;al2o3&quot;</span><span class="p">,</span><span class="s2">&quot;na2o&quot;</span><span class="p">,</span><span class="s2">&quot;k2o&quot;</span><span class="p">,</span><span class="s2">&quot;mgo&quot;</span><span class="p">,</span><span class="s2">&quot;cao&quot;</span><span class="p">]])</span><span class="o">.</span><span class="n">values</span>
+<p>Now we can define a composition of interest using the <cite>generate_query_single</cite> function:
+It does everything automatically for us, including the addition of descriptors.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">composition</span> <span class="o">=</span> <span class="n">imelt</span><span class="o">.</span><span class="n">generate_query_single</span><span class="p">(</span><span class="n">sio2</span> <span class="o">=</span> <span class="mf">75.0</span><span class="p">,</span>
+                                        <span class="n">al2o3</span> <span class="o">=</span> <span class="mf">12.5</span><span class="p">,</span>
+                                        <span class="n">na2o</span> <span class="o">=</span> <span class="mf">12.5</span><span class="p">,</span>
+                                        <span class="n">k2o</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+                                        <span class="n">mgo</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+                                        <span class="n">cao</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+                                 <span class="n">composition_mole</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Predictions can be obtained for Tg with:</p>
+<p>To get predictions from the model <cite>imelt_model</cite>, we use its <cite>predict</cite> method:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">prediction</span> <span class="o">=</span> <span class="n">imelt_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="s2">&quot;property&quot;</span><span class="p">,</span> <span class="n">composition</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>where “property” is a string indicating the property you want, composition is a compositional array that has been put in good shape (simply use the <cite>generate_query_single</cite> or <cite>generate_query_range</cite> to do so). Optional arguments are the temperature T and lbd, the optical wavelength at which you want the optical refractive index if that is what you are after.</p>
+<p>Here is a list of the “property” available:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>melt viscosity (log10 Pa s) using Adam-Gibbs: enter “ag”</p></li>
+<li><p>melt viscosity (log10 Pa s) using Vogel-Tammann-Fulcher: enter “tvf”</p></li>
+<li><p>melt viscosity (log10 Pa s) using Free Volume: enter “cg”</p></li>
+<li><p>melt viscosity (log10 Pa s) using Avramov-Milchev: enter “am”</p></li>
+<li><p>melt viscosity (log10 Pa s) using MYEGA: enter “myega”</p></li>
+<li><p>melt fragility : enter “fragility”</p></li>
+<li><p>melt liquidus (K) : enter “liquidus”</p></li>
+<li><p>glass transition temperature (K): enter “tg”</p></li>
+<li><p>glass configurational entropy (J/mol/K) : enter “sctg”</p></li>
+<li><p>glass density (in K): enter “density_glass”</p></li>
+<li><p>glass elastic modulus (GPa) : enter “elastic_modulus”</p></li>
+<li><p>glass coefficient of thermal expansion : enter “cte”</p></li>
+<li><p>glass Abbe number : enter “abbe”</p></li>
+<li><p>glass optical refractive index : enter “sellmeier”</p></li>
+<li><p>glass Raman spectrum : enter “raman_pred”</p></li>
+</ul>
+<p>Note that for the melt viscosity you must provide a vector of temperature, and for the glass optical refractive you must provide a vector of wavelength.</p>
+</div></blockquote>
+<p>For instance, if you want predictions for melt viscosity between 1000 and 3000 K with a step of 1 K, you will do</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">T_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">1000.0</span><span class="p">,</span> <span class="mf">3000.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">viscosity</span> <span class="o">=</span> <span class="n">imelt_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="s2">&quot;vft&quot;</span><span class="p">,</span> <span class="n">composition</span><span class="p">,</span> <span class="n">T_range</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To get the glass optical refractive index at 589 nm, you will do:</p>
+<p>WARNING : lambda is provided in microns !</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lbd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">589.0</span><span class="o">*</span><span class="mf">1e-3</span><span class="p">])</span> <span class="c1"># warning: enter wavenumber in microns</span>
+<span class="n">ri</span> <span class="o">=</span> <span class="n">imelt_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="s2">&quot;sellmeier&quot;</span><span class="p">,</span> <span class="n">composition</span><span class="p">,</span> <span class="n">lbd</span><span class="o">=</span><span class="n">lbd</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And for a property such as Tg, you can do:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tg</span> <span class="o">=</span> <span class="n">imelt_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="s2">&quot;tg&quot;</span><span class="p">,</span> <span class="n">composition</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -143,11 +175,11 @@ We also automatically add descriptors to the composition.</p>
 </div>
 <p>We can predict the viscosity with the Vogel-Tammann-Fulscher equation. First, we create a array containing the temperatures of interest, then we calculate the viscosity:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">T_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">600</span><span class="p">,</span> <span class="mi">1500</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c1"># from 600 to 1500 K with 1 K steps</span>
-<span class="n">viscosity</span> <span class="o">=</span> <span class="n">imelt_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="s2">&quot;tvf&quot;</span><span class="p">,</span><span class="n">composition</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">T_range</span><span class="p">),</span><span class="mi">39</span><span class="p">)),</span><span class="n">T_range</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">viscosity</span> <span class="o">=</span> <span class="n">imelt_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="s2">&quot;tvf&quot;</span><span class="p">,</span> <span class="n">composition</span><span class="p">,</span> <span class="n">T_range</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In the above code note that the composition array has to be modified so that you have as many lines as you have temperatures to predict.</p>
-<p>Many other predictions are possible, look at the Jupyter notebooks for more details and examples.</p>
+<p>Many other predictions are possible, look at the <a class="reference internal" href="tutorials.html"><span class="doc">Tutorials</span></a> for more details and examples.</p>
 </section>
 </section>
 
@@ -155,8 +187,8 @@ We also automatically add descriptors to the composition.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="result_analysis.html" class="btn btn-neutral float-left" title="Result analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="references.html" class="btn btn-neutral float-right" title="References" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="training.html" class="btn btn-neutral float-left" title="Training the networks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorials.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

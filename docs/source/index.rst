@@ -30,8 +30,9 @@ The project is hosted on `Github <https://github.com/charlesll/i-melt>`_, a `Str
    installation
    data
    training
-   result_analysis
    predictions
+   tutorials
+   bugs
    references
 
 Indices and tables

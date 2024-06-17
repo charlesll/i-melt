@@ -14,8 +14,8 @@ import time, h5py, torch, shutil
 
 from sklearn.metrics import mean_squared_error
 
-import imelt
-import utils
+import imelt.model as model
+import imelt.utils as utils
 
 from tqdm import tqdm
 
@@ -28,7 +28,7 @@ def train_candidates(nb_layers = 4, nb_neurons = 300, p_drop = 0.15, nb_exp = 50
     print("Calculation will be performed on {}".format(device))
     
     # custom data loader, automatically sent to device
-    ds = imelt.data_loader()
+    ds = model.data_loader()
 
     for i in range(nb_exp):
 
@@ -37,7 +37,7 @@ def train_candidates(nb_layers = 4, nb_neurons = 300, p_drop = 0.15, nb_exp = 50
         name = "./model/candidates/l"+str(nb_layers)+"_n"+str(nb_neurons)+"_p"+str(p_drop)+"_m"+str(i)+".pth"
 
         # declaring model
-        neuralmodel = imelt.model(ds.x_visco_train.shape[1],nb_neurons,nb_layers,ds.nb_channels_raman,
+        neuralmodel = model.model(ds.x_visco_train.shape[1],nb_neurons,nb_layers,ds.nb_channels_raman,
                                   activation_function = torch.nn.GELU(), p_drop=p_drop
                                  )
 
@@ -51,7 +51,7 @@ def train_candidates(nb_layers = 4, nb_neurons = 300, p_drop = 0.15, nb_exp = 50
         neuralmodel.to(device)
 
         optimizer = torch.optim.Adam(neuralmodel.parameters(), lr = 0.0003, weight_decay=0.00) # optimizer
-        neuralmodel, record_train_loss, record_valid_loss = imelt.training(neuralmodel, ds, criterion, optimizer, 
+        neuralmodel, record_train_loss, record_valid_loss = model.training(neuralmodel, ds, criterion, optimizer, 
                                                                            save_switch=True, save_name=name, nb_folds=1, train_patience=400, min_delta=0.05, verbose=True)
 
 def detect_save(nb_layers = 4, nb_neurons = 300, p_drop = 0.15, nb_exp = 50):
@@ -63,13 +63,13 @@ def detect_save(nb_layers = 4, nb_neurons = 300, p_drop = 0.15, nb_exp = 50):
     """
     
     # custom data loader, automatically sent to device
-    ds = imelt.data_loader()
+    ds = model.data_loader()
     
     # scaling coefficients for loss function
     # viscosity is always one
     # scaling coefficients for loss function
     # viscosity is always one
-    ls = imelt.loss_scales()
+    ls = model.loss_scales()
     entro_scale = ls.entro
     raman_scale = ls.raman
     density_scale = ls.density
@@ -121,7 +121,7 @@ def detect_save(nb_layers = 4, nb_neurons = 300, p_drop = 0.15, nb_exp = 50):
         record_loss.loc[i,"name"] = "l"+str(nb_layers)+"_n"+str(nb_neurons)+"_p"+str(p_drop)+"_m"+str(i)+".pth"
 
         # declaring model
-        neuralmodel = imelt.model(ds.x_visco_train.shape[1],nb_neurons,nb_layers,ds.nb_channels_raman,
+        neuralmodel = model.model(ds.x_visco_train.shape[1],nb_neurons,nb_layers,ds.nb_channels_raman,
                                   p_drop=p_drop, activation_function = torch.nn.GELU())
         neuralmodel.load_state_dict(torch.load(name, map_location='cpu'))
         neuralmodel.to('cpu')

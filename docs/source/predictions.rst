@@ -9,12 +9,8 @@ The easiest way to try i-Melt is to use the `web calculator <https://i-melt.stre
 Jupyter notebooks
 -----------------
 
-More control can be achieved using directly the i-melt library. 
+More control can be achieved using directly the i-melt Python library. Have a look at the :doc:`tutorials` page.
 
-Several example notebooks are provided in the main repository. We invite you to have a look at them directly.
-
-If you want to have an example of use for making predictions for a given composition, have a 
-look at the `Example_Prediction_OneComposition.ipynb <https://share.streamlit.io/charlesll/i-melt/Example_Prediction_OneComposition.ipynb>`_ notebook.
 
 The steps are simple. First, import the necessary libraries and imelt:
 
@@ -26,8 +22,7 @@ The steps are simple. First, import the necessary libraries and imelt:
   import numpy as np # for arrays
   import pandas as pd # for dataframes
   import matplotlib.pyplot as plt # for plotting
-  import src.imelt as imelt # imelt core functions
-  import src.utils as utils # utility functions
+  import imelt
 
 Then, we can load the pre-trained i-melt models as one Python object:
 
@@ -35,23 +30,64 @@ Then, we can load the pre-trained i-melt models as one Python object:
 
   imelt_model = imelt.load_pretrained_bagged()
 
-Now we can define a composition of interest in a Panda dataframe. 
-We also automatically add descriptors to the composition.
+Now we can define a composition of interest using the `generate_query_single` function:
+It does everything automatically for us, including the addition of descriptors.
 
 .. code-block:: python
 
-  composition = [0.75, # SiO2
-                0.125, # Al2O3
-                0.125, # Na2O
-                0.0, # K2O
-                0.0, # MgO
-                0.0] # CaO
+  composition = imelt.generate_query_single(sio2 = 75.0, 
+                                          al2o3 = 12.5,
+                                          na2o = 12.5, 
+                                          k2o = 0.0,
+                                          mgo = 0.0,
+                                          cao = 0.0, 
+                                   composition_mole=True)
 
-  # we transform composition in a dataframe and add descriptors
-  composition = pd.DataFrame(np.array(composition).reshape(1,6), columns=["sio2","al2o3","na2o","k2o","mgo","cao"])
-  composition = utils.descriptors(composition.loc[:,["sio2","al2o3","na2o","k2o","mgo","cao"]]).values
+To get predictions from the model `imelt_model`, we use its `predict` method:
 
-Predictions can be obtained for Tg with:
+  .. code-block:: python
+
+      prediction = imelt_model.predict("property", composition)
+
+where "property" is a string indicating the property you want, composition is a compositional array that has been put in good shape (simply use the `generate_query_single` or `generate_query_range` to do so). Optional arguments are the temperature T and lbd, the optical wavelength at which you want the optical refractive index if that is what you are after.
+
+Here is a list of the "property" available:
+
+  - melt viscosity (log10 Pa s) using Adam-Gibbs: enter "ag"
+  - melt viscosity (log10 Pa s) using Vogel-Tammann-Fulcher: enter "tvf"
+  - melt viscosity (log10 Pa s) using Free Volume: enter "cg"
+  - melt viscosity (log10 Pa s) using Avramov-Milchev: enter "am"
+  - melt viscosity (log10 Pa s) using MYEGA: enter "myega"
+  - melt fragility : enter "fragility"
+  - melt liquidus (K) : enter "liquidus"
+  - glass transition temperature (K): enter "tg"
+  - glass configurational entropy (J/mol/K) : enter "sctg"
+  - glass density (in K): enter "density_glass"
+  - glass elastic modulus (GPa) : enter "elastic_modulus"
+  - glass coefficient of thermal expansion : enter "cte"
+  - glass Abbe number : enter "abbe"
+  - glass optical refractive index : enter "sellmeier"
+  - glass Raman spectrum : enter "raman_pred"
+
+  Note that for the melt viscosity you must provide a vector of temperature, and for the glass optical refractive you must provide a vector of wavelength.
+
+For instance, if you want predictions for melt viscosity between 1000 and 3000 K with a step of 1 K, you will do
+
+.. code-block:: python
+
+    T_range = np.arange(1000.0, 3000.0, 1.0)
+    viscosity = imelt_model.predict("vft", composition, T_range)
+
+To get the glass optical refractive index at 589 nm, you will do:
+
+WARNING : lambda is provided in microns !
+
+.. code-block:: python
+  
+    lbd = np.array([589.0*1e-3]) # warning: enter wavenumber in microns
+    ri = imelt_model.predict("sellmeier", composition, lbd=lbd) 
+
+And for a property such as Tg, you can do:
 
 .. code-block:: python
 
@@ -82,8 +118,8 @@ We can predict the viscosity with the Vogel-Tammann-Fulscher equation. First, we
 .. code-block:: python
 
   T_range = np.arange(600, 1500, 1.0) # from 600 to 1500 K with 1 K steps
-  viscosity = imelt_model.predict("tvf",composition*np.ones((len(T_range),39)),T_range.reshape(-1,1))
+  viscosity = imelt_model.predict("tvf", composition, T_range)
 
 In the above code note that the composition array has to be modified so that you have as many lines as you have temperatures to predict.
 
-Many other predictions are possible, look at the Jupyter notebooks for more details and examples.
+Many other predictions are possible, look at the :doc:`tutorials` for more details and examples.
