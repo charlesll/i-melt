@@ -6,7 +6,7 @@ Several example notebooks are provided in the Examples folder in the main reposi
 Prediction for a given composition
 ----------------------------------
 
-The notebook `Prediction_one_composition.ipynb <https://github.com/charlesll/i-melt/blob/main/examples/Prediction_one_composition.ipynb`_ provides an example of predicting several properties for a given melt composition.
+The notebook `Prediction_one_composition.ipynb <https://github.com/charlesll/i-melt/blob/main/examples/Prediction_one_composition.ipynb>`_ provides an example of predicting several properties for a given melt composition.
 
 Prediction of a single property
 ------------------------------------
@@ -26,4 +26,4 @@ The notebook `Ternary_diagram.ipynb <https://github.com/charlesll/i-melt/blob/ma
 Replicate figures from Le Losq and Baldoni 2023 paper
 -----------------------------------------------------
 
-The notebook `Replicate_2023_paper.ipynb <https://github.com/charlesll/i-melt/blob/main/examples/Ternary_diagram.ipynb>`_ allows reproducing the analysis and figure of the paper presenting i-Melt v2.0.
+The notebook `Replicate_2023_paper.ipynb <https://github.com/charlesll/i-melt/blob/main/examples/Replicate_2023_paper.ipynb>`_ allows reproducing the analysis and figure of the paper presenting i-Melt v2.0.

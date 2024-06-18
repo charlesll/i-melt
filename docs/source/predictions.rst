@@ -11,6 +11,8 @@ Jupyter notebooks
 
 More control can be achieved using directly the i-melt Python library. Have a look at the :doc:`tutorials` page.
 
+Import the model
+----------------
 
 The steps are simple. First, import the necessary libraries and imelt:
 
@@ -30,6 +32,9 @@ Then, we can load the pre-trained i-melt models as one Python object:
 
   imelt_model = imelt.load_pretrained_bagged()
 
+Generate a query
+----------------
+
 Now we can define a composition of interest using the `generate_query_single` function:
 It does everything automatically for us, including the addition of descriptors.
 
@@ -42,6 +47,9 @@ It does everything automatically for us, including the addition of descriptors.
                                           mgo = 0.0,
                                           cao = 0.0, 
                                    composition_mole=True)
+
+Make a prediction
+-----------------
 
 To get predictions from the model `imelt_model`, we use its `predict` method:
 
@@ -92,6 +100,9 @@ And for a property such as Tg, you can do:
 .. code-block:: python
 
   tg = imelt_model.predict("tg", composition)
+
+Get error bars
+--------------
 
 If you want error bars, you need to ask for samples:
 

@@ -8,8 +8,9 @@
 
 - i-Melt is now a Python package : install it using 'pip install imelt' !
 - new examples, see the new examples folder in the repository
-- the database has been moved in the folder ./src/imelt/data
+- the database has also been moved in the folder ./src/imelt/data
 - functions to simplify queries are available: generate_query_single and generate_query_range
+- Results_paper.ipynb is renamed and placed in the example folder : ./examples/Replicate_2023_paper.ipynb
 
 ### V2.0.1
 
