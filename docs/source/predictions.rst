@@ -14,7 +14,7 @@ More control can be achieved using directly the i-melt Python library. Have a lo
 Import the model
 ----------------
 
-The steps are simple. First, import the necessary libraries and imelt:
+The steps are simple. First, import imelt and other libraries as you want. Here is an example of import, using a traditional scientific Python stack:
 
 .. code-block:: python
 
@@ -47,6 +47,8 @@ It does everything automatically for us, including the addition of descriptors.
                                           mgo = 0.0,
                                           cao = 0.0, 
                                    composition_mole=True)
+
+You can also use the `imelt.generate_query_range` function to generate a query for a range of composition. See for an example the :doc:`tutorials`.
 
 Make a prediction
 -----------------

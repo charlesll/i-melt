@@ -5,12 +5,19 @@ The i-Melt 2.1 library is meant to provide trained models and use them for predi
 
 However, if you want to play with the code and train new models, you can do so following the instructions listed below. Note that paths will probably have to be slightly modified, as the current library is intended to be used for predictions and the code for training has been written prior to the latest "production release".
 
-Gettign the scripts
+Simple example
+--------------
+
+The notebook `Training_single.ipynb <https://github.com/charlesll/i-melt/blob/main/examples/Training_single.ipynb>`_ provides a simple example of how you can train your own i-Melt neural networks.
+
+Training scripts
 -------------------
 
 Scripts for building, training models and providing useful functions are provided `here <https://github.com/charlesll/i-melt/blob/master/src/>`_.
 
 The easiest way of training one or multiple neural networks is to use those scripts. I suggest getting a copy of the Github repository and working in it directly, it will simplify things.
+
+
 
 Training one network
 --------------------
@@ -34,29 +41,29 @@ We select an architecture. For this example, we have selected the reference arch
 	nb_neurons = 200
 	p_drop = 0.10 # we increased dropout here as this now works well with GELU units
 
-If we want to save the model and figures in the directories `./model/candidates/` and `./figures/single/`, we can use this code to check if the folders exist, and create them if not:
+If we want to save the model and figures in a directory such as `./outputs/`, we can use this code to check if the folder exists and create it if not:
 
 .. code-block:: python
 
-	imelt.create_dir('./model/candidates/')
-	imelt.create_dir('./figures/single/')
+	imelt.create_dir('./outputs/')
 	
 Now we need a name for our model, we can generate it with the hyperparameters actually, this will help us having automatic names in case we try different architectures:
 
 .. code-block:: python
 
-	name = "./model/candidates/l"+str(nb_layers)+"_n"+str(nb_neurons)+"_p"+str(p_drop)+"_test"+".pth"
+	name = "./outputs/candidates/l"+str(nb_layers)+"_n"+str(nb_neurons)+"_p"+str(p_drop)+"_test"+".pth"
 
 and we declare the model using `imelt.model()`:
 
 .. code-block:: python
 
-	neuralmodel = imelt.model(ds.x_visco_train.shape[1],
-							hidden_size=nb_neurons,
-							num_layers=nb_layers,
-							nb_channels_raman=ds.nb_channels_raman,
-							activation_function = torch.nn.GELU(), 
-							p_drop=p_drop)
+	neuralmodel = imelt.model(ds.x_visco_train.shape[1], # input shape
+							hidden_size=nb_neurons, # number of neurons per hidden layer
+							num_layers=nb_layers, # number of hidden layers
+							nb_channels_raman=ds.nb_channels_raman, # number of input channels for Raman spectra
+							activation_function = torch.nn.GELU(), # ANN activation function
+							p_drop=p_drop # dropout probability
+							)
 
 We select a criterion for training (the MSE criterion from PyTorch) and send it to the GPU device
 
@@ -65,7 +72,7 @@ We select a criterion for training (the MSE criterion from PyTorch) and send it 
 	criterion = torch.nn.MSELoss(reduction='mean')
 	criterion.to(device) # sending criterion on device
 
-Before training, we need to initilize the bias layer using the imelt function, and we send the network parameters to the GPU:
+Before training, we need to initilize the bias layer using the model `output_bias_init` method, and we send the network parameters to the GPU:
 
 .. code-block:: python
 
@@ -81,8 +88,8 @@ Training will be done with the `ADAM <https://arxiv.org/abs/1412.6980>`_ optimiz
 
 We have build a function for training in the imelt library that performs early stopping. You have to select:
 
-* the patience (how much epoch do you wait once you notice the validation error stop improving)
-* the min_delta variable, that represents the sensitivity to determine if the RMSE on the validation dataset really improved or not
+* the patience (how much epoch do you wait once you notice the validation error stops improving).
+* the min_delta variable, which represents the sensitivity to determine if the RMSE on the validation dataset really improved or not.
 
 The `imelt.training()` function outputs the trained model, and records of the training and validation losses during the epochs.
 
@@ -90,10 +97,16 @@ Training can thus be done with this code:
 
 .. code-block:: python
 
-	neuralmodel, record_train_loss, record_valid_loss = imelt.training(neuralmodel,ds,
-			criterion,optimizer,save_switch=True,save_name=name,
-			train_patience=250,min_delta=0.05,
-			verbose=True)
+	neuralmodel, record_train_loss, record_valid_loss = imelt.training(neuralmodel, # model
+                                                                   ds, # dataset
+                                                                   criterion, # criterion for training (RMSE here)
+                                                                   optimizer, # optimizer: ADAM
+                                                                   save_switch=True, # do we save the best models?
+                                                                   save_name=name, # where do we save them?
+                                                                   train_patience=250, # how many epochs we wait until early stopping?
+                                                                   min_delta=0.05, # how sensitive should we be to consider the validation metric has improved?
+                                                                   verbose=True # do you want text?
+                                                                   )
 
 Hyperparameter tuning
 ---------------------

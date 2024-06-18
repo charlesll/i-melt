@@ -27,3 +27,8 @@ Replicate figures from Le Losq and Baldoni 2023 paper
 -----------------------------------------------------
 
 The notebook `Replicate_2023_paper.ipynb <https://github.com/charlesll/i-melt/blob/main/examples/Replicate_2023_paper.ipynb>`_ allows reproducing the analysis and figure of the paper presenting i-Melt v2.0.
+
+Training an i-Melt neural network
+-----------------------------------------------------
+
+The notebook `Training_single.ipynb <https://github.com/charlesll/i-melt/blob/main/examples/Training_single.ipynb>`_ provides a simple example of how you can train your own i-Melt neural networks.

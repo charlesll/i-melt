@@ -1,14 +1,14 @@
 Database
 ========
 
-Database localisation
+Localisation
 ---------------------
 
 All data are given in a `Database.xlsx <https://github.com/charlesll/i-melt/blob/master/data/Database.xlsx>`_ file in the `/src/imelt/data folder <https://github.com/charlesll/i-melt/tree/master/data>`_.
 
 The data used for training the currently provided models are in HDF5 format in the data folder. They are also provided with the library in /src/imelt/data/.
 
-Data preparation
+Preparation
 ----------------
 
 The script `Dataset_preparation.py <https://github.com/charlesll/i-melt/blob/master/src/Dataset_preparation.py>`_ allows preparing the datasets, which are subsequently saved in HDF5 format in the data folder.

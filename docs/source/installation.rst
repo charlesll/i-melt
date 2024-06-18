@@ -17,13 +17,21 @@ Installation of i-Melt
 
 i-Melt is now a Python package. It supports Python 3.8 or higher. Install it using pip:
 
-	`$ pip install imelt`
+.. code-block:: console
 
-There may be a problem with the installation of aws-fortuna.
+	$ pip install imelt
 
-Apparently there is problems with the versions of jax and flax for this package. I reported it but this is still ongoing.
-For now, an easy fix is to install aws-fortuna, and then to upgrade jax and flax to the latest versions:
 
-	`$ pip install --upgrade jax flax`
+Potential installation issues (known)
+-------------------------------------
+
+At the moment there may be a problem with the installation of aws-fortuna 0.1.45.
+
+This aws-fortuna version has dependency problems with the versions of jax and flax. I reported it but this is still ongoing.
+For now, an easy fix is to install i-melt using the above command, and then to upgrade flax to the latest version:
+
+.. code-block:: console
+
+	$ pip install --upgrade flax
 
 There will be a version error message, but disregard it, aws-fortuna works and there is no problem anymore.

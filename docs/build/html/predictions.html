@@ -22,7 +22,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Tutorials" href="tutorials.html" />
-    <link rel="prev" title="Training the networks" href="training.html" /> 
+    <link rel="prev" title="Training" href="training.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,13 +48,18 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data.html">Database</a></li>
-<li class="toctree-l1"><a class="reference internal" href="training.html">Training the networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training.html">Training</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Predictions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#web-calculator">Web calculator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#jupyter-notebooks">Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#import-the-model">Import the model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generate-a-query">Generate a query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#make-a-prediction">Make a prediction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#get-error-bars">Get error bars</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">Errors and bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 
@@ -91,7 +96,10 @@
 <section id="jupyter-notebooks">
 <h2>Jupyter notebooks<a class="headerlink" href="#jupyter-notebooks" title="Link to this heading"></a></h2>
 <p>More control can be achieved using directly the i-melt Python library. Have a look at the <a class="reference internal" href="tutorials.html"><span class="doc">Tutorials</span></a> page.</p>
-<p>The steps are simple. First, import the necessary libraries and imelt:</p>
+</section>
+<section id="import-the-model">
+<h2>Import the model<a class="headerlink" href="#import-the-model" title="Link to this heading"></a></h2>
+<p>The steps are simple. First, import imelt and other libraries as you want. Here is an example of import, using a traditional scientific Python stack:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span> <span class="c1">#matplotlib magic</span>
 
 
@@ -105,6 +113,9 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">imelt_model</span> <span class="o">=</span> <span class="n">imelt</span><span class="o">.</span><span class="n">load_pretrained_bagged</span><span class="p">()</span>
 </pre></div>
 </div>
+</section>
+<section id="generate-a-query">
+<h2>Generate a query<a class="headerlink" href="#generate-a-query" title="Link to this heading"></a></h2>
 <p>Now we can define a composition of interest using the <cite>generate_query_single</cite> function:
 It does everything automatically for us, including the addition of descriptors.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">composition</span> <span class="o">=</span> <span class="n">imelt</span><span class="o">.</span><span class="n">generate_query_single</span><span class="p">(</span><span class="n">sio2</span> <span class="o">=</span> <span class="mf">75.0</span><span class="p">,</span>
@@ -116,6 +127,10 @@ It does everything automatically for us, including the addition of descriptors.<
                                  <span class="n">composition_mole</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>You can also use the <cite>imelt.generate_query_range</cite> function to generate a query for a range of composition. See for an example the <a class="reference internal" href="tutorials.html"><span class="doc">Tutorials</span></a>.</p>
+</section>
+<section id="make-a-prediction">
+<h2>Make a prediction<a class="headerlink" href="#make-a-prediction" title="Link to this heading"></a></h2>
 <p>To get predictions from the model <cite>imelt_model</cite>, we use its <cite>predict</cite> method:</p>
 <blockquote>
 <div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">prediction</span> <span class="o">=</span> <span class="n">imelt_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="s2">&quot;property&quot;</span><span class="p">,</span> <span class="n">composition</span><span class="p">)</span>
@@ -159,6 +174,9 @@ It does everything automatically for us, including the addition of descriptors.<
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tg</span> <span class="o">=</span> <span class="n">imelt_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="s2">&quot;tg&quot;</span><span class="p">,</span> <span class="n">composition</span><span class="p">)</span>
 </pre></div>
 </div>
+</section>
+<section id="get-error-bars">
+<h2>Get error bars<a class="headerlink" href="#get-error-bars" title="Link to this heading"></a></h2>
 <p>If you want error bars, you need to ask for samples:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tg</span> <span class="o">=</span> <span class="n">imelt_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="s2">&quot;tg&quot;</span><span class="p">,</span> <span class="n">composition</span><span class="p">,</span> <span class="n">sampling</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_sample</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
@@ -187,7 +205,7 @@ It does everything automatically for us, including the addition of descriptors.<
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="training.html" class="btn btn-neutral float-left" title="Training the networks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="training.html" class="btn btn-neutral float-left" title="Training" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="tutorials.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

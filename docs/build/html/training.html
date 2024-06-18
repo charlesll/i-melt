@@ -49,7 +49,8 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data.html">Database</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Training</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#gettign-the-scripts">Gettign the scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#simple-example">Simple example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#training-scripts">Training scripts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#training-one-network">Training one network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hyperparameter-tuning">Hyperparameter tuning</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ray-tune-optuna">RAY TUNE + OPTUNA</a></li>
@@ -92,8 +93,12 @@
 <h1>Training<a class="headerlink" href="#training" title="Link to this heading"></a></h1>
 <p>The i-Melt 2.1 library is meant to provide trained models and use them for predictions.</p>
 <p>However, if you want to play with the code and train new models, you can do so following the instructions listed below. Note that paths will probably have to be slightly modified, as the current library is intended to be used for predictions and the code for training has been written prior to the latest “production release”.</p>
-<section id="gettign-the-scripts">
-<h2>Gettign the scripts<a class="headerlink" href="#gettign-the-scripts" title="Link to this heading"></a></h2>
+<section id="simple-example">
+<h2>Simple example<a class="headerlink" href="#simple-example" title="Link to this heading"></a></h2>
+<p>The notebook <a class="reference external" href="https://github.com/charlesll/i-melt/blob/main/examples/Training_single.ipynb">Training_single.ipynb</a> provides a simple example of how you can train your own i-Melt neural networks.</p>
+</section>
+<section id="training-scripts">
+<h2>Training scripts<a class="headerlink" href="#training-scripts" title="Link to this heading"></a></h2>
 <p>Scripts for building, training models and providing useful functions are provided <a class="reference external" href="https://github.com/charlesll/i-melt/blob/master/src/">here</a>.</p>
 <p>The easiest way of training one or multiple neural networks is to use those scripts. I suggest getting a copy of the Github repository and working in it directly, it will simplify things.</p>
 </section>
@@ -113,22 +118,22 @@
 <span class="n">p_drop</span> <span class="o">=</span> <span class="mf">0.10</span> <span class="c1"># we increased dropout here as this now works well with GELU units</span>
 </pre></div>
 </div>
-<p>If we want to save the model and figures in the directories <cite>./model/candidates/</cite> and <cite>./figures/single/</cite>, we can use this code to check if the folders exist, and create them if not:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">imelt</span><span class="o">.</span><span class="n">create_dir</span><span class="p">(</span><span class="s1">&#39;./model/candidates/&#39;</span><span class="p">)</span>
-<span class="n">imelt</span><span class="o">.</span><span class="n">create_dir</span><span class="p">(</span><span class="s1">&#39;./figures/single/&#39;</span><span class="p">)</span>
+<p>If we want to save the model and figures in a directory such as <cite>./outputs/</cite>, we can use this code to check if the folder exists and create it if not:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">imelt</span><span class="o">.</span><span class="n">create_dir</span><span class="p">(</span><span class="s1">&#39;./outputs/&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Now we need a name for our model, we can generate it with the hyperparameters actually, this will help us having automatic names in case we try different architectures:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;./model/candidates/l&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">nb_layers</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;_n&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">nb_neurons</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;_p&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">p_drop</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;_test&quot;</span><span class="o">+</span><span class="s2">&quot;.pth&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;./outputs/candidates/l&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">nb_layers</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;_n&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">nb_neurons</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;_p&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">p_drop</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;_test&quot;</span><span class="o">+</span><span class="s2">&quot;.pth&quot;</span>
 </pre></div>
 </div>
 <p>and we declare the model using <cite>imelt.model()</cite>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">neuralmodel</span> <span class="o">=</span> <span class="n">imelt</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">x_visco_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                                                <span class="n">hidden_size</span><span class="o">=</span><span class="n">nb_neurons</span><span class="p">,</span>
-                                                <span class="n">num_layers</span><span class="o">=</span><span class="n">nb_layers</span><span class="p">,</span>
-                                                <span class="n">nb_channels_raman</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">nb_channels_raman</span><span class="p">,</span>
-                                                <span class="n">activation_function</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">GELU</span><span class="p">(),</span>
-                                                <span class="n">p_drop</span><span class="o">=</span><span class="n">p_drop</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">neuralmodel</span> <span class="o">=</span> <span class="n">imelt</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">x_visco_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="c1"># input shape</span>
+                                                <span class="n">hidden_size</span><span class="o">=</span><span class="n">nb_neurons</span><span class="p">,</span> <span class="c1"># number of neurons per hidden layer</span>
+                                                <span class="n">num_layers</span><span class="o">=</span><span class="n">nb_layers</span><span class="p">,</span> <span class="c1"># number of hidden layers</span>
+                                                <span class="n">nb_channels_raman</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">nb_channels_raman</span><span class="p">,</span> <span class="c1"># number of input channels for Raman spectra</span>
+                                                <span class="n">activation_function</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">GELU</span><span class="p">(),</span> <span class="c1"># ANN activation function</span>
+                                                <span class="n">p_drop</span><span class="o">=</span><span class="n">p_drop</span> <span class="c1"># dropout probability</span>
+                                                <span class="p">)</span>
 </pre></div>
 </div>
 <p>We select a criterion for training (the MSE criterion from PyTorch) and send it to the GPU device</p>
@@ -136,7 +141,7 @@
 <span class="n">criterion</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="c1"># sending criterion on device</span>
 </pre></div>
 </div>
-<p>Before training, we need to initilize the bias layer using the imelt function, and we send the network parameters to the GPU:</p>
+<p>Before training, we need to initilize the bias layer using the model <cite>output_bias_init</cite> method, and we send the network parameters to the GPU:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">neuralmodel</span><span class="o">.</span><span class="n">output_bias_init</span><span class="p">()</span>
 <span class="n">neuralmodel</span> <span class="o">=</span> <span class="n">neuralmodel</span><span class="o">.</span><span class="n">float</span><span class="p">()</span> <span class="c1"># this is just to make sure we are using always float() numbers</span>
 <span class="n">neuralmodel</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
@@ -148,15 +153,21 @@
 </div>
 <p>We have build a function for training in the imelt library that performs early stopping. You have to select:</p>
 <ul class="simple">
-<li><p>the patience (how much epoch do you wait once you notice the validation error stop improving)</p></li>
-<li><p>the min_delta variable, that represents the sensitivity to determine if the RMSE on the validation dataset really improved or not</p></li>
+<li><p>the patience (how much epoch do you wait once you notice the validation error stops improving).</p></li>
+<li><p>the min_delta variable, which represents the sensitivity to determine if the RMSE on the validation dataset really improved or not.</p></li>
 </ul>
 <p>The <cite>imelt.training()</cite> function outputs the trained model, and records of the training and validation losses during the epochs.</p>
 <p>Training can thus be done with this code:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">neuralmodel</span><span class="p">,</span> <span class="n">record_train_loss</span><span class="p">,</span> <span class="n">record_valid_loss</span> <span class="o">=</span> <span class="n">imelt</span><span class="o">.</span><span class="n">training</span><span class="p">(</span><span class="n">neuralmodel</span><span class="p">,</span><span class="n">ds</span><span class="p">,</span>
-                <span class="n">criterion</span><span class="p">,</span><span class="n">optimizer</span><span class="p">,</span><span class="n">save_switch</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">save_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-                <span class="n">train_patience</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span><span class="n">min_delta</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
-                <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">neuralmodel</span><span class="p">,</span> <span class="n">record_train_loss</span><span class="p">,</span> <span class="n">record_valid_loss</span> <span class="o">=</span> <span class="n">imelt</span><span class="o">.</span><span class="n">training</span><span class="p">(</span><span class="n">neuralmodel</span><span class="p">,</span> <span class="c1"># model</span>
+                                                           <span class="n">ds</span><span class="p">,</span> <span class="c1"># dataset</span>
+                                                           <span class="n">criterion</span><span class="p">,</span> <span class="c1"># criterion for training (RMSE here)</span>
+                                                           <span class="n">optimizer</span><span class="p">,</span> <span class="c1"># optimizer: ADAM</span>
+                                                           <span class="n">save_switch</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># do we save the best models?</span>
+                                                           <span class="n">save_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="c1"># where do we save them?</span>
+                                                           <span class="n">train_patience</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="c1"># how many epochs we wait until early stopping?</span>
+                                                           <span class="n">min_delta</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="c1"># how sensitive should we be to consider the validation metric has improved?</span>
+                                                           <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span> <span class="c1"># do you want text?</span>
+                                                           <span class="p">)</span>
 </pre></div>
 </div>
 </section>
