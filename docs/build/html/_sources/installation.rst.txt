@@ -4,7 +4,6 @@ Installation
 General preparation
 -------------------
 
-
 i-Melt runs with a traditional Python stack.
 
 If you are not familiar with Python, you can first have a look at the `scipy lecture notes <https://scipy-lectures.org/>`_,
@@ -22,16 +21,18 @@ i-Melt is now a Python package. It supports Python 3.8 or higher. Install it usi
 	$ pip install imelt
 
 
-Potential installation issues (known)
--------------------------------------
+Optional dependencies
+---------------------
 
-At the moment there may be a problem with the installation of aws-fortuna 0.1.45.
+We simplified the dependencies of the latest version of i-Melt to avoid installation issues, particularly with aws-fortuna that still creates problems. The following packages are not anymore direct dependencies for i-Melt but may be required to run the examples/paper replicate notebooks:
 
-This aws-fortuna version has dependency problems with the versions of jax and flax. I reported it but this is still ongoing.
-For now, an easy fix is to install i-melt using the above command, and then to upgrade flax to the latest version:
+- aws-fortuna
+- seaborn
+- mpltern >= 0.4
+- uncertainties
+- jupyter
+- corner
+- heatmatpz
+- torchvision
 
-.. code-block:: console
-
-	$ pip install --upgrade flax
-
-There will be a version error message, but disregard it, aws-fortuna works and there is no problem anymore.
+We recommend installing them when needed. If you are running into an installation problem for those packages, unfortunately we cannot do anything so please contact directly their development team via their Github Issues page.

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Installation &mdash; i-Melt 2.0.0 documentation</title>
@@ -16,7 +16,7 @@
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="_static/documentation_options.js?v=51b770b3"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -49,7 +49,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#general-preparation">General preparation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation-of-i-melt">Installation of i-Melt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#potential-installation-issues-known">Potential installation issues (known)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#optional-dependencies">Optional dependencies</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="data.html">Database</a></li>
@@ -100,15 +100,20 @@ a set of tutorials for the beginner.</p>
 </pre></div>
 </div>
 </section>
-<section id="potential-installation-issues-known">
-<h2>Potential installation issues (known)<a class="headerlink" href="#potential-installation-issues-known" title="Link to this heading"></a></h2>
-<p>At the moment there may be a problem with the installation of aws-fortuna 0.1.45.</p>
-<p>This aws-fortuna version has dependency problems with the versions of jax and flax. I reported it but this is still ongoing.
-For now, an easy fix is to install i-melt using the above command, and then to upgrade flax to the latest version:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>flax
-</pre></div>
-</div>
-<p>There will be a version error message, but disregard it, aws-fortuna works and there is no problem anymore.</p>
+<section id="optional-dependencies">
+<h2>Optional dependencies<a class="headerlink" href="#optional-dependencies" title="Link to this heading"></a></h2>
+<p>We simplified the dependencies of the latest version of i-Melt to avoid installation issues, particularly with aws-fortuna that still creates problems. The following packages are not anymore direct dependencies for i-Melt but may be required to run the examples/paper replicate notebooks:</p>
+<ul class="simple">
+<li><p>aws-fortuna</p></li>
+<li><p>seaborn</p></li>
+<li><p>mpltern &gt;= 0.4</p></li>
+<li><p>uncertainties</p></li>
+<li><p>jupyter</p></li>
+<li><p>corner</p></li>
+<li><p>heatmatpz</p></li>
+<li><p>torchvision</p></li>
+</ul>
+<p>We recommend installing them when needed. If you are running into an installation problem for those packages, unfortunately we cannot do anything so please contact directly their development team via their Github Issues page.</p>
 </section>
 </section>
 
