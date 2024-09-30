@@ -4,6 +4,10 @@
 
 ## NEWS
 
+### V2.1.2
+
+- update build process for PyPI
+
 ### V2.1.1
 
 - remove unnecessary dependencies as some of them create problems for installation that should not be handled by us.

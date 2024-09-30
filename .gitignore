@@ -1,6 +1,7 @@
 __pycache__
 .DS_Store
 .ipynb_checkpoints
+dist
 model/dev
 model/exp_multitask
 model/exp_trainsize
@@ -16,3 +17,4 @@ src/bkg
 build
 imelt.egg-info
 .conda
+

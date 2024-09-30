@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "imelt"
-version = "2.1.1"
+version = "2.1.2"
 dependencies = [
   "matplotlib",
   "numpy",
