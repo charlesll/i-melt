@@ -22,7 +22,7 @@ copyright = '2021-2024, Charles Le Losq, Barbara Baldoni, Andrew P. Valentine'
 author = 'Charles Le Losq, Barbara Baldoni, Andrew P. Valentine'
 
 # The full version, including alpha/beta/rc tags
-release = '2.0.0'
+release = '2.1.2'
 
 
 # -- General configuration ---------------------------------------------------
