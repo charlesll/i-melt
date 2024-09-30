@@ -15,3 +15,4 @@ compressed_files.tar.gz
 src/bkg
 build
 imelt.egg-info
+.conda

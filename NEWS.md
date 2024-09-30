@@ -4,6 +4,10 @@
 
 ## NEWS
 
+### V2.1.1
+
+- remove unnecessary dependencies as some of them create problems for installation that should not be handled by us.
+
 ### V2.1.0
 
 - i-Melt is now a Python package : install it using 'pip install imelt' !

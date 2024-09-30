@@ -266,41 +266,40 @@ class model(torch.nn.Module):
     def output_bias_init(self):
         """bias initialisation for self.out_thermo
 
-        positions are Tg, Sconf(Tg), Ae, A_am, density, fragility (MYEGA one)
         """
         self.out_thermo.bias = torch.nn.Parameter(
             data=torch.tensor(
                 [
-                    np.log(1000.0),
-                    np.log(8.0),  # Tg, ScTg
-                    -3.5,
-                    -3.5,
-                    -3.5,
-                    -4.5,  # A_AG, A_AM, A_CG, A_TVF
-                    np.log(715.0),
-                    np.log(61.0),
-                    np.log(500.0),  # To_CG, C_CG, C_TVF
-                    np.log(27.29),
-                    np.log(36.66),
-                    np.log(29.65),
-                    np.log(47.28),
-                    np.log(12.66),
-                    np.log(20.66),  # molar volumes of SiO2, al2o3, na2o, k2o, mgo, cao
+                    np.log(1000.0), # Tg
+                    np.log(8.0),  # ScTg
+                    -3.5, # A_AG
+                    -3.5, # A_AM
+                    -3.5, # A_CG
+                    -4.5, # A_TVF
+                    np.log(715.0), # To_CG
+                    np.log(61.0), # C_CG
+                    np.log(500.0), # C_TVF
+                    np.log(27.29), # SiO2 molar volume
+                    np.log(36.66), # al2o3 molar volume
+                    np.log(29.65), # na2o molar volume
+                    np.log(47.28), # k2o molar volume
+                    np.log(12.66), # mgo molar volume
+                    np.log(20.66), # cao molar volume
                     np.log(44.0),  # fragility
-                    0.90,
-                    0.20,
-                    0.98,
-                    0.6,
-                    0.2,
-                    1.0,  # Sellmeier coeffs B1, B2, B3, C1, C2, C3
-                    np.log(81.37),
-                    np.log(130.2),
-                    np.log(100.6),
-                    np.log(50.13),
-                    np.log(85.78),
-                    np.log(86.05),
-                    np.log(0.03),
-                    np.log(0.01578),
+                    0.90, # Sellmeier coeff B1
+                    0.20, # Sellmeier coeff B2
+                    0.98, # Sellmeier coeff B3
+                    0.6, # Sellmeier coeff C1
+                    0.2, # Sellmeier coeff C2
+                    1.0, # Sellmeier coeff C3
+                    np.log(81.37), # SiO2 Cpi
+                    np.log(130.2), # al2o3 Cpi
+                    np.log(100.6), # na2o Cpi
+                    np.log(50.13), # k2o Cpi
+                    np.log(85.78), # mgo Cpi
+                    np.log(86.05), # cao Cpi
+                    np.log(0.03), # Al2O3 excess T Cpi
+                    np.log(0.01578), # K2O excess T Cpi
                     np.log(100.0),  # glass elastic modulus
                     np.log(8.5),  # CTE
                     np.log(57.0),  # Abbe Number
