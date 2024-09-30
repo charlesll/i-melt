@@ -4,7 +4,7 @@
 
 ## NEWS
 
-### V2.1.2
+### V2.1.3
 
 - update build process for PyPI
 
