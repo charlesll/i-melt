@@ -15,7 +15,7 @@ neuralmodel = imelt.load_pretrained_bagged()
 # streamlit preparation
 st.title('i-Melt: Prediction of melt and glass properties')
 st.markdown("""
-            (c) Le Losq C. and co. 2021-2024
+            (c) Le Losq C. and co. 2021-2025
             
             i-Melt is a greybox model that uses physical equations and machine 
             learning to predict the properties of

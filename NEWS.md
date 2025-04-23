@@ -1,8 +1,12 @@
 # i-Melt
 
-(c) 2021-2024 Charles Le Losq and co., lelosq@ipgp.fr
+(c) 2021-2025 Charles Le Losq and co., lelosq@ipgp.fr
 
 ## NEWS
+
+### V2.1.4
+
+- update minimal version of Python to 3.10 as it was creating problems with older release and dependencies
 
 ### V2.1.3
 
