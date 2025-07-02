@@ -7,82 +7,17 @@ import torch, time
 import pandas as pd
 from scipy.constants import Avogadro, Planck
 import imelt as imelt
+import warnings
 
 # to load data and models in a library
 from pathlib import Path
 import os
 
 _BASEMODELPATH = Path(os.path.dirname(__file__)) / "models"
-_BASEDATAPATH = Path(os.path.dirname(__file__)) / "data"
-
 
 ###
 ### MODEL
 ###
-class PositionalEncoder(torch.nn.Module):
-    """
-    From:
-    https://towardsdatascience.com/how-to-make-a-pytorch-transformer-for-time-series-forecasting-69e073d4061e
-    Adapted from:
-    https://pytorch.org/tutorials/beginner/transformer_tutorial.html
-    https://github.com/LiamMaclean216/Pytorch-Transfomer/blob/master/utils.py
-    """
-
-    def __init__(
-        self, dropout: float = 0.1, max_seq_len: int = 5000, d_model: int = 512
-    ):
-        """
-        Args:
-            dropout: the dropout rate
-            max_seq_len: the maximum length of the input sequences
-            d_model: The dimension of the output of sub-layers in the model
-                     (Vaswani et al, 2017)
-        """
-
-        super().__init__()
-
-        self.d_model = d_model
-
-        self.dropout = torch.nn.Dropout(p=dropout)
-
-        # Create constant positional encoding matrix with values
-        # dependent on position and i
-        position = torch.arange(max_seq_len).unsqueeze(1)
-
-        exp_input = torch.arange(0, d_model, 2) * (-np.log(10000.0) / d_model)
-
-        div_term = torch.exp(
-            exp_input
-        )  # Returns a new tensor with the exponential of the elements of exp_input
-
-        pe = torch.zeros(max_seq_len, d_model)
-
-        pe[:, 0::2] = torch.sin(position * div_term)
-
-        pe[:, 1::2] = torch.cos(
-            position * div_term
-        )  # torch.Size([target_seq_len, dim_val])
-
-        pe = pe.unsqueeze(0).transpose(
-            0, 1
-        )  # torch.Size([target_seq_len, input_size, dim_val])
-
-        # register that pe is not a model parameter
-        self.register_buffer("pe", pe)
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """
-        Args:
-            x: Tensor, shape [batch_size, enc_seq_len, dim_val]
-        """
-
-        add = self.pe[: x.size(1), :].squeeze(1)
-
-        x = x + add
-
-        return self.dropout(x)
-
-
 class model(torch.nn.Module):
     """i-MELT model"""
 
@@ -93,10 +28,7 @@ class model(torch.nn.Module):
         num_layers=4,
         nb_channels_raman=800,
         p_drop=0.2,
-        activation_function=torch.nn.ReLU(),
-        shape="rectangle",
-        dropout_pos_enc=0.01,
-        n_heads=4,
+        activation_function=torch.nn.GELU(),
     ):
         """Initialization of i-MELT model
 
@@ -118,116 +50,44 @@ class model(torch.nn.Module):
             dropout probability, default = 0.2
 
         activation_function : torch.nn activation function (optional)
-            activation function for the hidden units, default = torch.nn.ReLU()
-            choose here : https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity
+            activation function for the hidden units, default = torch.nn.GELU()
 
-        shape : string (optional)
-            either a rectangle network (same number of neurons per layer, or triangle (regularly decreasing number of neurons per layer))
-            default = rectangle
-
-        dropout_pos_enc & n_heads are experimental features, do not use...
         """
         super(model, self).__init__()
 
+        #
         # init parameters
+        #
         self.input_size = input_size
         self.hidden_size = hidden_size
         self.num_layers = num_layers
         self.nb_channels_raman = nb_channels_raman
-        self.shape = shape
-
-        # get constants
-        # self.constants = constants()
-
-        # network related torch stuffs
         self.activation_function = activation_function
         self.p_drop = p_drop
         self.dropout = torch.nn.Dropout(p=p_drop)
 
-        # for transformer
-        self.dropout_pos_enc = dropout_pos_enc
-        self.n_heads = n_heads
-
+        #
         # general shape of the network
-        if self.shape == "rectangle":
-
-            self.linears = torch.nn.ModuleList(
-                [torch.nn.Linear(input_size, self.hidden_size)]
-            )
-            self.linears.extend(
-                [
-                    torch.nn.Linear(self.hidden_size, self.hidden_size)
-                    for i in range(1, self.num_layers)
-                ]
-            )
-
-        if self.shape == "triangle":
-
-            self.linears = torch.nn.ModuleList(
-                [
-                    torch.nn.Linear(
-                        self.input_size, int(self.hidden_size / self.num_layers)
-                    )
-                ]
-            )
-            self.linears.extend(
-                [
-                    torch.nn.Linear(
-                        int(self.hidden_size / self.num_layers * i),
-                        int(self.hidden_size / self.num_layers * (i + 1)),
-                    )
-                    for i in range(1, self.num_layers)
-                ]
-            )
-        if self.shape == "transformer":
-
-            # Creating the three linear layers needed for the model
-            self.encoder_input_layer = torch.nn.Linear(
-                in_features=1, out_features=self.hidden_size
-            )
-
-            # Create positional encoder
-            self.positional_encoding_layer = PositionalEncoder(
-                d_model=self.hidden_size,
-                dropout=self.dropout_pos_enc,
-                max_seq_len=self.hidden_size,
-            )
-
-            # The encoder layer used in the paper is identical to the one used by
-            # Vaswani et al (2017) on which the PyTorch module is based.
-            encoder_layer = torch.nn.TransformerEncoderLayer(
-                d_model=self.hidden_size,
-                nhead=self.n_heads,
-                dropout=self.p_drop,
-                batch_first=True,
-            )
-
-            # Stack the encoder layers in nn.TransformerDecoder
-            # It seems the option of passing a normalization instance is redundant
-            # in my case, because nn.TransformerEncoderLayer per default normalizes
-            # after each sub-layer
-            # (https://github.com/pytorch/pytorch/issues/24930).
-            self.encoder = torch.nn.TransformerEncoder(
-                encoder_layer=encoder_layer, num_layers=self.num_layers, norm=None
-            )
+        #
+        self.linears = torch.nn.ModuleList(
+            [torch.nn.Linear(input_size, self.hidden_size)]
+        )
+        self.linears.extend(
+            [
+                torch.nn.Linear(self.hidden_size, self.hidden_size)
+                for i in range(1, self.num_layers)
+            ]
+        )
 
         ###
         # output layers
         ###
-        if self.shape == "transformer":
-            self.out_thermo = torch.nn.Linear(
-                self.hidden_size * self.input_size, 34
-            )  # Linear output, 22 without Cp
-            self.out_raman = torch.nn.Linear(
-                self.hidden_size * self.input_size, self.nb_channels_raman
-            )  # Linear output
-        else:
-            self.out_thermo = torch.nn.Linear(
-                self.hidden_size, 34
-            )  # Linear output, 22 without Cp
-            self.out_raman = torch.nn.Linear(
-                self.hidden_size, self.nb_channels_raman
-            )  # Linear output
+        self.out_thermo = torch.nn.Linear(
+            self.hidden_size, 34
+        )  # Linear output, 22 without Cp
+        self.out_raman = torch.nn.Linear(
+            self.hidden_size, self.nb_channels_raman
+        )  # Linear output
 
         # the model will also contains parameter for the losses
         # this was adjusted to the dataset used in the paper
@@ -248,20 +108,6 @@ class model(torch.nn.Module):
             ),
             requires_grad=True,
         )
-
-        # we are going to determine better values for
-        # the aCpl and bCpl coefficients
-        # self.Cp_coefs = torch.nn.Parameter(
-        #     torch.tensor(
-        #     [np.log(81.37), np.log(85.78), np.log(100.6), np.log(50.13), np.log(85.78), np.log(86.05),
-        #      np.log(0.09428), np.log(0.01578)]),
-        #      requires_grad=True
-        #     )
-
-        # here are parameters if we try minimizing the m vs Cpconf/Sconf relationship
-        # self.m_cp_s_coefs = torch.nn.Parameter(
-        #     torch.tensor([np.log(10.), np.log(15.)]),
-        #     requires_grad=True)
 
     def output_bias_init(self):
         """bias initialisation for self.out_thermo
@@ -322,15 +168,163 @@ class model(torch.nn.Module):
 
     def forward(self, x):
         """foward pass in core neural network"""
-        if self.shape != "transformer":
-            for layer in self.linears:  # Feedforward
-                x = self.dropout(self.activation_function(layer(x)))
-            return x
+        for layer in self.linears:  # Feedforward
+            x = self.dropout(self.activation_function(layer(x)))
+        return x
+        
+    def _quick_reshape(self, _input, exp=False):
+        """reshape of vectors for getting nx1 tensor
+        
+        if exp == True, returns the exponential"""
+        out = torch.reshape(_input, (_input.shape[0], 1))
+        if exp == True:
+            return torch.exp(out)
         else:
-            x = self.encoder_input_layer(x.unsqueeze(2))
-            x = self.positional_encoding_layer(x)
-            x = self.encoder(x)
-            return x.flatten(start_dim=1)
+            return out
+    
+    def predict_all(self, x, T=None, lbd=None):
+        """Compute all properties in one forward pass"""
+        hidden = self.forward(x)
+        thermo_out = self.out_thermo(hidden)
+        
+        # Compute all scalar properties
+        properties = {
+            'tg': self._quick_reshape(thermo_out[:, 0], exp=True),
+            'sctg': self._quick_reshape(thermo_out[:, 1], exp=True),
+            'ae': self._quick_reshape(thermo_out[:, 2]),
+            'a_am': self._quick_reshape(thermo_out[:,3]),
+            'a_cg': self._quick_reshape(thermo_out[:,4]),
+            'a_tvf': self._quick_reshape(thermo_out[:,5]),
+            'to_cg' : self._quick_reshape(thermo_out[:,6], exp=True), # To parameter for Free Volume (CG)
+            'c_cg' : self._quick_reshape(thermo_out[:,7], exp=True), # C parameter for Free Volume (CG)
+            'c_tvf' : self._quick_reshape(thermo_out[:,8], exp=True), # C parameter for VFT
+            'vm_glass': torch.exp(thermo_out[:, 9:15]), #partial molar volume of oxide cations in glass
+            'fragility': self._quick_reshape(thermo_out[:, 15], exp=True),
+            'S_B1': self._quick_reshape(thermo_out[:,16]),
+            'S_B2': self._quick_reshape(thermo_out[:,17]),
+            'S_B3': self._quick_reshape(thermo_out[:,18]),
+            'S_C1': 0.01*self._quick_reshape(thermo_out[:,19]), # scaled
+            'S_C2': 0.1*self._quick_reshape(thermo_out[:,20]), # scaled
+            'S_C3': 100.0*self._quick_reshape(thermo_out[:,21]), # scaled
+            # 6 values in order: SiO2 Al2O3 Na2O K2O MgO CaO
+            # 2 last values are for bCPl for Al2O3 and K2O
+            'partial_cpl': torch.exp(thermo_out[:, 22:30]),
+            'a_cp' : torch.exp(thermo_out[:, 22:28]),
+            'b_cp' : torch.exp(thermo_out[:, 28:30]),
+            'elastic_modulus': self._quick_reshape(thermo_out[:,30], exp=True),
+            'cte': self._quick_reshape(thermo_out[:,31], exp=True),
+            'abbe': self._quick_reshape(thermo_out[:,32], exp=True),
+            'liquidus': self._quick_reshape(thermo_out[:,33], exp=True),
+            'raman_spectra': self.out_raman(hidden)
+        }
+
+        # calculate density
+        properties['density_glass'] = self._calculate_density_glass(x, 
+                                                                    properties["vm_glass"])
+
+        # term ap in equation dS = ap ln(T/Tg) + b(T-Tg)
+        out = self.aCpl(x, properties["a_cp"]) - self.cpg_tg(x)
+        properties['ap_calc'] = torch.reshape(out, (out.shape[0], 1))
+
+        # a_Cpl and b_Cpl
+        properties['aCpl'] = self.aCpl(x, properties["a_cp"])
+        properties['bCpl'] = self.bCpl(x, properties["b_cp"])
+
+        # calculate b terms for the various viscosity eqs.
+        properties['be'] = (12.0 - properties['ae']) * (properties['tg'] * properties['sctg'])
+        properties['b_cg'] = (
+                0.5
+                * (12.0 - properties['a_cg'])
+                * (
+                    properties['tg'] 
+                    - properties['to_cg'] 
+                    + torch.sqrt(
+                        (properties['tg'] - properties['to_cg']) ** 2 + properties['c_cg'] * properties['tg']
+                        )
+                  )
+            )
+        properties['b_tvf'] = (12.0 - properties['a_tvf']) * (properties['tg'] - properties['c_tvf'])
+        
+        # Compute dependent properties
+        if T is not None:
+            # Liquid heat capacity at T
+            out = properties['aCpl'] + properties['bCpl'] * T
+            properties['cpl'] = torch.reshape(out, (out.shape[0], 1))
+
+            # delta Cp = Cp conf
+            out = properties['ap_calc'] * (torch.log(T) - torch.log(properties['tg'])) + self.bCpl(x, properties["b_cp"]) * (T - properties['tg'])
+            properties['dCp'] = torch.reshape(out, (out.shape[0], 1))
+
+            # calculate viscosity
+            properties['ag'] = self._calculate_ag(T, 
+                                                  properties['ae'],
+                                                  properties['be'],
+                                                  properties['sctg'],
+                                                  properties['dCp'])
+
+            properties['myega'] = self._calculate_myega(T,
+                                                        properties['tg'],
+                                                        properties['ae'],
+                                                        properties['fragility'])
+            
+            properties['am'] = self._calculate_am(T,
+                                                  properties['tg'],
+                                                  properties['a_am'],
+                                                  properties['fragility'])
+            
+            properties['cg'] = self._calculate_cg(T,
+                                                  properties['a_cg'],
+                                                  properties['b_cg'],
+                                                  properties['to_cg'],
+                                                  properties['c_cg'])
+            
+            properties['tvf'] = self._calculate_tvf(T,
+                                                    properties['tg'],
+                                                    properties['a_tvf'],
+                                                    properties['c_tvf'])
+            
+        
+        if lbd is not None:
+            properties['sellmeier'] = self._calculate_sellmeier(lbd,
+                                                                properties['S_B1'],
+                                                                properties['S_B2'],
+                                                                properties['S_B3'],
+                                                                properties['S_C1'],
+                                                                properties['S_C2'],
+                                                                properties['S_C3'])
+        
+        return properties
+    
+    def _calculate_ag(self, T, ae, be, sctg, dCp):
+        """Adam-Gibbs equation for viscosity calculation"""
+        return ae + be / (T * (sctg + dCp))
+
+    def _calculate_myega(self, T, tg, ae, fragility):
+        """viscosity from MYEGA equation"""
+        return ae + (12.0 - ae) * (tg / T) * torch.exp(
+            (fragility / (12.0 - ae) - 1.0) * (tg / T - 1.0)
+        )
+    
+    def _calculate_am(self, T, tg, a_am, fragility):
+        """Avramov-Mitchell equation for viscosity calculation"""
+        return a_am + (12.0 - a_am) * (tg / T) ** (fragility / (12.0 - a_am))
+    
+    def _calculate_cg(self, T, a_cg, b_cg, to_cg, c_cg):
+        """Cohen Grest (free volume) viscosity equation"""
+        return a_cg + 2.0 * b_cg / (T - to_cg + torch.sqrt((T - to_cg) ** 2 + c_cg * T))
+    
+    def _calculate_tvf(self, T, tg, a_tvf, c_tvf):
+        """Tamman-Vogel-Fulscher empirical viscosity"""
+        return a_tvf + ((12.0 - a_tvf) * (tg - c_tvf)) / (T - c_tvf)
+
+    def _calculate_sellmeier(self, lbd, S_B1, S_B2, S_B3, S_C1, S_C2, S_C3):
+        """Sellmeier equation for refractive index calculation, with lbd in microns"""
+        return torch.sqrt(
+            1.0
+            + S_B1 * lbd**2 / (lbd**2 - S_C1)
+            + S_B2 * lbd**2 / (lbd**2 - S_C2)
+            + S_B3 * lbd**2 / (lbd**2 - S_C3)
+        )
 
     def at_gfu(self, x):
         """calculate atom per gram formula unit
@@ -347,24 +341,13 @@ class model(torch.nn.Module):
         )
         return torch.reshape(out, (out.shape[0], 1))
 
-    def aCpl(self, x):
+    def aCpl(self, x, a_cp):
         """calculate term a in equation Cpl = aCpl + bCpl*T
 
-        Partial molar Cp are from Richet 1985, etc.
+        Partial molar Cp are from the neural network.
 
         assumes first columns are sio2 al2o3 na2o k2o mgo cao
         """
-        # Richet 1985
-        # out = (81.37*x[:,0] # Cp liquid SiO2
-        #        + 130.2*x[:,1] # Cp liquid Al2O3 (Courtial R. 1993)
-        #        + 100.6*x[:,2] # Cp liquid Na2O (Richet 1985)
-        #        + 50.13*x[:,3] + x[:,0]*(x[:,3]*x[:,3])*151.7 # Cp liquid K2O (Richet 1985)
-        #        + 85.78*x[:,4] # Cp liquid MgO (Richet 1985)
-        #        + 86.05*x[:,5] # Cp liquid CaO (Richet 1985)
-        #       )
-
-        # solution with a_cp values from neural net
-        a_cp = torch.exp(self.out_thermo(self.forward(x))[:, 22:28])
         out = (
             a_cp[:, 0] * x[:, 0]  # Cp liquid SiO2, fixed value from Richet 1984
             + a_cp[:, 1] * x[:, 1]  # Cp liquid Al2O3
@@ -374,33 +357,17 @@ class model(torch.nn.Module):
             + a_cp[:, 5] * x[:, 5]  # Cp liquid CaO)
         )
 
-        # solution with a_cp values as global parameters
-        # out = (torch.exp(self.Cp_coefs[0])*x[:,0] + # Cp liquid SiO2
-        #        torch.exp(self.Cp_coefs[1])*x[:,1] + # Cp liquid Al2O3
-        #        torch.exp(self.Cp_coefs[2])*x[:,2] + # Cp liquid Na2O
-        #        torch.exp(self.Cp_coefs[3])*x[:,3] + # Cp liquid K2O
-        #        torch.exp(self.Cp_coefs[4])*x[:,4] + # Cp liquid MgO
-        #        torch.exp(self.Cp_coefs[5])*x[:,5] # Cp liquid CaO)
-        #       )
-
         return torch.reshape(out, (out.shape[0], 1))
 
-    def bCpl(self, x):
+    def bCpl(self, x, b_cp):
         """calculate term b in equation Cpl = aCpl + bCpl*T
 
         assumes first columns are sio2 al2o3 na2o k2o mgo cao
 
         only apply B terms on Al and K
         """
-        # Richet 1985
-        # out = 0.09428*x[:,1] + 0.01578*x[:,3]
-
-        # solution with a_cp values from neural net
-        b_cp = torch.exp(self.out_thermo(self.forward(x))[:, 28:30])
+        # euqation from Richet 1985, dependency on Al2O3 and K2O
         out = b_cp[:, 0] * x[:, 1] + b_cp[:, 1] * x[:, 3]
-
-        # solution with a_cp values as global parameters
-        # out = torch.exp(self.Cp_coefs[6])*x[:,1] + torch.exp(self.Cp_coefs[7])*x[:,3]
 
         return torch.reshape(out, (out.shape[0], 1))
 
@@ -410,26 +377,22 @@ class model(torch.nn.Module):
 
     def cpl(self, x, T):
         """Liquid heat capacity at T"""
-        out = self.aCpl(x) + self.bCpl(x) * T
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x, T=T)['cpl']
 
     def partial_cpl(self, x):
         """partial molar values for Cpl
         6 values in order: SiO2 Al2O3 Na2O K2O MgO CaO
         2 last values are temperature dependence for Al2O3 and K2O
         """
-        return torch.exp(self.out_thermo(self.forward(x))[:, 22:30])
+        return self.predict_all(x)['partial_cpl']
 
     def ap_calc(self, x):
         """calculate term ap in equation dS = ap ln(T/Tg) + b(T-Tg)"""
-        out = self.aCpl(x) - self.cpg_tg(x)
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['ap_calc']
 
     def dCp(self, x, T):
-        out = self.ap_calc(x) * (torch.log(T) - torch.log(self.tg(x))) + self.bCpl(
-            x
-        ) * (T - self.tg(x))
-        return torch.reshape(out, (out.shape[0], 1))
+        """calculate Cpconf""" 
+        return self.predict_all(x, T=T)['dCp']
 
     def raman_pred(self, x):
         """Raman predicted spectra"""
@@ -437,71 +400,62 @@ class model(torch.nn.Module):
 
     def tg(self, x):
         """glass transition temperature Tg"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:, 0])
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['tg']
 
     def sctg(self, x):
         """configurational entropy at Tg"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:, 1])
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['sctg']
 
     def ae(self, x):
         """Ae parameter in Adam and Gibbs and MYEGA"""
-        out = self.out_thermo(self.forward(x))[:, 2]
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['ae']
 
     def a_am(self, x):
         """A parameter for Avramov-Mitchell"""
-        out = self.out_thermo(self.forward(x))[:, 3]
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['a_am']
 
     def a_cg(self, x):
         """A parameter for Free Volume (CG)"""
-        out = self.out_thermo(self.forward(x))[:, 4]
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['a_cg']
 
     def a_tvf(self, x):
         """A parameter for VFT"""
-        out = self.out_thermo(self.forward(x))[:, 5]
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['a_tvf']
 
     def to_cg(self, x):
         """To parameter for Free Volume (CG)"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:, 6])
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['to_cg']
 
     def c_cg(self, x):
         """C parameter for Free Volume (CG)"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:, 7])
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['c_cg']
 
     def c_tvf(self, x):
         """C parameter for VFT"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:, 8])
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['c_tvf']
 
     def vm_glass(self, x):
         """partial molar volume of oxide cations in glass"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:, 9:15])
-        return torch.reshape(out, (out.shape[0], 6))
+        return self.predict_all(x)['vm_glass']
 
-    def density_glass(self, x):
+    def _calculate_density_glass(self, x, vm_):
         """glass density
 
-        assumes X first columns are sio2 al2o3 na2o k2o mgo cao
+        X columns are sio2 al2o3 na2o k2o mgo cao
+
+        vm_ are the partial molar volumes of the oxides, same shape as X
         """
-        vm_ = self.vm_glass(x)  # partial molar volumes
         w = imelt.molarweights()  # weights
 
         # calculation of glass molar volume
         v_g = (
-            vm_[:, 0] * x[:, 0]
-            + vm_[:, 1] * x[:, 1]  # sio2 + al2o3
-            + vm_[:, 2] * x[:, 2]
-            + vm_[:, 3] * x[:, 3]  # na2o + k2o
-            + vm_[:, 4] * x[:, 4]
-            + vm_[:, 5] * x[:, 5]
-        )  # mgo + cao
+            vm_[:, 0] * x[:, 0] # sio2
+            + vm_[:, 1] * x[:, 1]  # al2o3
+            + vm_[:, 2] * x[:, 2]  # na2o
+            + vm_[:, 3] * x[:, 3]  # k2o
+            + vm_[:, 4] * x[:, 4]  # mgo
+            + vm_[:, 5] * x[:, 5] # cao
+        )
 
         # glass mass for one mole of oxides
         XMW_SiO2 = x[:, 0] * w["sio2"]
@@ -516,6 +470,13 @@ class model(torch.nn.Module):
 
         out = XMW_tot / v_g.reshape(-1, 1)
         return torch.reshape(out, (out.shape[0], 1))
+
+    def density_glass(self, x):
+        """glass density
+
+        X columns are sio2 al2o3 na2o k2o mgo cao
+        """
+        return self.predict_all(x)['density_glass']
 
     def density_melt(self, x, T, P=1):
         """melt density, calculated as in DensityX"""
@@ -564,59 +525,47 @@ class model(torch.nn.Module):
 
     def fragility(self, x):
         """melt fragility"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:, 15])
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['fragility']
 
     def S_B1(self, x):
         """Sellmeir B1"""
-        out = self.out_thermo(self.forward(x))[:, 16]
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['S_B1']
 
     def S_B2(self, x):
         """Sellmeir B2"""
-        out = self.out_thermo(self.forward(x))[:, 17]
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['S_B2']
 
     def S_B3(self, x):
         """Sellmeir B3"""
-        out = self.out_thermo(self.forward(x))[:, 18]
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['S_B3']
 
     def S_C1(self, x):
         """Sellmeir C1, with proper scaling"""
-        out = 0.01 * self.out_thermo(self.forward(x))[:, 19]
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['S_C1']
 
     def S_C2(self, x):
         """Sellmeir C2, with proper scaling"""
-        out = 0.1 * self.out_thermo(self.forward(x))[:, 20]
-
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['S_C2']
 
     def S_C3(self, x):
         """Sellmeir C3, with proper scaling"""
-        out = 100 * self.out_thermo(self.forward(x))[:, 21]
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['S_C3']
 
     def elastic_modulus(self, x):
         """elastic modulus"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:, 30])
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['elastic_modulus']
 
     def cte(self, x):
         """coefficient of thermal expansion"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:, 31])
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['cte']
 
     def abbe(self, x):
         """Abbe number"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:, 32])
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['abbe']
 
     def liquidus(self, x):
         """liquidus temperature, K"""
-        out = torch.exp(self.out_thermo(self.forward(x))[:, 33])
-        return torch.reshape(out, (out.shape[0], 1))
+        return self.predict_all(x)['liquidus']
 
     def a_theory(self, x):
         """Theoretical high T viscosity limit
@@ -668,139 +617,41 @@ class model(torch.nn.Module):
     def ag(self, x, T):
         """viscosity from the Adam-Gibbs equation, given chemistry X and temperature T
 
-        need for speed = we decompose the calculation as much as reasonable for a minimum amount of forward pass
         """
-        # one forward pass to get thermodynamic output
-        thermo_out = self.out_thermo(self.forward(x))
-
-        # get Ae
-        ae = torch.reshape(thermo_out[:, 2], (thermo_out[:, 2].shape[0], 1))
-
-        # get ScTg
-        sctg = torch.exp(thermo_out[:, 1])
-        sctg = torch.reshape(sctg, (sctg.shape[0], 1))
-
-        # get Tg
-        tg = torch.exp(thermo_out[:, 0])
-        tg = torch.reshape(tg, (tg.shape[0], 1))
-
-        # get Be
-        be = (12.0 - ae) * (tg * sctg)
-
-        return ae + be / (T * (sctg + self.dCp(x, T)))
+        return self.predict_all(x, T=T)['ag']
 
     def myega(self, x, T):
         """viscosity from the MYEGA equation, given entries X and temperature T
 
-        need for speed = we decompose the calculation for making only one forward pass
         """
-        # one forward pass to get thermodynamic output
-        thermo_out = self.out_thermo(self.forward(x))
-
-        # get Ae
-        ae = torch.reshape(thermo_out[:, 2], (thermo_out[:, 2].shape[0], 1))
-
-        # get Tg
-        tg = torch.exp(thermo_out[:, 0])
-        tg = torch.reshape(tg, (tg.shape[0], 1))
-
-        # get fragility
-        frag = torch.exp(thermo_out[:, 15])
-        frag = torch.reshape(frag, (frag.shape[0], 1))
-
-        return ae + (12.0 - ae) * (tg / T) * torch.exp(
-            (frag / (12.0 - ae) - 1.0) * (tg / T - 1.0)
-        )
+        return self.predict_all(x, T=T)['myega']
 
     def am(self, x, T):
         """viscosity from the Avramov-Mitchell equation, given entries X and temperature T
 
-        need for speed = we decompose the calculation for making only one forward pass
         """
-
-        # one forward pass to get thermodynamic output
-        thermo_out = self.out_thermo(self.forward(x))
-
-        # get the A_am parameter
-        a_am = torch.reshape(thermo_out[:, 3], (thermo_out[:, 3].shape[0], 1))
-
-        # Get TG
-        tg = torch.exp(thermo_out[:, 0])
-        tg = torch.reshape(tg, (tg.shape[0], 1))
-
-        # get fragility
-        frag = torch.exp(thermo_out[:, 15])
-        frag = torch.reshape(frag, (frag.shape[0], 1))
-
-        return a_am + (12.0 - a_am) * (tg / T) ** (frag / (12.0 - a_am))
+        return self.predict_all(x, T=T)['am']
 
     def cg(self, x, T):
         """free volume theory viscosity equation, given entries X and temperature T
 
-        need for speed = we decompose the calculation for making only one forward pass
         """
-
-        # one forward pass to get thermodynamic output
-        thermo_out = self.out_thermo(self.forward(x))
-
-        # get A CG
-        a_cg = torch.reshape(thermo_out[:, 4], (thermo_out[:, 4].shape[0], 1))
-
-        # Get TG
-        tg = torch.exp(thermo_out[:, 0])
-        tg = torch.reshape(tg, (tg.shape[0], 1))
-
-        # get To
-        to_cg = torch.exp(thermo_out[:, 6])
-        to_cg = torch.reshape(to_cg, (to_cg.shape[0], 1))
-
-        # get C CG
-        c_cg = torch.exp(thermo_out[:, 7])
-        c_cg = torch.reshape(c_cg, (c_cg.shape[0], 1))
-
-        b_cg = (
-            0.5
-            * (12.0 - a_cg)
-            * (tg - to_cg + torch.sqrt((tg - to_cg) ** 2 + c_cg * tg))
-        )
-        return a_cg + 2.0 * b_cg / (T - to_cg + torch.sqrt((T - to_cg) ** 2 + c_cg * T))
+        return self.predict_all(x, T=T)['cg']
 
     def tvf(self, x, T):
         """Tamman-Vogel-Fulscher empirical viscosity, given entries X and temperature T
 
         need for speed = we decompose the calculation for making only one forward pass
         """
-
-        # one forward pass to get thermodynamic output
-        thermo_out = self.out_thermo(self.forward(x))
-
-        # get the A_tvf parameter
-        a_tvf = torch.reshape(thermo_out[:, 5], (thermo_out[:, 5].shape[0], 1))
-
-        # Get TG
-        tg = torch.exp(thermo_out[:, 0])
-        tg = torch.reshape(tg, (tg.shape[0], 1))
-
-        # Get C_tvf
-        c_tvf = torch.exp(thermo_out[:, 8])
-        c_tvf = torch.reshape(c_tvf, (c_tvf.shape[0], 1))
-
-        return a_tvf + ((12.0 - a_tvf) * (tg - c_tvf)) / (T - c_tvf)
+        return self.predict_all(x, T=T)['tvf']
 
     def sellmeier(self, x, lbd):
         """Sellmeier equation for refractive index calculation, with lbd in microns"""
-        return torch.sqrt(
-            1.0
-            + self.S_B1(x) * lbd**2 / (lbd**2 - self.S_C1(x))
-            + self.S_B2(x) * lbd**2 / (lbd**2 - self.S_C2(x))
-            + self.S_B3(x) * lbd**2 / (lbd**2 - self.S_C3(x))
-        )
-
+        return self.predict_all(x, lbd=lbd)['sellmeier']
 
 ###
 ### TRAINING FUNCTIONS
 ###
-
 
 class loss_scales:
     """loss scales for everything"""
@@ -816,7 +667,6 @@ class loss_scales:
         self.tg = 0.001
         self.A_scale = 1e4  # 1e-6 potentiellement bien
         self.cpl = 1e-2  # 1e-2 for strong constraints
-
 
 def training(
     neuralmodel,
@@ -971,15 +821,19 @@ def training(
             y_liquidus_train = slices_y_liquidus_train[i].to(device)
 
             # Forward pass on training set
-            y_ag_pred_train = neuralmodel.ag(x_visco_train, T_visco_train)
-            y_myega_pred_train = neuralmodel.myega(x_visco_train, T_visco_train)
-            y_am_pred_train = neuralmodel.am(x_visco_train, T_visco_train)
-            y_cg_pred_train = neuralmodel.cg(x_visco_train, T_visco_train)
-            y_tvf_pred_train = neuralmodel.tvf(x_visco_train, T_visco_train)
+
+            # use i-Melt v2.2 API to speed up viscosity calculations
+            visco_preds = neuralmodel.predict_all(x_visco_train,
+                                                  T = T_visco_train)
+            y_ag_pred_train = visco_preds["ag"]
+            y_myega_pred_train = visco_preds["myega"]
+            y_am_pred_train = visco_preds["am"]
+            y_cg_pred_train = visco_preds["cg"]
+            y_tvf_pred_train = visco_preds["tvf"]
             y_raman_pred_train = neuralmodel.raman_pred(x_raman_train)
             y_density_pred_train = neuralmodel.density_glass(x_density_train)
             y_entro_pred_train = neuralmodel.sctg(x_entro_train)
-            y_ri_pred_train = neuralmodel.sellmeier(x_ri_train, lbd_ri_train)
+            y_ri_pred_train = neuralmodel.sellmeier(x_ri_train, lbd=lbd_ri_train)
             y_cpl_pred_train = neuralmodel.cpl(x_cpl_train, T_cpl_train)
             y_elastic_pred_train = neuralmodel.elastic_modulus(x_elastic_train)
             y_cte_pred_train = neuralmodel.cte(x_cte_train)
@@ -1075,28 +929,21 @@ def training(
             precision_liquidus = torch.exp(-neuralmodel.log_vars[9])
 
             # on validation set
-            y_ag_pred_valid = neuralmodel.ag(
-                ds.x_visco_valid.to(device), ds.T_visco_valid.to(device)
-            )
-            y_myega_pred_valid = neuralmodel.myega(
-                ds.x_visco_valid.to(device), ds.T_visco_valid.to(device)
-            )
-            y_am_pred_valid = neuralmodel.am(
-                ds.x_visco_valid.to(device), ds.T_visco_valid.to(device)
-            )
-            y_cg_pred_valid = neuralmodel.cg(
-                ds.x_visco_valid.to(device), ds.T_visco_valid.to(device)
-            )
-            y_tvf_pred_valid = neuralmodel.tvf(
-                ds.x_visco_valid.to(device), ds.T_visco_valid.to(device)
-            )
+            visco_preds = neuralmodel.predict_all(ds.x_visco_valid.to(device),
+                                                  T = ds.T_visco_valid.to(device))
+            y_ag_pred_valid = visco_preds["ag"]
+            y_myega_pred_valid = visco_preds["myega"]
+            y_am_pred_valid = visco_preds["am"]
+            y_cg_pred_valid = visco_preds["cg"]
+            y_tvf_pred_valid = visco_preds["tvf"]
+
             y_raman_pred_valid = neuralmodel.raman_pred(ds.x_raman_valid.to(device))
             y_density_pred_valid = neuralmodel.density_glass(
                 ds.x_density_valid.to(device)
             )
             y_entro_pred_valid = neuralmodel.sctg(ds.x_entro_valid.to(device))
             y_ri_pred_valid = neuralmodel.sellmeier(
-                ds.x_ri_valid.to(device), ds.lbd_ri_valid.to(device)
+                ds.x_ri_valid.to(device), lbd=ds.lbd_ri_valid.to(device)
             )
             y_clp_pred_valid = neuralmodel.cpl(
                 ds.x_cpl_valid.to(device), ds.T_cpl_valid.to(device)
@@ -1277,396 +1124,7 @@ def training(
 
     return neuralmodel, record_train_loss, record_valid_loss
 
-
-def training_lbfgs(
-    neuralmodel,
-    ds,
-    criterion,
-    optimizer,
-    save_switch=True,
-    save_name="./temp",
-    train_patience=50,
-    min_delta=0.1,
-    verbose=True,
-    mode="main",
-    device="cuda",
-):
-    """train neuralmodel given a dataset, criterion and optimizer
-
-    Parameters
-    ----------
-    neuralmodel : model
-        a neuravi model
-    ds : dataset
-        dataset from data_loader()
-    criterion : pytorch criterion
-        the criterion for goodness of fit
-    optimizer : pytorch optimizer
-        the optimizer to use
-
-
-    Options
-    -------
-    save_switch : bool
-        if True, the network will be saved in save_name
-    save_name : string
-        the path to save the model during training
-    train_patience : int, default = 50
-        the number of iterations
-    min_delta : float, default = 0.1
-        Minimum decrease in the loss to qualify as an improvement,
-        a decrease of less than or equal to `min_delta` will count as no improvement.
-    verbose : bool, default = True
-        Do you want details during training?
-    device : string, default = "cuda"
-        the device where the calculations are made during training
-
-    Returns
-    -------
-    neuralmodel : model
-        trained model
-    record_train_loss : list
-        training loss (global)
-    record_valid_loss : list
-        validation loss (global)
-    """
-
-    if verbose == True:
-        time1 = time.time()
-
-    # put model in train mode
-    neuralmodel.train()
-
-    # for early stopping
-    epoch = 0
-    best_epoch = 0
-    val_ex = 0
-
-    # for recording losses
-    record_train_loss = []
-    record_valid_loss = []
-
-    x_visco_train = ds.x_visco_train.to(device)
-    y_visco_train = ds.y_visco_train.to(device)
-    T_visco_train = ds.T_visco_train.to(device)
-
-    x_raman_train = ds.x_raman_train.to(device)
-    y_raman_train = ds.y_raman_train.to(device)
-
-    x_density_train = ds.x_density_train.to(device)
-    y_density_train = ds.y_density_train.to(device)
-
-    x_elastic_train = ds.x_elastic_train.to(device)
-    y_elastic_train = ds.y_elastic_train.to(device)
-
-    x_entro_train = ds.x_entro_train.to(device)
-    y_entro_train = ds.y_entro_train.to(device)
-
-    x_ri_train = ds.x_ri_train.to(device)
-    y_ri_train = ds.y_ri_train.to(device)
-    lbd_ri_train = ds.lbd_ri_train.to(device)
-
-    x_cpl_train = ds.x_cpl_train.to(device)
-    y_cpl_train = ds.y_cpl_train.to(device)
-    T_cpl_train = ds.T_cpl_train.to(device)
-
-    x_cte_train = ds.x_cte_train.to(device)
-    y_cte_train = ds.y_cte_train.to(device)
-
-    x_abbe_train = ds.x_abbe_train.to(device)
-    y_abbe_train = ds.y_abbe_train.to(device)
-
-    x_liquidus_train = ds.x_liquidus_train.to(device)
-    y_liquidus_train = ds.y_liquidus_train.to(device)
-
-    while val_ex <= train_patience:
-
-        #
-        # TRAINING
-        #
-        def closure():  # closure condition for LBFGS
-
-            # Forward pass on training set
-            y_ag_pred_train = neuralmodel.ag(x_visco_train, T_visco_train)
-            y_myega_pred_train = neuralmodel.myega(x_visco_train, T_visco_train)
-            y_am_pred_train = neuralmodel.am(x_visco_train, T_visco_train)
-            y_cg_pred_train = neuralmodel.cg(x_visco_train, T_visco_train)
-            y_tvf_pred_train = neuralmodel.tvf(x_visco_train, T_visco_train)
-            y_raman_pred_train = neuralmodel.raman_pred(x_raman_train)
-            y_density_pred_train = neuralmodel.density_glass(x_density_train)
-            y_elastic_pred_train = neuralmodel.elastic_modulus(x_elastic_train)
-            y_entro_pred_train = neuralmodel.sctg(x_entro_train)
-            y_ri_pred_train = neuralmodel.sellmeier(x_ri_train, lbd_ri_train)
-            y_cpl_pred_train = neuralmodel.cpl(x_cpl_train, T_cpl_train)
-            y_cte_pred_train = neuralmodel.cte(x_cte_train)
-            y_abbe_pred_train = neuralmodel.abbe(x_abbe_train)
-            y_liquidus_pred_train = neuralmodel.liquidus(x_liquidus_train)
-
-            # Get precisions
-            precision_visco = torch.exp(-neuralmodel.log_vars[0])
-            precision_raman = torch.exp(-neuralmodel.log_vars[1])
-            precision_density = torch.exp(-neuralmodel.log_vars[2])
-            precision_entro = torch.exp(-neuralmodel.log_vars[3])
-            precision_ri = torch.exp(-neuralmodel.log_vars[4])
-            precision_cpl = torch.exp(-neuralmodel.log_vars[5])
-            precision_elastic = torch.exp(-neuralmodel.log_vars[6])
-            precision_cte = torch.exp(-neuralmodel.log_vars[7])
-            precision_abbe = torch.exp(-neuralmodel.log_vars[8])
-            precision_liquidus = torch.exp(-neuralmodel.log_vars[9])
-
-            # Compute Loss
-            loss_ag = precision_visco * criterion(y_ag_pred_train, y_visco_train)
-            loss_myega = precision_visco * criterion(y_myega_pred_train, y_visco_train)
-            loss_am = precision_visco * criterion(y_am_pred_train, y_visco_train)
-            loss_cg = precision_visco * criterion(y_cg_pred_train, y_visco_train)
-            loss_tvf = precision_visco * criterion(y_tvf_pred_train, y_visco_train)
-            loss_raman = precision_raman * criterion(y_raman_pred_train, y_raman_train)
-            loss_density = precision_density * criterion(
-                y_density_pred_train, y_density_train
-            )
-            loss_entro = precision_entro * criterion(y_entro_pred_train, y_entro_train)
-            loss_ri = precision_ri * criterion(y_ri_pred_train, y_ri_train)
-            loss_cpl = precision_cpl * criterion(y_cpl_pred_train, y_cpl_train)
-            loss_elastic = precision_elastic * criterion(
-                y_elastic_pred_train, y_elastic_train
-            )
-            loss_cte = precision_cte * criterion(y_cte_pred_train, y_cte_train)
-            loss_abbe = precision_abbe * criterion(y_abbe_pred_train, y_abbe_train)
-            loss_liquidus = precision_liquidus * criterion(
-                y_liquidus_pred_train, y_liquidus_train
-            )
-
-            loss_fold = (
-                loss_ag
-                + loss_myega
-                + loss_am
-                + loss_cg
-                + loss_tvf
-                + loss_raman
-                + loss_density
-                + loss_entro
-                + loss_ri
-                + loss_cpl
-                + loss_elastic
-                + loss_cte
-                + loss_abbe
-                + loss_liquidus
-                + neuralmodel.log_vars[0]
-                + neuralmodel.log_vars[1]
-                + neuralmodel.log_vars[2]
-                + neuralmodel.log_vars[3]
-                + neuralmodel.log_vars[4]
-                + neuralmodel.log_vars[5]
-                + neuralmodel.log_vars[6]
-                + neuralmodel.log_vars[7]
-                + neuralmodel.log_vars[8]
-                + neuralmodel.log_vars[9]
-            )
-
-            # initialise gradient
-            optimizer.zero_grad()
-            loss_fold.backward()  # backward gradient determination
-
-            return loss_fold
-
-        # Update weights
-        optimizer.step(closure)  # update weights
-
-        # update the running loss
-        loss = closure().item()
-
-        # record global loss (mean of the losses of the training folds)
-        record_train_loss.append(loss)
-
-        #
-        # MONITORING VALIDATION SUBSET
-        #
-        with torch.set_grad_enabled(False):
-
-            # # Precisions
-            precision_visco = torch.exp(-neuralmodel.log_vars[0])
-            precision_raman = torch.exp(-neuralmodel.log_vars[1])
-            precision_density = torch.exp(-neuralmodel.log_vars[2])
-            precision_entro = torch.exp(-neuralmodel.log_vars[3])
-            precision_ri = torch.exp(-neuralmodel.log_vars[4])
-            precision_cpl = torch.exp(-neuralmodel.log_vars[5])
-            precision_elastic = torch.exp(-neuralmodel.log_vars[6])
-            precision_cte = torch.exp(-neuralmodel.log_vars[7])
-            precision_abbe = torch.exp(-neuralmodel.log_vars[8])
-            precision_liquidus = torch.exp(-neuralmodel.log_vars[9])
-
-            # on validation set
-            y_ag_pred_valid = neuralmodel.ag(
-                ds.x_visco_valid.to(device), ds.T_visco_valid.to(device)
-            )
-            y_myega_pred_valid = neuralmodel.myega(
-                ds.x_visco_valid.to(device), ds.T_visco_valid.to(device)
-            )
-            y_am_pred_valid = neuralmodel.am(
-                ds.x_visco_valid.to(device), ds.T_visco_valid.to(device)
-            )
-            y_cg_pred_valid = neuralmodel.cg(
-                ds.x_visco_valid.to(device), ds.T_visco_valid.to(device)
-            )
-            y_tvf_pred_valid = neuralmodel.tvf(
-                ds.x_visco_valid.to(device), ds.T_visco_valid.to(device)
-            )
-            y_raman_pred_valid = neuralmodel.raman_pred(ds.x_raman_valid.to(device))
-            y_density_pred_valid = neuralmodel.density_glass(
-                ds.x_density_valid.to(device)
-            )
-            y_entro_pred_valid = neuralmodel.sctg(ds.x_entro_valid.to(device))
-            y_ri_pred_valid = neuralmodel.sellmeier(
-                ds.x_ri_valid.to(device), ds.lbd_ri_valid.to(device)
-            )
-            y_clp_pred_valid = neuralmodel.cpl(
-                ds.x_cpl_valid.to(device), ds.T_cpl_valid.to(device)
-            )
-            y_elastic_pred_valid = neuralmodel.elastic_modulus(
-                ds.x_elastic_valid.to(device)
-            )
-            y_cte_pred_valid = neuralmodel.cte(ds.x_cte_valid.to(device))
-            y_abbe_pred_valid = neuralmodel.abbe(ds.x_abbe_valid.to(device))
-            y_liquidus_pred_valid = neuralmodel.liquidus(ds.x_liquidus_valid.to(device))
-
-            # validation loss
-            loss_ag_v = precision_visco * criterion(
-                y_ag_pred_valid, ds.y_visco_valid.to(device)
-            )
-            loss_myega_v = precision_visco * criterion(
-                y_myega_pred_valid, ds.y_visco_valid.to(device)
-            )
-            loss_am_v = precision_visco * criterion(
-                y_am_pred_valid, ds.y_visco_valid.to(device)
-            )
-            loss_cg_v = precision_visco * criterion(
-                y_cg_pred_valid, ds.y_visco_valid.to(device)
-            )
-            loss_tvf_v = precision_visco * criterion(
-                y_tvf_pred_valid, ds.y_visco_valid.to(device)
-            )
-            loss_raman_v = precision_raman * criterion(
-                y_raman_pred_valid, ds.y_raman_valid.to(device)
-            )
-            loss_density_v = precision_density * criterion(
-                y_density_pred_valid, ds.y_density_valid.to(device)
-            )
-            loss_entro_v = precision_entro * criterion(
-                y_entro_pred_valid, ds.y_entro_valid.to(device)
-            )
-            loss_ri_v = precision_ri * criterion(
-                y_ri_pred_valid, ds.y_ri_valid.to(device)
-            )
-            loss_cpl_v = precision_cpl * criterion(
-                y_clp_pred_valid, ds.y_cpl_valid.to(device)
-            )
-            loss_elastic_v = precision_elastic * criterion(
-                y_elastic_pred_valid, ds.y_elastic_valid.to(device)
-            )
-            loss_cte_v = precision_cte * criterion(
-                y_cte_pred_valid, ds.y_cte_valid.to(device)
-            )
-            loss_abbe_v = precision_abbe * criterion(
-                y_abbe_pred_valid, ds.y_abbe_valid.to(device)
-            )
-            loss_liquidus_v = precision_liquidus * criterion(
-                y_liquidus_pred_valid, ds.y_liquidus_valid.to(device)
-            )
-
-            loss_v = (
-                loss_ag_v
-                + loss_myega_v
-                + loss_am_v
-                + loss_cg_v
-                + loss_tvf_v
-                + loss_raman_v
-                + loss_density_v
-                + loss_entro_v
-                + loss_ri_v
-                + loss_cpl_v
-                + loss_elastic_v
-                + loss_cte_v
-                + loss_abbe_v
-                + loss_liquidus_v
-                + neuralmodel.log_vars[0]
-                + neuralmodel.log_vars[1]
-                + neuralmodel.log_vars[2]
-                + neuralmodel.log_vars[3]
-                + neuralmodel.log_vars[4]
-                + neuralmodel.log_vars[5]
-                + neuralmodel.log_vars[6]
-                + neuralmodel.log_vars[7]
-                + neuralmodel.log_vars[8]
-                + neuralmodel.log_vars[9]
-            )
-
-            record_valid_loss.append(loss_v.item())
-
-        #
-        # Print info on screen
-        #
-        if verbose == True:
-            if epoch % 100 == 0:
-                # print('\nTRAIN -- Raman: {:.3f}, d: {:.3f}, S: {:.3f}, RI: {:.3f}, V: {:.3f}, Cp: {:.3f}, Em: {:.3f}, CTE: {:.3f}, Ab: {:.3f}, Tl: {:.3f}'.format(
-                # loss_raman, loss_density, loss_entro,  loss_ri, loss_ag, loss_cpl, loss_elastic, loss_cte, loss_abbe, loss_liquidus
-                # ))
-                print(
-                    "VALID -- Raman: {:.3f}, d: {:.3f}, S: {:.3f}, RI: {:.3f}, V: {:.3f}, Cp: {:.3f}, Em: {:.3f}, CTE: {:.3f}, Ab: {:.3f}, Tl: {:.3f}\n".format(
-                        loss_raman_v,
-                        loss_density_v,
-                        loss_entro_v,
-                        loss_ri_v,
-                        loss_ag_v,
-                        loss_cpl_v,
-                        loss_elastic_v,
-                        loss_cte_v,
-                        loss_abbe_v,
-                        loss_liquidus_v,
-                    )
-                )
-            if epoch % 20 == 0:
-                print(
-                    "Epoch {} => loss train {:.2f}, valid {:.2f}".format(
-                        epoch, loss, loss_v
-                    )
-                )
-
-        #
-        # calculating ES criterion
-        #
-        if epoch == 0:
-            val_ex = 0
-            best_loss_v = loss_v.item()
-        elif (
-            loss_v.item() <= best_loss_v - min_delta
-        ):  # if improvement is significant, this saves the model
-            val_ex = 0
-            best_epoch = epoch
-            best_loss_v = loss_v.item()
-
-            if save_switch == True:  # save best model
-                torch.save(neuralmodel.state_dict(), save_name)
-        else:
-            val_ex += 1
-
-        epoch += 1
-
-    # print outputs if verbose is True
-    # if verbose == True:
-    #     time2 = time.time()
-    #     print("Running time in seconds:", time2-time1)
-    #     print("Scaled loss values are:")
-    #     print('\nTRAIN -- Raman: {:.3f}, d: {:.3f}, S: {:.3f}, RI: {:.3f}, V: {:.3f}, Cp: {:.3f}, Em: {:.3f}, CTE: {:.3f}, Ab: {:.3f}, Tl: {:.3f}'.format(
-    #             loss_raman, loss_density, loss_entro,  loss_ri, loss_ag, loss_cpl, loss_elastic, loss_cte, loss_abbe, loss_liquidus
-    #             ))
-    #     print('VALID -- Raman: {:.3f}, d: {:.3f}, S: {:.3f}, RI: {:.3f}, V: {:.3f}, Cp: {:.3f}, Em: {:.3f}, CTE: {:.3f}, Ab: {:.3f}, Tl: {:.3f}\n'.format(
-    #             loss_raman_v, loss_density_v, loss_entro_v,  loss_ri_v, loss_ag_v, loss_cpl_v, loss_elastic_v, loss_cte_v, loss_abbe_v, loss_liquidus_v
-    #             ))
-
-    return neuralmodel, record_train_loss, record_valid_loss
-
-
-def record_loss_build(path, list_models, ds, shape="rectangle"):
+def record_loss_build(path, list_models, ds):
     """build a Pandas dataframe with the losses for a list of models at path"""
     # scaling coefficients for global loss function
     # viscosity is always one
@@ -1725,7 +1183,7 @@ def record_loss_build(path, list_models, ds, shape="rectangle"):
 
         # Declare model
         neuralmodel = imelt.model(
-            6, nb_neurons, nb_layers, ds.nb_channels_raman, p_drop=p_drop, shape=shape
+            6, nb_neurons, nb_layers, ds.nb_channels_raman, p_drop=p_drop
         )
         neuralmodel.load_state_dict(torch.load(path + "/" + name, map_location="cpu"))
         neuralmodel.eval()
@@ -1841,12 +1299,9 @@ def record_loss_build(path, list_models, ds, shape="rectangle"):
 
     return record_loss
 
-
 ###
-### BAGGING
+### BAGGING PREDICTOR
 ###
-
-
 class bagging_models:
     """custom class for bagging models and making predictions
 
@@ -1905,32 +1360,39 @@ class bagging_models:
 
     def predict(
         self,
-        method,
+        methods,
         X,
-        T=np.array([1000.0]),
-        lbd=np.array([500.0]),
-        sampling=False,
-        n_sample=10,
+        T = np.array([1000.0]),
+        lbd = np.array([589.0*1e-3]), # in micrometers !
+        sampling = False,
+        n_sample = 10,
     ):
         """returns predictions from the n models
 
         Parameters
         ----------
-        method : str
-            the property to predict. See imelt code for possibilities. Basically it is a string handle that will be converted to an imelt function.
-            For instance, for tg, enter 'tg'.
+        methods : list
+            list of the properties to predict. Choose between:
         X : pandas dataframe
             chemical composition for prediction
         T : 1d numpy array or pandas dataframe
             temperatures for predictions, default = np.array([1000.0,])
         lbd : 1d numpy array or pandas dataframe
-            lambdas for Sellmeier equation, default = np.array([500.0,])
+            wavelength in micrometer for Sellmeier equation, default = np.array([589.0*1e-3])
         sampling : Bool
             if True, dropout is activated and n_sample random samples will be generated per network.
             This allows performing MC Dropout on the ensemble of models.
+        n_sample : Int, optional
         """
 
-        #
+        # to ensure compatibility with older versions of imelt
+        if isinstance(methods, str):
+            methods = [methods]
+            methods_oldAPI = True
+            warnings.warn("methods is a string, using old API. Please use a list of methods in the future instead.", DeprecationWarning)
+        else:
+            methods_oldAPI = False
+
         # Handle different input types for X and send to device
         if isinstance(X, np.ndarray):
             X = torch.FloatTensor(X).to(self.device)  # Convert to FloatTensor
@@ -1938,7 +1400,6 @@ class bagging_models:
             X = torch.FloatTensor(X.values).to(
                 self.device
             )  # Extract values and convert to Tensor
-
 
         if isinstance(T, np.ndarray):
             T = torch.Tensor(T.reshape(-1, 1)).to(self.device)
@@ -1952,188 +1413,99 @@ class bagging_models:
         # Handle cases where one variable has a single value and others have multiple
         if len(T) > 1 and len(X) == 1:
             X = torch.tile(X, (len(T), 1))
-        elif len(lbd) > 1 and len(X) == 1:
-            X = torch.tile(X, (len(lbd), 1))
         elif len(X) > 1 and len(T) == 1:
             T = torch.tile(T, (len(X), 1))
-            if len(X) > 1 and len(lbd) == 1:
-                lbd = torch.tile(lbd, (len(X), 1))
+        if len(lbd) > 1 and len(X) == 1:
+            X = torch.tile(X, (len(lbd), 1))
+        elif len(X) > 1 and len(lbd) == 1:
+            lbd = torch.tile(lbd, (len(X), 1))
 
-        #
-        # sending models to device also.
-        # and we activate dropout if necessary for error sampling
-        #
-        for i in range(self.n_models):
-            self.models[i].to(self.device)
-            if sampling == True:
-                self.models[i].train()
-
-        with torch.no_grad():
-            if method == "raman_pred":
-                #
-                # For Raman spectra generation
-                #
-                if sampling == True:
-                    out = np.zeros(
-                        (len(X), 850, self.n_models, n_sample)
-                    )  # problem is defined with a X raman shift of 850 values
-                    for i in range(self.n_models):
-                        for j in range(n_sample):
-                            out[:, :, i, j] = (
-                                getattr(self.models[i], method)(X)
-                                .cpu()
-                                .detach()
-                                .numpy()
-                            )
-
-                    # reshaping for 3D outputs
-                    out = out.reshape(
-                        (out.shape[0], out.shape[1], out.shape[2] * out.shape[3])
-                    )
-                else:
-                    out = np.zeros(
-                        (len(X), 850, self.n_models)
-                    )  # problem is defined with a X raman shift of 850 values
-                    for i in range(self.n_models):
-                        out[:, :, i] = (
-                            getattr(self.models[i], method)(X).cpu().detach().numpy()
-                        )
-            else:
-                #
-                # Other parameters (latent or real)
-                #
-
-                # sampling activated
-                if sampling == True:
-                    out = np.zeros((len(X), self.n_models, n_sample))
-                    if method in frozenset(
-                        ("ag", "myega", "am", "cg", "tvf", "density_melt", "cpl", "dCp")
-                    ):
-                        for i in range(self.n_models):
-                            for j in range(n_sample):
-                                out[:, i, j] = (
-                                    getattr(self.models[i], method)(X, T)
-                                    .cpu()
-                                    .detach()
-                                    .numpy()
-                                    .reshape(-1)
-                                )
-                    elif method == "sellmeier":
-                        for i in range(self.n_models):
-                            for j in range(n_sample):
-                                out[:, i, j] = (
-                                    getattr(self.models[i], method)(X, lbd)
-                                    .cpu()
-                                    .detach()
-                                    .numpy()
-                                    .reshape(-1)
-                                )
-                    elif method == "vm_glass":
-                        # we must create a new out tensor because we have a multi-output
-                        out = np.zeros((len(X), 6, self.n_models, n_sample))
-                        for i in range(self.n_models):
-                            for j in range(n_sample):
-                                out[:, :, i, j] = (
-                                    getattr(self.models[i], method)(X)
-                                    .cpu()
-                                    .detach()
-                                    .numpy()
-                                )
-                    elif method == "partial_cpl":
-                        # we must create a new out tensor because we have a multi-output
-                        out = np.zeros((len(X), 8, self.n_models, n_sample))
-                        for i in range(self.n_models):
-                            for j in range(n_sample):
-                                out[:, :, i, j] = (
-                                    getattr(self.models[i], method)(X)
-                                    .cpu()
-                                    .detach()
-                                    .numpy()
-                                )
-                    else:
-                        for i in range(self.n_models):
-                            for j in range(n_sample):
-                                out[:, i, j] = (
-                                    getattr(self.models[i], method)(X)
-                                    .cpu()
-                                    .detach()
-                                    .numpy()
-                                    .reshape(-1)
-                                )
-
-                    # reshaping for 2D outputs
-                    if method in frozenset(("vm_glass", "partial_cpl")):
-                        out = out.reshape(
-                            (out.shape[0], out.shape[1], out.shape[2] * out.shape[3])
-                        )
-                    else:
-                        out = out.reshape((out.shape[0], out.shape[1] * out.shape[2]))
-
-                # no sampling
-                else:
-                    out = np.zeros((len(X), self.n_models))
-                    if method in frozenset(
-                        ("ag", "myega", "am", "cg", "tvf", "density_melt", "cpl", "dCp")
-                    ):
-                        for i in range(self.n_models):
-                            out[:, i] = (
-                                getattr(self.models[i], method)(X, T)
-                                .cpu()
-                                .detach()
-                                .numpy()
-                                .reshape(-1)
-                            )
-                    elif method == "sellmeier":
-                        for i in range(self.n_models):
-                            out[:, i] = (
-                                getattr(self.models[i], method)(X, lbd)
-                                .cpu()
-                                .detach()
-                                .numpy()
-                                .reshape(-1)
-                            )
-                    elif method == "vm_glass":
-                        # we must create a new out tensor because we have a multi-output
-                        out = np.zeros((len(X), 6, self.n_models))
-                        for i in range(self.n_models):
-                            out[:, :, i] = (
-                                getattr(self.models[i], method)(X)
-                                .cpu()
-                                .detach()
-                                .numpy()
-                            )
-                    elif method == "partial_cpl":
-                        # we must create a new out tensor because we have a multi-output
-                        out = np.zeros((len(X), 8, self.n_models))
-                        for i in range(self.n_models):
-                            out[:, :, i] = (
-                                getattr(self.models[i], method)(X)
-                                .cpu()
-                                .detach()
-                                .numpy()
-                            )
-                    else:
-                        for i in range(self.n_models):
-                            out[:, i] = (
-                                getattr(self.models[i], method)(X)
-                                .cpu()
-                                .detach()
-                                .numpy()
-                                .reshape(-1)
-                            )
-
-        # Before leaving this function, we make sure we freeze again the dropout
-        for i in range(self.n_models):
-            self.models[
-                i
-            ].eval()  # we make sure we freeze dropout if user does not activate sampling
-
-        # returning our sample
+        # if we don't sample, we only need one sample
         if sampling == False:
-            return np.median(out, axis=out.ndim - 1)
-        else:
-            return out
+            n_sample = 1
 
+        # take care of model device and MC dropout        
+        for i in range(self.n_models):
+            self.models[i].to(self.device) # send model to device
+            if sampling == True:
+                self.models[i].train() # activate dropout for MC sampling
+            
+        # save output dictionaries from predict_all() in a list
+        # preallocation
+        out_dict_models = [None for i in range(self.n_models*n_sample)]
+
+        # make predictions
+        with torch.no_grad():
+            count = 0
+            for i in range(self.n_models):
+                for j in range(n_sample):
+                    out_dict_models[count] = self.models[i].predict_all(X, T=T, lbd=lbd)
+                    count += 1
+
+                # if sampling, deactivate dropout before switching to the next model / leaving
+                if sampling == True:
+                    self.models[i].eval()
+        
+        # prepare output dictionary for the user
+        output_dictionary = {}
+        for method in methods:
+            # Handling specific cases first, then generalities
+            if method == "raman_spectra":
+                out = np.zeros(
+                    (len(X), 850, self.n_models*n_sample)
+                )  # problem is defined with a X raman shift of 850 values
+                for i in range(self.n_models*n_sample):
+                        out[:, :, i] = (
+                            out_dict_models[i][method]
+                            .cpu()
+                            .detach()
+                            .numpy()
+                        )   
+                    # out = out.reshape(
+                    #     (out.shape[0], out.shape[1], out.shape[2] * out.shape[3])
+                    # )
+
+            elif method == "vm_glass":
+                out = np.zeros((len(X), 6, self.n_models*n_sample))
+                for i in range(self.n_models*n_sample):
+                        out[:, :, i] = (
+                            out_dict_models[i][method]
+                            .cpu()
+                            .detach()
+                            .numpy()
+                        )  
+            elif method == "partial_cpl":
+                out = np.zeros((len(X), 8, self.n_models*n_sample))
+                for i in range(self.n_models*n_sample):
+                        out[:, :, i] = (
+                            out_dict_models[i][method]
+                            .cpu()
+                            .detach()
+                            .numpy()
+                        )  
+            else:
+                out = np.zeros((len(X), self.n_models*n_sample))
+                for i in range(self.n_models*n_sample):
+                        out[:, i] = (
+                            out_dict_models[i][method]
+                            .cpu()
+                            .detach()
+                            .numpy()
+                            .reshape(-1)
+                        )  
+
+            # final storage
+            if sampling == False:
+                output_dictionary[method] = np.median(out, axis=out.ndim - 1)
+            else:
+                output_dictionary[method] = out
+        
+        # to ensure compatibility with older versions of imelt
+        if methods_oldAPI == True:
+            # if the user used the old API, we return a single array
+            output_dictionary = output_dictionary[methods[0]]
+
+        return output_dictionary
 
 def load_pretrained_bagged(
     device=torch.device("cpu"), activation_function=torch.nn.GELU()

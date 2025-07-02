@@ -17,15 +17,12 @@ def generate_query_single(
     composition_mole=True,
 ):
     """Generates a query DataFrame for a single magma composition
-       with multiple T values.
 
     Args:
         sio2, al2o3, ..., cao: Oxide weight percentages (if composition_mole=False) or
             mole percentages (if composition_mole=True). Defaults to pure SiO2.
         composition_mole: Boolean indicating if input composition is in mole (True)
             or weight percent (False). Defaults to True.
-        T_init, T_final: Initial and final temperatures (in Kelvin) for the query. Defaults to 1400 K.
-        nb_values: Number of P/T points to generate within the specified ranges. Defaults to 100.
 
     Returns:
         pd.DataFrame: A DataFrame containing the query with columns for T and oxide compositions.
@@ -63,8 +60,7 @@ def generate_query_range(
     composition_mole=True,
     nb_values=10,
 ):
-    """Generates a query DataFrame for multiple magma compositions within specified ranges,
-       each with multiple P/T values.
+    """Generates a query DataFrame for multiple magma compositions within specified ranges
 
     Args:
         oxide_ranges: A dictionary specifying the initial and final values for each oxide.

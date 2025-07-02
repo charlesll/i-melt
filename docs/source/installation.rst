@@ -14,7 +14,7 @@ You can install `Anaconda Python <https://www.anaconda.com/products/individual>`
 Installation of i-Melt
 ----------------------
 
-i-Melt is now a Python package. It supports Python 3.8 or higher. Install it using pip:
+i-Melt is now a Python package. It supports Python 3.10 or higher. Install it using pip:
 
 .. code-block:: console
 

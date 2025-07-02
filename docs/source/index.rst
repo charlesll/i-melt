@@ -6,7 +6,7 @@
 Welcome to i-Melt's documentation!
 ==================================
 
-Copyright (2021-2024) C. Le Losq and co.
+Copyright (2021-2025) C. Le Losq and co.
 
 Charles Le Losq, Institut de physique du globe de Paris, University Paris Cité
 lelosq@ipgp.fr
@@ -27,6 +27,7 @@ The project is hosted on `Github <https://github.com/charlesll/i-melt>`_, a `Str
    :maxdepth: 2
    :caption: Contents:
 
+   news
    installation
    data
    training

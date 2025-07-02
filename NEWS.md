@@ -4,6 +4,13 @@
 
 ## NEWS
 
+### V2.2.0
+
+- All properties can now be computed using only a single forward pass in the neural network using the `model.predict_all()` function. This limits the computing time and is much more efficient and thus frugal, particularly when doing MC Dropout. The old API still can be used, but it is encouraged to use `predict_all()`, which returns a dictionary that contains all the latent variables and observed properties.
+- the `predict()` function API has changed: several properties can now be asked passing a list to the function, for the argument methods. The old argument `method` still works too. Therefore, when interest in several properties (latent or observed), please use the new `methods`argument. It will do only one forward pass in the neural network to make all the predictions. This results in better efficiency and significantly less computing time when making multiple query.
+- the Streamlit app has been updated and is now much much faster, thanks to the new predict() behavior. Training a neural network is also faster as we can group viscosity predictions: we gained a factor 2 approximately.
+- All example notebooks have been updated accordingly.
+
 ### V2.1.4
 
 - update minimal version of Python to 3.10 as it was creating problems with older release and dependencies

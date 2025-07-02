@@ -18,7 +18,6 @@ Scripts for building, training models and providing useful functions are provide
 The easiest way of training one or multiple neural networks is to use those scripts. I suggest getting a copy of the Github repository and working in it directly, it will simplify things.
 
 
-
 Training one network
 --------------------
 
