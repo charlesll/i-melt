@@ -9,9 +9,11 @@ News
 Version 2.2.0
 --------------
 
-- All properties can now be computed using only a single forward pass in the neural network with the ``model.predict_all()`` function. This significantly reduces computing time, especially for Monte Carlo (MC) Dropout. The old API remains available, but using ``predict_all()`` is encouraged. It returns a dictionary containing all latent variables and observed properties.
-- The ``predict()`` function API has changed: several properties can now be requested by passing a list to the ``methods`` argument. The old ``method`` argument still works. For multiple property predictions (latent or observed), use the ``methods`` argument. This results in only one forward pass through the neural network, improving efficiency and reducing computing time.
-- The Streamlit app has been updated and is now significantly faster, thanks to the new ``predict()`` behavior. Training neural networks is also faster as viscosity predictions are grouped, yielding approximately a factor of 2 speed-up.
+- All properties can now be computed using only a single forward pass in the neural network using the ``model.predict_all()`` function. This limits the computing time and is much more efficient and thus frugal, particularly when doing MC Dropout. The old API still can be used, but it is encouraged to use `predict_all()`, which returns a dictionary that contains all the latent variables and observed properties.
+- the ``predict()`` function API has changed: several properties can now be asked passing a list to the function, for the argument methods. The old argument ``method`` still works too. Therefore, when interest in several properties (latent or observed), please use the new ``methods``argument. It will do only one forward pass in the neural network to make all the predictions. This results in better efficiency and significantly less computing time when making multiple query.
+- Code has been cleaned and some functions not needed for i-Melt were removed.
+- the Streamlit app has been updated and is now much much faster, thanks to the new ``predict()`` behavior. 
+- Training a neural network is also faster as we can group viscosity predictions: we gained a factor 2 approximately.
 - All example notebooks have been updated accordingly.
 
 Version 2.1.4
