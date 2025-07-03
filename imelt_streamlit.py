@@ -40,7 +40,7 @@ st.sidebar.markdown('---')
 composition_type = st.sidebar.radio("Select composition input type:", ("wt%", "mol%"))
 
 # Sidebar for inputs
-st.sidebar.header(f'Composition Input ({composition_type})')
+st.sidebar.subheader(f'Composition Input ({composition_type})')
 composition = {
     'SiO2': st.sidebar.number_input('SiO2', value=60.0, min_value=0.0, max_value=100.0),
     'Al2O3': st.sidebar.number_input('Al2O3', value=10.0, min_value=0.0, max_value=100.0),
@@ -50,11 +50,26 @@ composition = {
     'CaO': st.sidebar.number_input('CaO', value=10.0, min_value=0.0, max_value=100.0),
 }
 
-equation_ = st.sidebar.radio("Select viscosity equation for the plot:", ('Adam-Gibbs', 
-                                                                      'Vogel-Fulcher-Tammann (VFT)', 
-                                                                      'MYEGA', 
-                                                                      'Avramov-Milchev', 
-                                                                      'Free Volume'))
+st.sidebar.subheader(f'Viscosity equation for the plot')
+equation_ = st.sidebar.radio("Select the equation:", ('Adam-Gibbs',
+                                                      'Vogel-Fulcher-Tammann (VFT)',
+                                                      'MYEGA',
+                                                      'Avramov-Milchev',
+                                                      'Free Volume'))
+
+st.sidebar.subheader(f'Number of samples for error bar calculation')
+
+
+nb_samples = st.sidebar.number_input('Number of samples', value=10, min_value=1, max_value=1000)
+
+expander = st.sidebar.expander("Notes on sample number (click to expand):")
+expander.write("""1-sigma uncertainties are calculated using MC Dropout and are provided either in parenthesis 
+                    for printed numbers or as shaded areas in figures. Due to speed and frugality considerations for this online calculator,
+                    here uncertainties are evaluated using a limited number of model forward pass (n=10). For better uncertainties estimates, you can increase this number. 
+                    The best will be to scale it with conformal prediction (see Le Losq and Baldoni, 2021). A Jupyter notebook
+                    is provided on Github to highlight how to perform such operations. Very high error bars may be observed if predictions are asked for compositions that are not in the training set.
+                    In this case, the model is extrapolating and uncertainties are expected to be large. You can use this to check the reliability of the model for your composition.
+               """)
 
 # Function to normalize composition
 def normalize_composition(composition_dict):
@@ -180,19 +195,6 @@ if st.button('Calculate Properties'):
         st.metric('Refractive index at 589 nm',"{:.3f}({:.3f})".format(ri.mean(),ri.std()))
         st.metric('Thermal expansion',"{:.2f}({:.2f})".format(cte.mean(),cte.std())+r"x1e-6/K")
     
-    with st.expander("Notes on reported uncertainties (click to expand):"):
-        st.markdown("""
-                    1-sigma uncertainties calculated using MC Dropout are provided either in parenthesis 
-                    for printed numbers or as shaded areas in figures. Due to speed and frugality considerations for this online calculator,
-                    here uncertainties are evaluated using a limited number of model forward pass (n=500). 
-                    
-                    For better uncertainties estimates, a larger number of forward pass may be necessary, and 
-                    scaling with conformal prediction may also be best (see article). A Jupyter notebook
-                    is provided on Github to highlight how to perform such operations. 
-
-                    Very high error bars may be observed if predictions are asked for compositions that are not in the training set.
-                    In this case, the model is extrapolating and uncertainties are expected to be large.
-                    """)
         
     st.subheader('Viscosity equations and parameters')
 
